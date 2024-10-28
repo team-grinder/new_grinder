@@ -1,0 +1,9 @@
+package com.grinder.image.repository;
+
+import com.grinder.image.entity.Image;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ImageRepository extends JpaRepository<Image, Long> {
+}

@@ -30,6 +30,9 @@ public class Member extends BaseDateEntity {
     private TierType tier;
 
     @Name(name = "결제정보 연관 관계")
-    private String PaymentInfoId;
+    private Long PaymentInfoId;
+
+    @Name(name = "카페 관리자 연관 관계")
+    private Long CafeAdminId;
 
 }
