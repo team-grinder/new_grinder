@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: grinder
+
+  datasource:
+    driver-class-name: ENC(qUd7z0u9cv/ufdS5y5M9mH5408IjRv1w1nmv9z18W0wjUFzISZIr7Q==)
+    url: ENC(TXNeJHKB6555E6BKWt0JtfQnYROuZs43+fFC9eyJji58FEpNL6K44GQVMmjJYJEZkGU1lR6cAspmBuT7RWa/I75lCm6e7KWJHrUTXB44xRR/hcqfuBwHtUjKpl/XfthYK5Zs8z/CxKsfeNrpZMoNHAgYM2O9rkYaVif7KBpIDrB+DgOAt+2VEA==)
+    username: ENC(x+cM3eM5dXMMvtjcaS2lo/0mogj1SnUw)
+    password: ENC(75GW/0QEsaOTKReqHGOxt0BJ3pd7V7XU)
+
+    hikari:
+      connection-timeout: 10000
+      minimum-idle: 3
+      maximum-pool-size: 6
+      idle-timeout: 10000
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+#thread pool
+server:
+  tomcat:
+    threads:
+      min-spare: 2
+      max: 5
+
+#logging
+logging:
+  level.org:
+      springframework: info
+      security: trace
+      zercok: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
