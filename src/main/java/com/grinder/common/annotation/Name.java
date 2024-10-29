@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 각 필드의 역할을 설명하기 위한 애노테이션.
+ * 각 필드의 역할을 설명하기 위한 애노테이션
  */
 
 @Retention(RetentionPolicy.RUNTIME)

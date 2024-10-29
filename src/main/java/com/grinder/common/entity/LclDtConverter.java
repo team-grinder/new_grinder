@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 //Local Date Time 변환 로직
 @Converter(autoApply = true)
 public class LclDtConverter implements AttributeConverter<LocalDateTime, String> {
-    // 저장할 때 사용하는 포맷 (YYYYMMDDHH24MISS)
     private static final DateTimeFormatter SAVE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     @Override
