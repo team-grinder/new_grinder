@@ -17,12 +17,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseDateEntity implements Serializable {
     @CreatedDate
-    @Column(updatable = false, nullable = false, length = 14)
-    @Convert(converter = LclDtConverter.class)
+    @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP(6)")
     private LocalDateTime createDate;
 
     @LastModifiedDate
-    @Column(nullable = false, length = 14)
-    @Convert(converter = LclDtConverter.class)
+    @Column(nullable = false, columnDefinition = "TIMESTAMP(6)")
     private LocalDateTime modifiedDate;
 }
