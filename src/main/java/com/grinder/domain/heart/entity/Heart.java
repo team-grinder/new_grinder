@@ -22,7 +22,7 @@ public class Heart {
     @JoinColumn(nullable = false)
     private Member member;
 
-    @Column(nullable = false, length = 36)
+    @Column(nullable = false)
     private Long contentId;
 
     @Enumerated(EnumType.STRING)
