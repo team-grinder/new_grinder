@@ -4,8 +4,6 @@ import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.cafe.entity.Cafe;
 import com.grinder.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,8 +13,6 @@ import javax.persistence.*;
         @Index(name = "idx_cafe_id", columnList = "cafe_id"),
         @Index(name = "idx_visible_updatedAt_feedId", columnList = "is_visible, updated_at, feed_id")
 })
-@Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Feed extends BaseDateEntity {
