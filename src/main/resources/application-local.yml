@@ -47,12 +47,29 @@ spring:
               - profile
               - email
 
+          kakao:
+            client-name: kakao
+            client-id: ENC(NU8nItxNprfX+TRnNjKLstiSYi1w9Zw2LmSSGNP78wvvdADFhaRNu4UcyPWT8d1Y)
+            client-secret: ENC(OEU1xmCOg1m4550qaUrvFMH/WBDLfp4FqBo4xFPJuSWQ1fXMJocBoJi/SMOSgizy)
+            redirect-uri: ENC(B9549fFiFR23XzUzplLYUt6SUgE4e+zod87xFRGzXOQRhgumWU3gtQJXmzn89qr6fioiWZ0Y/Xw=)
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - account_email
+
       provider:
         naver:
           authorization-uri: ENC(TeVq+bFrL+WbILoraSLsVsutbyzGP8e0oVayHhnorHysM5iY66ZfnGKQcaSX4saNQ/3LFxZ6etA=)
           token-uri: ENC(aeRHoputB2DeXiCnm/8M9R9pP7jIfGAh2v1HbF25zL2jmQ19zIZtJgwl35Scqpdr)
           user-info-uri: ENC(szyEnD/rOuJH5YmWZWyjcb4Cfqw9bbuTjJ+/zIVSDzx3U+4rz5zkFiG2tkyoUzZl)
           user-name-attribute: response
+
+        kakao:
+          authorization-uri: ENC(cLZXUfFeBu+/6uF9rERJix9wPSIlV94YEXalNhfySLaa0iqJx9+tPDrF/MH20WpV)
+          token-uri: ENC(XI+aj4zB8wNryuj+DCzqiLVoeTY4moU4ox5hjChQpwr2kwNAUJ615ShM4EGjXU4e)
+          user-info-uri: ENC(T9IZi3zqyK8jDbUy8r0BN0Tp4buz+8xHoqP78YUxAZRGMVbJ54KY/ruuxRTBbbUs)
+          user-name-attribute: id
 
 # thread pool
 server:
