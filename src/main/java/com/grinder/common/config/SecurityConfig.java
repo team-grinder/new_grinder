@@ -16,6 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final CacheManager cacheManager;
+    private final MemberDetailsService memberDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -40,5 +42,16 @@ public class SecurityConfig {
     }
 
 
+    /**
+     * 유저 인증 시 캐싱 처리
+     */
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(memberDetailsService);
 
+        // SpringCacheBasedUserCache 설정
+        authProvider.setUserCache(new SpringCacheBasedUserCache(cacheManager.getCache("userCache")));
+        return authProvider;
+    }
 }
