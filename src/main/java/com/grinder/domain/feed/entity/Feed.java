@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(indexes = {
-        @Index(name = "idx_cafe_id", columnList = "cafe_id")
-})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Feed extends BaseDateEntity {
@@ -34,10 +31,9 @@ public class Feed extends BaseDateEntity {
     @Column(nullable = false)
     private Boolean isVisible;
 
-    @Column(name = "grade")
     private Integer grade;
 
-    @Column(name = "rank")
+    @Column(name = "rank_value")
     private Integer rank;
 
 }
