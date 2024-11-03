@@ -9,10 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(indexes = {
-        @Index(name = "idx_feed_id", columnList = "feed_id"),
-        @Index(name = "idx_parent_comment_id", columnList = "parent_comment_id")
-})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment extends BaseDateEntity {

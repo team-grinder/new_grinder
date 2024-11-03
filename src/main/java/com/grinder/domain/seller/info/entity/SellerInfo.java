@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"member_id", "cafe_id"})
-})
 @NoArgsConstructor
 @AllArgsConstructor
 public class SellerInfo {

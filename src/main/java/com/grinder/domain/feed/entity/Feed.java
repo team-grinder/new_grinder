@@ -10,8 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_cafe_id", columnList = "cafe_id"),
-        @Index(name = "idx_visible_updatedAt_feedId", columnList = "is_visible, updated_at, feed_id")
+        @Index(name = "idx_cafe_id", columnList = "cafe_id")
 })
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,11 +21,11 @@ public class Feed extends BaseDateEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
     @Column(nullable = false, length = 2000)

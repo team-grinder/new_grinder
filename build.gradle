@@ -25,7 +25,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 //    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
@@ -40,14 +40,16 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok'
 
-    // QUERYDSL
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+//    // QUERYDSL
+//    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+//    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0'
+//    annotationProcessor 'javax.annotation:javax.annotation-api'
+//    annotationProcessor 'javax.persistence:javax.persistence-api'
+//
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
@@ -55,20 +57,20 @@ tasks.named('test') {
     systemProperty 'jasypt.encryptor.password', findProperty("jasypt.encryptor.password")
 }
 
-// === QueryDsl 빌드 옵션 ===
-def generated = layout.buildDirectory.dir("generated/querydsl")
-
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
-    options.getGeneratedSourceOutputDirectory().set(file(generated))
-}
-
-// java source set 에 querydsl QClass 위치 추가
-sourceSets {
-    main.java.srcDirs += [ generated.get().asFile ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제
-clean {
-    delete file(generated)
-}
+//// === QueryDsl 빌드 옵션 ===
+//def generated = layout.buildDirectory.dir("generated/querydsl")
+//
+//// querydsl QClass 파일 생성 위치를 지정
+//tasks.withType(JavaCompile) {
+//    options.getGeneratedSourceOutputDirectory().set(file(generated))
+//}
+//
+//// java source set 에 querydsl QClass 위치 추가
+//sourceSets {
+//    main.java.srcDirs += [ generated.get().asFile ]
+//}
+//
+//// gradle clean 시에 QClass 디렉토리 삭제
+//clean {
+//    delete file(generated)
+//}

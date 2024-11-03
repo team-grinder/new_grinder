@@ -26,6 +26,6 @@ public class Heart {
     private Long contentId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 16)
+    @Column(name = "content_type", nullable = false, length = 16)
     private ContentType contentType;
 }
