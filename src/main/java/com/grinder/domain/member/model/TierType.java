@@ -1,7 +1,9 @@
 package com.grinder.domain.member.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum TierType {
     MASTER("master"),
