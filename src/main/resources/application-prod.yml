@@ -23,14 +23,35 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
 
-#thread pool
+  security:
+    oauth2:
+      client:
+        registration:
+          naver:
+            client-name: naver
+            client-id: ENC(cPpWmy1bRHSmNLIVa/07KhxVyMtOvf9clNBRNNetshk=)
+            client-secret: ENC(fvYj+WAbNCPveV0wRRZvMe6pskohKeLB)
+            redirect-uri: ENC(lWQY1dlOSYaPMpAawj/mRkdshIjQTYVjdV9Dr0dQAQsMDnRPahVfao8Gc9rEz2HvbRWcqIRWU1s=)
+            authorization-grant-type: authorization_code
+            scope:
+              - name
+              - email
+
+      provider:
+        naver:
+          authorization-uri: ENC(TeVq+bFrL+WbILoraSLsVsutbyzGP8e0oVayHhnorHysM5iY66ZfnGKQcaSX4saNQ/3LFxZ6etA=)
+          token-uri: ENC(aeRHoputB2DeXiCnm/8M9R9pP7jIfGAh2v1HbF25zL2jmQ19zIZtJgwl35Scqpdr)
+          user-info-uri: ENC(szyEnD/rOuJH5YmWZWyjcb4Cfqw9bbuTjJ+/zIVSDzx3U+4rz5zkFiG2tkyoUzZl)
+          user-name-attribute: response
+
+# thread pool
 server:
   tomcat:
     threads:
       min-spare: 2
       max: 5
 
-#logging
+# logging
 logging:
   level.org:
     springframework: info
