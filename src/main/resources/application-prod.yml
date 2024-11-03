@@ -37,6 +37,16 @@ spring:
               - name
               - email
 
+          google:
+            client-name: google
+            client-id: ENC(ZbYfiO0SRwaewrDp9VCZAqpsyxzfaU7tJiGSrn0veKV/3X+rmrnZv4QQrVcnigfCsii+6sQVdOsKeUaNpJs16gJuWpvTKZ+ELZxii14KMhPsm483xF/YnA==)
+            client-secret: ENC(i6e2a6JLniaAG/qgjKPYSsDk9AqxJAtQfWVHlhzGLxTFG27+8LsJ5ucij/imNm66)
+            redirect-uri: ENC(OcOB6ZXVKfjLHYtuA1fIwRLU7eDZbyzJQhuRdFJwZQabi724d5v0PsVTlscEJvKXEH7Xnsjwn5w=)
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
+
       provider:
         naver:
           authorization-uri: ENC(TeVq+bFrL+WbILoraSLsVsutbyzGP8e0oVayHhnorHysM5iY66ZfnGKQcaSX4saNQ/3LFxZ6etA=)
