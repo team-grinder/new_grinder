@@ -5,10 +5,12 @@ import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.member.model.TierType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,4 +37,6 @@ public class Member extends BaseDateEntity {
     @Name(name = "카페 관리자 연관 관계")
     private Long CafeAdminId;
 
+    @Name(name = "삭제 여부")
+    private boolean isDeleted;
 }
