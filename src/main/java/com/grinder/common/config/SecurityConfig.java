@@ -1,6 +1,7 @@
 package com.grinder.common.config;
 
-import com.grinder.common.security.MemberDetailsService;
+import com.grinder.common.security.common.service.MemberDetailsService;
+import com.grinder.common.security.oauth.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final OAuth2MemberService customOAuth2MemberService;
     private final CacheManager cacheManager;
     private final MemberDetailsService memberDetailsService;
 
@@ -37,7 +39,8 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .permitAll()
+                        .userInfoEndpoint((userInfoEndpointConfig) ->
+                                userInfoEndpointConfig.userService(customOAuth2MemberService))
                 )
                 .httpBasic(httpBasic -> httpBasic
                         .disable()
