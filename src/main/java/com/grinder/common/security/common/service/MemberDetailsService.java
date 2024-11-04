@@ -1,6 +1,6 @@
-package com.grinder.common.security;
+package com.grinder.common.security.common.service;
 
-import com.grinder.common.security.model.MemberUserDetails;
+import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.domain.member.entity.Member;
 import com.grinder.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
