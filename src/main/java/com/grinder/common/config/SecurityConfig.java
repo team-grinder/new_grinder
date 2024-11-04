@@ -27,20 +27,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests(authorizeRequests ->
-                authorizeRequests
-                    .antMatchers("/").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .formLogin(formLogin ->
-                formLogin
-                    .loginPage("/login").loginProcessingUrl("/loginProcess").permitAll()
-            )
-            .csrf().disable();
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .antMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/loginProcess")
+                        .permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .permitAll()
+                )
+                .httpBasic(httpBasic -> httpBasic
+                        .disable()
+                )
+                .csrf()
+                .disable();
 
         return http.build();
     }
-
 
     /**
      * 유저 인증 시 캐싱 처리
