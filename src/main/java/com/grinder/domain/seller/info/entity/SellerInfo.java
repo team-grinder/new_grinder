@@ -1,7 +1,7 @@
 package com.grinder.domain.seller.info.entity;
 
-import com.grinder.domain.cafe.entity.Cafe;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.cafe.entity.CafeEntity;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -18,9 +18,9 @@ public class SellerInfo {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Cafe cafe;
+    private CafeEntity cafeEntity;
 }

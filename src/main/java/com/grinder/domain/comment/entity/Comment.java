@@ -2,7 +2,7 @@ package com.grinder.domain.comment.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.feed.entity.Feed;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +22,7 @@ public class Comment extends BaseDateEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @Column(nullable = false, length = 200)
     private String content;
