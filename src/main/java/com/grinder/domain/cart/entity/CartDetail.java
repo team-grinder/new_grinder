@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class CartInfo extends BaseDateEntity {
+public class CartDetail extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;
