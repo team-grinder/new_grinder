@@ -1,7 +1,7 @@
 package com.grinder.domain.heart.entity;
 
 import com.grinder.domain.heart.model.ContentType;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +20,7 @@ public class Heart {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @Column(nullable = false)
     private Long contentId;

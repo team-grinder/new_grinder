@@ -16,5 +16,7 @@ public @interface Name {
 
     String description() default "";
 
+    String defaultValue() default "";
+
     String example() default "";
 }

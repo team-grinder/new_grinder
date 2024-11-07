@@ -3,13 +3,14 @@ package com.grinder.domain.cart.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.grinder.domain.cart.model.CartDTO;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -27,4 +28,20 @@ public class Cart extends BaseDateEntity {
     @Name(name = "카페 정보 연관 관계")
     private Long cafeId;
 
+    @Name(name = "주문 여부", defaultValue = "false")
+    private boolean isOrdered;
+
+
+    @PrePersist
+    public void prePersist() {
+        this.isOrdered = false;
+    }
+
+    public CartDTO toCartDTO() {
+        return CartDTO.builder()
+                .id(id)
+                .memberId(memberId)
+                .cafeId(cafeId)
+                .build();
+    }
 }

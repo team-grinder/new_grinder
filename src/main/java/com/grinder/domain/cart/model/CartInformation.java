@@ -1,26 +1,17 @@
-package com.grinder.domain.seller.info.entity;
+package com.grinder.domain.cart.model;
 
 import com.grinder.domain.cafe.entity.CafeEntity;
 import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
-@Entity
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SellerInfo {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
+public class CartInformation {
     private MemberEntity memberEntity;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
     private CafeEntity cafeEntity;
 }

@@ -1,7 +1,7 @@
 package com.grinder.common.security.common.service;
 
 import com.grinder.common.security.common.model.MemberUserDetails;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.member.entity.MemberEntity;
 import com.grinder.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,9 @@ public class MemberDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email){
-        Member member = memberRepository.findByEmail(email)
+        MemberEntity memberEntity = memberRepository.findByEmail(email)
                 .orElseThrow(()->new NullPointerException("회원 정보가 존재하지 않습니다. : " + email));
 
-        return new MemberUserDetails(member);
+        return new MemberUserDetails(memberEntity);
     }
 }

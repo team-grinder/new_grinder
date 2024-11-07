@@ -1,8 +1,8 @@
 package com.grinder.domain.feed.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.cafe.entity.Cafe;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.cafe.entity.CafeEntity;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -19,11 +19,11 @@ public class Feed extends BaseDateEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @ManyToOne
     @JoinColumn(name = "cafe_id")
-    private Cafe cafe;
+    private CafeEntity cafeEntity;
 
     @Column(nullable = false, length = 2000)
     private String content;
