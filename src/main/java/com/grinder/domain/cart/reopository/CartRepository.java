@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    boolean existsByMemberIdAndCafeIdAndOrderedIsFalse(Long memberId, Long cafeId);
+    boolean existByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
 
-    Optional<Cart> findByMemberIdAndCafeIdAndOrderedIsFalse(Long memberId, Long cafeId);
+    Optional<Cart> findByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
 
     @Modifying
     @Query("update Cart c set c.cafeId = :cafeId where c = :cart and c.isOrdered = false")

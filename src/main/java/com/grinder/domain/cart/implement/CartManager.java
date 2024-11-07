@@ -1,4 +1,4 @@
-package com.grinder.domain.cart.reader;
+package com.grinder.domain.cart.implement;
 
 import com.grinder.domain.cart.entity.Cart;
 import com.grinder.domain.cart.entity.CartDetail;
@@ -12,40 +12,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CartReader {
+public class CartManager {
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
     private final MenuRepository menuRepository;
-
-    public boolean hasUnorderedCart(Long memberId, Long cafeId) {
-        return cartRepository.existsByMemberIdAndCafeIdAndOrderedIsFalse(memberId, cafeId);
-    }
-
-    public CartDTO overwriteCart(Cart cart, Long cafeId) {
-        cartRepository.updateCafeId(cart, cafeId);
-
-        return cart.toCartDTO();
-    }
-
-    public Cart findCart(Long memberId, Long cafeId) {
-        return cartRepository.findByMemberIdAndCafeIdAndOrderedIsFalse(memberId, cafeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 카페의 장바구니가 존재하지 않습니다.")
-        );
-    }
-
-    public Cart findCart(Long cartId) {
-        return cartRepository.findById(cartId).orElseThrow(
-                () -> new IllegalArgumentException("해당 장바구니가 존재하지 않습니다.")
-        );
-    }
-
-    public void createCart(Long memberId, Long cafeId) {
-        cartRepository.save(Cart.builder()
-                .memberId(memberId)
-                .cafeId(cafeId)
-                .build()
-        );
-    }
 
     public CartDetail addMenu(Cart cart, Long menuId, int quantity) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(
@@ -61,5 +31,19 @@ public class CartReader {
                 .quantity(quantity)
                 .build()
         );
+    }
+
+    public void createCart(Long memberId, Long cafeId) {
+        cartRepository.save(Cart.builder()
+                .memberId(memberId)
+                .cafeId(cafeId)
+                .build()
+        );
+    }
+
+    public CartDTO overwriteCart(Cart cart, Long cafeId) {
+        cartRepository.updateCafeId(cart, cafeId);
+
+        return cart.toCartDTO();
     }
 }

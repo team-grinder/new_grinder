@@ -32,11 +32,6 @@ public class Cart extends BaseDateEntity {
     private boolean isOrdered;
 
 
-    @PrePersist
-    public void prePersist() {
-        this.isOrdered = false;
-    }
-
     public CartDTO toCartDTO() {
         return CartDTO.builder()
                 .id(id)
