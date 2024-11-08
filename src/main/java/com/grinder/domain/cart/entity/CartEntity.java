@@ -3,7 +3,7 @@ package com.grinder.domain.cart.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.cart.model.CartDTO;
+import com.grinder.domain.cart.model.Cart;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,8 +29,8 @@ public class CartEntity extends BaseDateEntity {
     private boolean isOrdered;
 
 
-    public CartDTO toCartDTO() {
-        return CartDTO.builder()
+    public Cart toCart() {
+        return Cart.builder()
                 .id(id)
                 .memberId(memberId)
                 .cafeId(cafeId)

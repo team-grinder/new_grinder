@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CartDTO {
+public class Cart {
     private Long id;
 
     private Long memberId;

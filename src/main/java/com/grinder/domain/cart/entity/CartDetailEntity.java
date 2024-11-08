@@ -2,6 +2,7 @@ package com.grinder.domain.cart.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.domain.cart.model.CartDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -29,4 +30,13 @@ public class CartDetailEntity extends BaseDateEntity {
 
     @Name(name = "수량")
     private int quantity;
+
+    public CartDetail toCartDetail() {
+        return CartDetail.builder()
+                .id(id)
+                .cartId(cartId)
+                .menuId(menuId)
+                .quantity(quantity)
+                .build();
+    }
 }
