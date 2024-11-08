@@ -3,6 +3,7 @@ package com.grinder.domain.menu.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.domain.menu.model.MenuInfo;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Menu extends BaseDateEntity {
+public class MenuEntity extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -37,4 +38,17 @@ public class Menu extends BaseDateEntity {
 
     @Name(name = "카페 정보 연관 관계")
     private Long cafeId;
+
+    public MenuInfo toMenuInfo() {
+        return MenuInfo.builder()
+                .id(id)
+                .description(description)
+                .price(price)
+                .stock(stock)
+                .seasonYn(seasonYn)
+                .sequence(sequence)
+                .imageId(imageId)
+                .cafeId(cafeId)
+                .build();
+    }
 }

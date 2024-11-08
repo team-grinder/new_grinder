@@ -14,10 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"memberId", "cafeId"})
-})
-public class Cart extends BaseDateEntity {
+public class CartEntity extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;

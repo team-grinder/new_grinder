@@ -1,8 +1,7 @@
-package com.grinder.domain.cafe.reader;
+package com.grinder.domain.cafe.implement;
 
 import com.grinder.domain.cafe.model.CafeBasicInfo;
 import com.grinder.domain.cafe.repository.CafeRepository;
-import com.grinder.domain.cart.entity.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.grinder.domain.cart.reopository;
 
-import com.grinder.domain.cart.entity.Cart;
+import com.grinder.domain.cart.entity.CartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
-    boolean existByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
+public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
-    Optional<Cart> findByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
+    boolean existsByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
+
+    Optional<CartEntity> findByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
 
     @Modifying
-    @Query("update Cart c set c.cafeId = :cafeId where c = :cart and c.isOrdered = false")
-    void updateCafeId(Cart cart, Long cafeId);
+    @Query("update CartEntity c set c.cafeId = :cafeId where c = :cartEntity and c.isOrdered = false")
+    void updateCafeId(CartEntity cartEntity, Long cafeId);
 }
