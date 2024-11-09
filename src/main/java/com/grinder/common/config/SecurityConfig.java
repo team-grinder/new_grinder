@@ -30,7 +30,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .antMatchers("/", "/oauth2/**", "/login/**").permitAll()
+                        .antMatchers("/login/oauth2/code/**").permitAll()
+                        .antMatchers("/login/**").permitAll()
+                        .antMatchers("/oauth2/**").permitAll()
+                        .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
