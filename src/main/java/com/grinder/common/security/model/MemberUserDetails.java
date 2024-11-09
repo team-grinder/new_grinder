@@ -1,6 +1,6 @@
 package com.grinder.common.security.model;
 
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,23 +11,23 @@ import java.util.HashSet;
 @AllArgsConstructor
 public class MemberUserDetails implements UserDetails {
 
-    private final Member member;
+    private final MemberEntity memberEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         HashSet<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(() -> member.getTier().getValue());
+        authorities.add(() -> memberEntity.getTier().getValue());
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return memberEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        return memberEntity.getEmail();
     }
 
     @Override
@@ -47,6 +47,6 @@ public class MemberUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !member.isDeleted();
+        return !memberEntity.isDeleted();
     }
 }

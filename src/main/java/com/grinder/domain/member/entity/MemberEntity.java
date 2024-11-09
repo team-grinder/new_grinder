@@ -2,6 +2,7 @@ package com.grinder.domain.member.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.domain.member.model.MemberBasicInfo;
 import com.grinder.domain.member.model.TierType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Member extends BaseDateEntity {
+public class MemberEntity extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -39,4 +40,13 @@ public class Member extends BaseDateEntity {
 
     @Name(name = "삭제 여부")
     private boolean isDeleted;
+
+    public MemberBasicInfo toBasicInfo() {
+        return MemberBasicInfo.builder()
+                .id(id)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .tier(tier)
+                .build();
+    }
 }

@@ -1,8 +1,8 @@
 package com.grinder.domain.seller.apply.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.cafe.entity.Cafe;
-import com.grinder.domain.member.entity.Member;
+import com.grinder.domain.cafe.entity.CafeEntity;
+import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -19,11 +19,11 @@ public class SellerApply extends BaseDateEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Cafe cafe;
+    private CafeEntity cafeEntity;
 
     private String regImageUrl;
 
