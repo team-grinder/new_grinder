@@ -18,7 +18,7 @@ public class CartReader {
     private final MenuRepository menuRepository;
 
     public boolean hasUnorderedCart(Long memberId, Long cafeId) {
-        return cartRepository.existsByMemberIdAndCafeIdAndOrderedIsFalse(memberId, cafeId);
+        return cartRepository.existsByMemberIdAndCafeIdAndIsOrderedIsFalse(memberId, cafeId);
     }
 
     public CartDTO overwriteCart(Cart cart, Long cafeId) {
@@ -28,7 +28,7 @@ public class CartReader {
     }
 
     public Cart findCart(Long memberId, Long cafeId) {
-        return cartRepository.findByMemberIdAndCafeIdAndOrderedIsFalse(memberId, cafeId).orElseThrow(
+        return cartRepository.findByMemberIdAndCafeIdAndIsOrderedIsFalse(memberId, cafeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 카페의 장바구니가 존재하지 않습니다.")
         );
     }
