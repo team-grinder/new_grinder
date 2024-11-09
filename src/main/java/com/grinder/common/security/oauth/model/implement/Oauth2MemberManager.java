@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
-public class MemberManager {
+public class Oauth2MemberManager {
     private final MemberRepository memberRepository;
 
     public Member findOrCreate(OAuth2Response oAuth2Response) {
