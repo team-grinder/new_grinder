@@ -1,6 +1,7 @@
 package com.grinder.common.config;
 
-import com.grinder.common.security.MemberDetailsService;
+import com.grinder.common.security.common.service.MemberDetailsService;
+import com.grinder.common.security.oauth.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final OAuth2MemberService customOAuth2MemberService;
     private final CacheManager cacheManager;
     private final MemberDetailsService memberDetailsService;
 
@@ -27,20 +29,38 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests(authorizeRequests ->
-                authorizeRequests
-                    .antMatchers("/").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .formLogin(formLogin ->
-                formLogin
-                    .loginPage("/login").loginProcessingUrl("/loginProcess").permitAll()
-            )
-            .csrf().disable();
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .antMatchers("/login/oauth2/code/**").permitAll()
+                        .antMatchers("/login/**").permitAll()
+                        .antMatchers("/oauth2/**").permitAll()
+                        .antMatchers("/").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/loginProcess")
+                        .permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) ->
+                                userInfoEndpointConfig.userService(customOAuth2MemberService))
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .permitAll()
+                )
+                .httpBasic(httpBasic -> httpBasic
+                        .disable()
+                )
+                .csrf()
+                .disable();
 
         return http.build();
     }
-
 
     /**
      * 유저 인증 시 캐싱 처리

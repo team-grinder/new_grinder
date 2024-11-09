@@ -1,4 +1,4 @@
-package com.grinder.common.security.model;
+package com.grinder.common.security.common.model;
 
 import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
