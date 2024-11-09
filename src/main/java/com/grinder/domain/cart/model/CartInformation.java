@@ -1,17 +1,19 @@
 package com.grinder.domain.cart.model;
 
-import com.grinder.domain.cafe.entity.CafeEntity;
-import com.grinder.domain.member.entity.MemberEntity;
+import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.menu.model.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartInformation {
-    private MemberEntity memberEntity;
-    private CafeEntity cafeEntity;
+    private Cafe cafe;
+    private List<Menu> menuList;
 }

@@ -14,6 +14,8 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
     Optional<CartEntity> findByMemberIdAndCafeIdAndIsOrderedIsFalse(Long memberId, Long cafeId);
 
+    Optional<CartEntity> findByMemberIdAndIsOrderedIsFalse(Long memberId);
+
     @Modifying
     @Query("update CartEntity c set c.cafeId = :cafeId where c.id = :cartId and c.isOrdered = false")
     void updateCafeId(Long cartId, Long cafeId);

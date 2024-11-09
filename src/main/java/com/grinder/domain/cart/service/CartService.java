@@ -1,11 +1,10 @@
 package com.grinder.domain.cart.service;
 
-import com.grinder.domain.cart.entity.CartDetailEntity;
-import com.grinder.domain.cart.entity.CartEntity;
 import com.grinder.domain.cart.implement.CartManager;
-import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.implement.CartReader;
+import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.model.CartDetail;
+import com.grinder.domain.cart.model.CartInformation;
 import com.grinder.domain.member.model.MemberBasicInfo;
 import com.grinder.domain.member.reader.MemberReader;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,11 @@ public class CartService {
     private final CartReader cartReader;
     private final MemberReader memberReader;
     private final CartManager cartManager;
+
+    public CartInformation getMyCart(String email) {
+        MemberBasicInfo memberInfo = memberReader.readEmail(email);
+        return cartManager.getMyCart(memberInfo.getId());
+    }
 
     @Transactional
     public void createCart(String email, Long cafeId) {
@@ -35,16 +39,16 @@ public class CartService {
     public CartDetail addMenu(String email, Long cafeId, Long menuId, int quantity) {
         MemberBasicInfo memberInfo = memberReader.readEmail(email);
 
-        CartEntity cartEntity = cartReader.findCart(memberInfo.getId(), cafeId);
+        Cart cart = cartReader.findCart(memberInfo.getId(), cafeId);
 
-        return cartManager.addMenu(cartEntity.getId(), menuId, quantity);
+        return cartManager.addMenu(cart.getId(), menuId, quantity);
     }
 
     @Transactional
     public void overwriteCart(Long cartId, Long cafeId) {
-        CartEntity cartEntity = cartReader.findCart(cartId);
+        Cart cart = cartReader.read(cartId);
 
-        Cart cart = cartManager.overwriteCart(cartEntity, cafeId);
+        cartManager.overwriteCart(cart.getId(), cafeId);
     }
 
     public boolean hasUnorderedCart(String email, Long cafeId) {

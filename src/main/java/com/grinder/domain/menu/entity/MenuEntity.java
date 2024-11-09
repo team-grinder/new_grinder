@@ -3,7 +3,7 @@ package com.grinder.domain.menu.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.menu.model.MenuInfo;
+import com.grinder.domain.menu.model.Menu;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -39,8 +39,8 @@ public class MenuEntity extends BaseDateEntity {
     @Name(name = "카페 정보 연관 관계")
     private Long cafeId;
 
-    public MenuInfo toMenuInfo() {
-        return MenuInfo.builder()
+    public Menu toMenu() {
+        return Menu.builder()
                 .id(id)
                 .description(description)
                 .price(price)

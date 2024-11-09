@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CafeBasicInfo {
+public class Cafe {
     private Long id;
 
     private String name;

@@ -11,4 +11,12 @@ public class Cart {
     private Long memberId;
 
     private Long cafeId;
+
+    public static class WithDetail {
+        private Long cafeId;
+
+        private Long menuId;
+
+        private int quantity;
+    }
 }

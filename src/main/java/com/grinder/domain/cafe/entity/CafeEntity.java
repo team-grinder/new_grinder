@@ -2,7 +2,7 @@ package com.grinder.domain.cafe.entity;
 
 
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.cafe.model.CafeBasicInfo;
+import com.grinder.domain.cafe.model.Cafe;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,8 +32,8 @@ public class CafeEntity extends BaseDateEntity {
 
     private String businessNumber;
 
-    public CafeBasicInfo toBasicInfo() {
-        return CafeBasicInfo.builder()
+    public Cafe toBasicInfo() {
+        return Cafe.builder()
                 .id(id)
                 .name(name)
                 .address(address)
