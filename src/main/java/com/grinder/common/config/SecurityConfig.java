@@ -45,6 +45,14 @@ public class SecurityConfig {
                         .userInfoEndpoint((userInfoEndpointConfig) ->
                                 userInfoEndpointConfig.userService(customOAuth2MemberService))
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .permitAll()
+                )
                 .httpBasic(httpBasic -> httpBasic
                         .disable()
                 )
