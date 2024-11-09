@@ -1,8 +1,7 @@
 package com.grinder.domain.cart.repository;
 
-import com.grinder.domain.cart.entity.Cart;
-import com.grinder.domain.cart.entity.QCart;
-import com.grinder.domain.cart.entity.QCartInfo;
+import com.grinder.domain.cart.entity.CartEntity;
+import com.grinder.domain.cart.entity.QCartEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -17,9 +16,8 @@ public class CartQueryRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public List<Cart> findCartList(Long memberId, Long cafeId) {
-        QCart cart = QCart.cart;
-        QCartInfo cartInfo = QCartInfo.cartInfo;
+    public List<CartEntity> findCartList(Long memberId, Long cafeId) {
+        QCartEntity cart = QCartEntity.cartEntity;
 
         return null;
     }

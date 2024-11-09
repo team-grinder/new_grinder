@@ -23,6 +23,6 @@ public class CartController {
 
         model.addAttribute("myCart", myCart);
 
-        return "cart/myCart";
+        return "";
     }
 }
