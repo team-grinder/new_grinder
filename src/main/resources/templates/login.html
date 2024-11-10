@@ -16,15 +16,13 @@
         <form th:action="@{/loginProcess}" method="post">
             <div class="email-box">
                 <img src="/images/icon/BsPersonCircle.png" alt="member_img">
-                <label for="emailInput">
-                </label>
-                <input id="emailInput" type="email" placeholder="이메일">
+                <label for="emailInput"></label>
+                <input id="emailInput" name="email" type="email" placeholder="이메일" required>
             </div>
             <div class="pw-box">
                 <img src="/images/icon/BsFillLockFill.png" alt="">
-                <label for="pwInput">
-                </label>
-                <input id="pwInput" type="password" placeholder="비밀번호">
+                <label for="pwInput"></label>
+                <input id="pwInput" name="password" type="password" placeholder="비밀번호" required>
             </div>
             <button type="submit" class="btn-login">로그인</button>
         </form>
@@ -46,6 +44,12 @@
                 <img src="/images/icon/icon_naver.png" alt="icon_naver">
                 네이버 계정으로 로그인</button>
         </div>
+
+        <div class="social-box3">
+            <button id="kakao-btn">
+                <img src="/images/icon/icon_kakao.png" alt="icon_kakao">
+                카카오 계정으로 로그인</button>
+        </div>
     </article>
 </main>
 <script src="/js/login.js"></script>
@@ -54,6 +58,7 @@
 <script>
     const naverBtn = document.querySelector("#naver-btn");
     const googleBtn = document.querySelector("#google-btn");
+    const kakaoBtn = document.querySelector("#kakao-btn");
 
     naverBtn.addEventListener('click', () => {
         // GET 요청 보내기
@@ -63,6 +68,10 @@
     googleBtn.addEventListener('click', () => {
         // GET 요청 보내기
         window.location.href = '/oauth2/authorization/google';
+    });
+    kakaoBtn.addEventListener('click', () => {
+        // GET 요청 보내기
+        window.location.href = '/oauth2/authorization/kakao';
     });
 </script>
 </html>
