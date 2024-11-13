@@ -12,6 +12,9 @@ public class MainController {
         return "/main/index";
     }
 
+    @GetMapping("/register")
+    public String register(){return "/main/register";}
+
     @GetMapping("/login")
     public String login() {
         return "login";
