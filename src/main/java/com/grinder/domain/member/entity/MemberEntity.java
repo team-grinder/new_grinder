@@ -71,17 +71,27 @@ public class MemberEntity extends BaseDateEntity {
                 .build();
     }
 
-    public MemberOauth toMemberAuth() {
-        return MemberOauth.builder()
-                .email(email)
-                .loginType(loginType)
-                .tier(tier)
-                .build();
-    }
+//    public MemberOauth toMemberAuth() {
+//        return MemberOauth.builder()
+//                .email(email)
+//                .loginType(loginType)
+//                .tier(tier)
+//                .build();
+//    }
 
-    @Builder
+    @Builder(builderClassName = "SocialMemberBuilder", builderMethodName = "socialBuilder")
     public MemberEntity(String email, LoginType loginType, TierType tier, boolean isDeleted) {
         this.email = email;
+        this.loginType = loginType;
+        this.tier = tier;
+        this.isDeleted = isDeleted;
+    }
+
+    @Builder(builderClassName = "CommonMemberBuilder", builderMethodName = "commonBuilder")
+    public MemberEntity(String email, String password, String phoneNumber,TierType tier,LoginType loginType,boolean isDeleted) {
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
         this.loginType = loginType;
         this.tier = tier;
         this.isDeleted = isDeleted;
