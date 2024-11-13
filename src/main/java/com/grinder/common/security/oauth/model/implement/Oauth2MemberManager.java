@@ -20,7 +20,7 @@ public class Oauth2MemberManager {
     }
 
     private Member createNewMember(OAuth2Response oAuth2Response) {
-        MemberEntity newMember = MemberEntity.builder()
+        MemberEntity newMember = MemberEntity.socialBuilder()
                 .email(oAuth2Response.getEmail())
                 .loginType(LoginType.SOCIAL)
                 .tier(TierType.SILVER)
