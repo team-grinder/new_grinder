@@ -55,12 +55,16 @@ label {
     box-sizing: border-box;
 }
 
-/* 오류 메시지 텍스트 */
-span {
+.form-container span {
+    display: none;
     color: #E10000;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 22px;
+}
+
+.form-container span[th\:if] {
+    display: block;
 }
 
 #join-btn {
