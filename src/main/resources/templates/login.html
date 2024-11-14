@@ -52,26 +52,33 @@
         </div>
     </article>
 </main>
-<script src="/js/login.js"></script>
+<div id="flashMessage" th:text="${message}" style="display: none;"></div>
 </body>
-
+<script src="/js/login.js"></script>
 <script>
     const naverBtn = document.querySelector("#naver-btn");
     const googleBtn = document.querySelector("#google-btn");
     const kakaoBtn = document.querySelector("#kakao-btn");
 
     naverBtn.addEventListener('click', () => {
-        // GET 요청 보내기
         window.location.href = '/oauth2/authorization/naver';
     });
 
     googleBtn.addEventListener('click', () => {
-        // GET 요청 보내기
         window.location.href = '/oauth2/authorization/google';
     });
     kakaoBtn.addEventListener('click', () => {
-        // GET 요청 보내기
         window.location.href = '/oauth2/authorization/kakao';
     });
+</script>
+<script>
+    window.onload = function() {
+        const flashMessageElement = document.getElementById('flashMessage');
+        const message = flashMessageElement ? flashMessageElement.textContent.trim() : "";
+
+        if (message) {
+            alert(message);
+        }
+    }
 </script>
 </html>
