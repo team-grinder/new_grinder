@@ -45,10 +45,8 @@ ol, ul {
 }
 body{
     position: relative;
-    width: 1400px;
     margin: 0 auto;
     font-family: 'GodoM', sans-serif;
-    zoom: 67%;
 }
 img {
     vertical-align: top; /* 이미지 아래 비는 공간 제거 */
@@ -59,10 +57,10 @@ button {
 
 textarea, input {
     outline-color: #009B55;
-    border: 1px solid #B4B4B4;
-    border-radius: 10px;
+    border: 0.0625em solid #B4B4B4;
+    border-radius: 0.625em;
     font-family: 'GodoM', sans-serif;
-    font-size: 20px;
+    font-size: 1.25em;
 }
 textarea::placeholder,
 input::placeholder {
