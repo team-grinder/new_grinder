@@ -45,13 +45,12 @@ ol, ul {
 }
 body{
     position: relative;
-    width: 1400px;
+    width: 100%;
     margin: 0 auto;
     font-family: 'GodoM', sans-serif;
-    zoom: 67%;
 }
 img {
-    vertical-align: top; /* 이미지 아래 비는 공간 제거 */
+    vertical-align: top;
 }
 button {
     cursor: pointer;
