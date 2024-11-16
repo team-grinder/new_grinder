@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberService {
     private final MemberManager memberManager;
-    private final BCryptPasswordEncoder passwordEncoder;
+
 
     public Member register(MemberRegister request) {
         memberManager.validateDuplicateEmail(request.getEmail());
+
         PasswordValidator.validatePassword(request.getPassword(), request.getConfirmPassword());
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        return memberManager.save(request, encodedPassword);
+        return memberManager.save(request);
     }
 }

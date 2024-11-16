@@ -19,8 +19,8 @@ public class MemberController {
     @PostMapping("/register")
     public String register(@ModelAttribute @Valid MemberRegister request,
                            BindingResult bindingResult,
-                           Model model,
-                           RedirectAttributes redirectAttributes) {
+                           RedirectAttributes redirectAttributes,
+                           Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("bindingResult", bindingResult);
