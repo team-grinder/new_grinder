@@ -5,8 +5,9 @@ import com.grinder.domain.cart.implement.CartReader;
 import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.model.CartDetail;
 import com.grinder.domain.cart.model.CartInformation;
+import com.grinder.domain.member.model.MemberBasicInfo;
+import com.grinder.domain.member.implement.MemberManager;
 import com.grinder.domain.member.reader.MemberReader;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CartService {
     private final CartReader cartReader;
-    private final MemberReader memberReader;
+    private final MemberManager memberManager;
     private final CartManager cartManager;
 
     public CartInformation getMyCart(String email) {
