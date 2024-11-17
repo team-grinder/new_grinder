@@ -1,11 +1,9 @@
 package com.grinder.domain.member.service;
 
 import com.grinder.common.utils.PasswordValidator;
-import com.grinder.domain.member.model.Member;
-import com.grinder.domain.member.model.MemberRegister;
 import com.grinder.domain.member.implement.MemberManager;
+import com.grinder.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +14,11 @@ public class MemberService {
     private final MemberManager memberManager;
 
 
-    public Member register(MemberRegister request) {
-        memberManager.validateDuplicateEmail(request.getEmail());
+    public Member register(String email, String password, String confirmPassword) {
+        memberManager.validateDuplicateEmail(email);
 
-        PasswordValidator.validatePassword(request.getPassword(), request.getConfirmPassword());
+        PasswordValidator.validatePassword(password, confirmPassword);
 
-        return memberManager.save(request);
+        return memberManager.save(email, password);
     }
 }

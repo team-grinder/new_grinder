@@ -5,13 +5,13 @@ import com.grinder.domain.member.entity.MemberEntity;
 import com.grinder.domain.member.model.LoginType;
 import com.grinder.domain.member.model.Member;
 import com.grinder.domain.member.model.MemberBasicInfo;
-import com.grinder.domain.member.model.MemberRegister;
 import com.grinder.domain.member.model.TierType;
 import com.grinder.domain.member.repository.MemberRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,16 +20,20 @@ public class MemberManager {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public MemberBasicInfo read(Long id) {
-        return memberRepository.findById(id).orElseThrow( () -> new MemberException("해당 회원이 존재하지 않습니다.") ).toBasicInfo();
+        return memberRepository.findById(id).orElseThrow(
+                () -> new MemberException("해당 회원이 존재하지 않습니다.")
+        ).toBasicInfo();
     }
     public MemberBasicInfo readEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow( () -> new MemberException("해당 이메일로 가입된 회원이 없습니다.") ).toBasicInfo();
+        return memberRepository.findByEmail(email).orElseThrow(
+                () -> new MemberException("해당 이메일로 가입된 회원이 없습니다.")
+        ).toBasicInfo();
     }
 
-    public Member save(MemberRegister request) {
+    public Member save(String email, String password) {
         MemberEntity memberEntity = MemberEntity.commonBuilder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .email(email)
+                .password(passwordEncoder.encode(password))
                 .loginType(LoginType.COMMON)
                 .tier(TierType.SILVER)
                 .isDeleted(false)
