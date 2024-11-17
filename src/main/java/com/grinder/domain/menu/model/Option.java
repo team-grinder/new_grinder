@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class Option {
     private Long id;
 
-    private String description;
+    private String name;
 
     private Long price;
 
@@ -20,11 +20,5 @@ public class Menu {
 
     private boolean lockYn;
 
-    private boolean seasonYn;
-
-    private int sequence;
-
-    private Long imageId;
-
-    private Long cafeId;
+    private Long menuId;
 }

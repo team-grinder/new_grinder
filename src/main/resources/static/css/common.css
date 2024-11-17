@@ -58,10 +58,10 @@ button {
 
 textarea, input {
     outline-color: #009B55;
-    border: 1px solid #B4B4B4;
-    border-radius: 10px;
+    border: 0.0625em solid #B4B4B4;
+    border-radius: 0.625em;
     font-family: 'GodoM', sans-serif;
-    font-size: 20px;
+    font-size: 1.25em;
 }
 textarea::placeholder,
 input::placeholder {

@@ -64,6 +64,13 @@ spring:
             token-uri: ENC(XI+aj4zB8wNryuj+DCzqiLVoeTY4moU4ox5hjChQpwr2kwNAUJ615ShM4EGjXU4e)
             user-info-uri: ENC(T9IZi3zqyK8jDbUy8r0BN0Tp4buz+8xHoqP78YUxAZRGMVbJ54KY/ruuxRTBbbUs)
             user-name-attribute: id
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
 
 server:
   tomcat:

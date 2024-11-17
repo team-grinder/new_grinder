@@ -9,10 +9,12 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 @Entity
 @Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -23,9 +25,11 @@ public class MenuEntity extends BaseDateEntity {
 
     private String description;
 
-    private String price;
+    private Long price;
     
     private int stock;
+
+    private boolean lockYn;
     
     @Name(name = "시즌 메뉴 여부")
     private boolean seasonYn;
@@ -39,12 +43,18 @@ public class MenuEntity extends BaseDateEntity {
     @Name(name = "카페 정보 연관 관계")
     private Long cafeId;
 
+    @PrePersist
+    public void prePersist() {
+        this.lockYn = false;
+    }
+
     public Menu toMenu() {
         return Menu.builder()
                 .id(id)
                 .description(description)
                 .price(price)
                 .stock(stock)
+                .lockYn(lockYn)
                 .seasonYn(seasonYn)
                 .sequence(sequence)
                 .imageId(imageId)
