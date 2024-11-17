@@ -1,5 +1,6 @@
 .swiper {
     width: 100%;
+    max-width: 1400px;
     height: 20em;
     background-color: #00A692;
     border-radius: 0.9375em;
