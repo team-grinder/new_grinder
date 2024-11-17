@@ -21,14 +21,14 @@ public class CartService {
     private final CartManager cartManager;
 
     public CartInformation getMyCart(String email) {
-        Long memberId = memberReader.readEmail(email).getId();
+        Long memberId = memberManager.readEmail(email).getId();
 
         return cartManager.getMyCart(memberId);
     }
 
     @Transactional
     public void createCart(String email, Long cafeId) {
-        Long memberId = memberReader.readEmail(email).getId();
+        Long memberId = memberManager.readEmail(email).getId();
 
         if (cartReader.hasUnorderedCart(memberId, cafeId)) {
             throw new IllegalArgumentException("이미 장바구니에 담긴 상품이 있습니다.");
@@ -39,7 +39,7 @@ public class CartService {
 
     @Transactional
     public CartDetail addMenu(String email, Long cafeId, Long menuId, int quantity) {
-        Long memberId = memberReader.readEmail(email).getId();
+        Long memberId = memberManager.readEmail(email).getId();
 
         Cart cart = cartReader.findCart(memberId, cafeId);
 
@@ -54,7 +54,7 @@ public class CartService {
     }
 
     public boolean hasUnorderedCart(String email, Long cafeId) {
-        Long memberId = memberReader.readEmail(email).getId();
+        Long memberId = memberManager.readEmail(email).getId();
         return cartReader.hasUnorderedCart(memberId, cafeId);
     }
 }
