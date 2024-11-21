@@ -55,6 +55,8 @@ img {
 button {
     all: unset;
     cursor: pointer;
+    box-sizing: border-box;
+    text-align: center;
 }
 textarea, input {
     outline-color: #009B55;

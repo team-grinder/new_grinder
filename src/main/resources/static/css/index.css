@@ -16,7 +16,7 @@
     left: 50%;
     width: 100%;
     max-width: 1280px;
-    padding: 0 1em;
+    padding: 0.7em 1em;
     transform: translate(-50%);
     background-color: white;
     z-index: 1;
@@ -128,3 +128,12 @@
     text-align: center;
 }
 
+.header-container .header-container-navigation .header-container-navigation-member-information ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-container .header-container-navigation .header-container-navigation-member-information ul li {
+    padding-right: 0.5em;
+}
