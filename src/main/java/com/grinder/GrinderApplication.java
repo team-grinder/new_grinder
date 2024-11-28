@@ -11,5 +11,4 @@ public class GrinderApplication {
     public static void main(String[] args) {
         SpringApplication.run(GrinderApplication.class, args);
     }
-
 }

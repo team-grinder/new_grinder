@@ -29,6 +29,8 @@ public class OptionEntity extends BaseDateEntity {
 
     private boolean lockYn;
 
+    private int sequence;
+
     @Name(name = "메뉴 정보 연관 관계", description = "메뉴 선택 시 나오는 소메뉴")
     private Long menuId;
 
@@ -45,6 +47,7 @@ public class OptionEntity extends BaseDateEntity {
                 .stock(stock)
                 .lockYn(lockYn)
                 .menuId(menuId)
+                .sequence(sequence)
                 .build();
     }
 }

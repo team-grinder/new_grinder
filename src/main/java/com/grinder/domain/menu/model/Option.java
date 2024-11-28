@@ -20,5 +20,7 @@ public class Option {
 
     private boolean lockYn;
 
+    private int sequence;
+
     private Long menuId;
 }

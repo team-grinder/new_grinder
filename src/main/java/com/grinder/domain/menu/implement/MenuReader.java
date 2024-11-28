@@ -1,10 +1,8 @@
 package com.grinder.domain.menu.implement;
 
 import com.grinder.domain.menu.entity.MenuEntity;
-import com.grinder.domain.menu.entity.OptionEntity;
 import com.grinder.domain.menu.model.Menu;
 import com.grinder.domain.menu.repository.MenuRepository;
-import com.grinder.domain.menu.repository.OptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MenuReader {
     private final MenuRepository menuRepository;
-    private final OptionRepository optionRepository;
+
+    public List<Menu> readAllMenu(Long cafeId) {
+        return menuRepository.findAllByCafeIdOrderBySequence(cafeId).stream().map(MenuEntity::toMenu).collect(Collectors.toList());
+    }
 
     public Menu read(Long menuId) {
         return menuRepository.findById(menuId).orElseThrow(
@@ -93,14 +94,5 @@ public class MenuReader {
     @Transactional
     public void deleteMenu(Long menuId) {
         menuRepository.deleteById(menuId);
-    }
-
-    @Transactional
-    public void addOption(Long menuId, String optionName, Long price) {
-        optionRepository.save(OptionEntity.builder()
-                .menuId(menuId)
-                .name(optionName)
-                .price(price)
-                .build());
     }
 }
