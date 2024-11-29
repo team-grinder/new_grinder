@@ -4,8 +4,8 @@ import com.grinder.domain.cart.entity.CartDetailEntity;
 import com.grinder.domain.cart.entity.CartEntity;
 import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.model.CartDetail;
-import com.grinder.domain.cart.reopository.CartDetailRepository;
-import com.grinder.domain.cart.reopository.CartRepository;
+import com.grinder.domain.cart.repository.CartDetailRepository;
+import com.grinder.domain.cart.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

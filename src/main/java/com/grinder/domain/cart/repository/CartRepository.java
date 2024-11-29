@@ -1,4 +1,4 @@
-package com.grinder.domain.cart.reopository;
+package com.grinder.domain.cart.repository;
 
 import com.grinder.domain.cart.entity.CartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

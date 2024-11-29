@@ -1,10 +1,12 @@
 package com.grinder.domain.cart.service;
 
+import com.grinder.domain.cart.exception.UnorderedCartAlreadyExistsException;
 import com.grinder.domain.cart.implement.CartManager;
 import com.grinder.domain.cart.implement.CartReader;
 import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.model.CartDetail;
 import com.grinder.domain.cart.model.CartInformation;
+import com.grinder.domain.cart.model.MenuVO;
 import com.grinder.domain.member.implement.MemberManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,19 @@ public class CartService {
         }
 
         cartManager.createCart(memberId, cafeId);
+    }
+
+    @Transactional
+    public boolean addMenuToCart(String email, MenuVO menuVO) {
+        Cart unorderedCart = cartManager.findUnorderedCart(email, menuVO.getCafeId());
+
+        if (!unorderedCart.getCafeId().equals(menuVO.getCafeId())) {
+            throw new UnorderedCartAlreadyExistsException("다른 카페의 장바구니가 이미 존재합니다.");
+        }
+
+        cartReader.createDetail(unorderedCart.getId(), menuVO.getMenuId(), menuVO.getQuantity());
+
+        return true;
     }
 
     @Transactional
