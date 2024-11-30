@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface OptionRepository extends JpaRepository<OptionEntity, Long> {
     List<OptionEntity> findAllByMenuIdOrderBySequence(Long menuId);
+
+    List<OptionEntity> findAllByMenuIdIn(List<Long> menuIds);
 }

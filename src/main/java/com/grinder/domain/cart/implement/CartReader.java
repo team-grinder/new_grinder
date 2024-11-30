@@ -6,6 +6,8 @@ import com.grinder.domain.cart.model.Cart;
 import com.grinder.domain.cart.model.CartDetail;
 import com.grinder.domain.cart.repository.CartDetailRepository;
 import com.grinder.domain.cart.repository.CartRepository;
+import com.grinder.domain.menu.implement.OptionReader;
+import com.grinder.domain.menu.model.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class CartReader {
+    private final OptionReader optionReader;
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
 
@@ -30,11 +33,14 @@ public class CartReader {
         ).toCart();
     }
 
-    public CartDetail createDetail(Long cartDetailId, Long menuId, int quantity) {
+    public CartDetail createDetail(Long cartDetailId, Long menuId, int quantity, List<Long> optionIds) {
+        List<Option> optionList = optionReader.readOptions(optionIds);
+
         return cartDetailRepository.save(CartDetailEntity.builder()
                 .cartId(cartDetailId)
                 .menuId(menuId)
                 .quantity(quantity)
+                .options(optionList)
                 .build()
         ).toCartDetail();
     }

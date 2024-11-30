@@ -1,20 +1,18 @@
 package com.grinder.domain.cart.model;
 
+import com.grinder.domain.menu.model.Menu;
+import com.grinder.domain.menu.model.Option;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class MenuVO {
-    private Long menuId;
-
-    private Long cafeId;
+public class MenuOptions {
+    private Menu menu;
 
     private int quantity;
 
-    private List<Long> optionIds;
+    private List<Option> options;
 }
