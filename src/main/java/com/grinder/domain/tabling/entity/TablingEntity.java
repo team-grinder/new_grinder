@@ -3,7 +3,7 @@ package com.grinder.domain.tabling.entity;
 
 import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.tabling.model.StatusType;
+import com.grinder.domain.tabling.model.TablingStatus;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Tabling extends BaseDateEntity {
+public class TablingEntity extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -24,7 +24,7 @@ public class Tabling extends BaseDateEntity {
     private int MaxNumber;
 
     @Enumerated(EnumType.STRING)
-    private StatusType status;
+    private TablingStatus status;
 
     private String reason;
 
