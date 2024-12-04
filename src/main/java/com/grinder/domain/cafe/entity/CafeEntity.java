@@ -3,10 +3,7 @@ package com.grinder.domain.cafe.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.cafe.model.Cafe;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +29,16 @@ public class CafeEntity extends BaseDateEntity {
 
     private String businessNumber;
 
-    public Cafe toBasicInfo() {
+    @Builder
+    public CafeEntity(String name, String address, String description, String tel, String businessNumber) {
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.tel = tel;
+        this.businessNumber = businessNumber;
+    }
+
+    public Cafe toCafe() {
         return Cafe.builder()
                 .id(id)
                 .name(name)

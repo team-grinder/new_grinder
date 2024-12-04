@@ -15,4 +15,8 @@ public class CafeService {
     public Cafe getCafe(Long cafeId) {
         return cafeReader.read(cafeId);
     }
+
+    public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {
+        return cafeReader.createCafe(name, address, description, tel, businessNumber);
+    }
 }
