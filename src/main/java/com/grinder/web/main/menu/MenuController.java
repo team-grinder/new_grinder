@@ -7,8 +7,8 @@ import com.grinder.domain.menu.model.Option;
 import com.grinder.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,15 +20,17 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
+    @GetMapping("/list/{cafeId}")
     public ResponseEntity<SuccessResult<List<Menu>>>
-    getMenuList(Long cafeId) {
+    getMenuList(@PathVariable Long cafeId) {
         List<Menu> menuList = menuService.getMenuList(cafeId);
 
         return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, menuList));
     }
 
+    @GetMapping("/options/{menuId}")
     public ResponseEntity<SuccessResult<List<Option>>>
-    getMenuOptions(Long menuId) {
+    getMenuOptions(@PathVariable Long menuId) {
         List<Option> optionList = menuService.getOptionList(menuId);
 
         return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, optionList));
