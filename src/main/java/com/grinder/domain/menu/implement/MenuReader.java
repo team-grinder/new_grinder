@@ -17,7 +17,8 @@ public class MenuReader {
     private final MenuRepository menuRepository;
 
     public List<Menu> readAllMenu(Long cafeId) {
-        return menuRepository.findAllByCafeIdOrderBySequence(cafeId).stream().map(MenuEntity::toMenu).collect(Collectors.toList());
+        return menuRepository.findAllByCafeIdOrderBySequence(cafeId).stream()
+                .map(MenuEntity::toMenu).collect(Collectors.toList());
     }
 
     public Menu read(Long menuId) {
