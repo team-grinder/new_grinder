@@ -33,6 +33,15 @@ public class CartReader {
         ).toCart();
     }
 
+    public CartDetail createDetail(Long cartDetailId, Long menuId, int quantity) {
+        return cartDetailRepository.save(CartDetailEntity.builder()
+                .cartId(cartDetailId)
+                .menuId(menuId)
+                .quantity(quantity)
+                .build()
+        ).toCartDetail();
+    }
+
     public CartDetail createDetail(Long cartDetailId, Long menuId, int quantity, List<Long> optionIds) {
         List<Option> optionList = optionReader.readOptions(optionIds);
 

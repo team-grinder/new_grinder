@@ -6,6 +6,9 @@ import com.grinder.domain.cafe.repository.CafeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class CafeReader {
@@ -15,6 +18,14 @@ public class CafeReader {
         return cafeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 카페가 존재하지 않습니다.")
         ).toCafe();
+    }
+
+    public List<Cafe> readByName(String name) {
+        List<CafeEntity> allByName = cafeRepository.findAllByName(name);
+        if (allByName.isEmpty()) {
+            throw new IllegalArgumentException("해당 이름의 카페가 존재하지 않습니다.");
+        }
+        return allByName.stream().map(CafeEntity::toCafe).collect(Collectors.toList());
     }
 
     public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {

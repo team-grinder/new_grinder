@@ -21,16 +21,16 @@ public class MenuController {
     private final MenuService menuService;
 
     @GetMapping("/list/{cafeId}")
-    public ResponseEntity<SuccessResult<List<Menu>>>
-    getMenuList(@PathVariable Long cafeId) {
+    public ResponseEntity<SuccessResult<List<Menu>>> getMenuList(
+            @PathVariable Long cafeId) {
         List<Menu> menuList = menuService.getMenuList(cafeId);
 
         return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, menuList));
     }
 
     @GetMapping("/options/{menuId}")
-    public ResponseEntity<SuccessResult<List<Option>>>
-    getMenuOptions(@PathVariable Long menuId) {
+    public ResponseEntity<SuccessResult<List<Option>>> getMenuOptions(
+            @PathVariable Long menuId) {
         List<Option> optionList = menuService.getOptionList(menuId);
 
         return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, optionList));
