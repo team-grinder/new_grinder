@@ -29,6 +29,8 @@ public class CafeEntity extends BaseDateEntity {
 
     private String businessNumber;
 
+    private Long imageId;
+
     @Builder
     public CafeEntity(String name, String address, String description, String tel, String businessNumber) {
         this.name = name;

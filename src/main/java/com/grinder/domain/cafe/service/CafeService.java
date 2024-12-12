@@ -17,6 +17,10 @@ public class CafeService {
     private final CafeReader cafeReader;
     private final CafeManager cafeManager;
 
+    public List<Cafe> getPopularCafe() {
+        return cafeManager.findPopularCafe();
+    }
+
     public Cafe getCafe(Long cafeId) {
         return cafeReader.read(cafeId);
     }

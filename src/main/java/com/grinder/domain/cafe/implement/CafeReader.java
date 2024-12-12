@@ -2,6 +2,7 @@ package com.grinder.domain.cafe.implement;
 
 import com.grinder.domain.cafe.entity.CafeEntity;
 import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.cafe.repository.CafeQueryRepository;
 import com.grinder.domain.cafe.repository.CafeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CafeReader {
     private final CafeRepository cafeRepository;
+    private final CafeQueryRepository cafeQueryRepository;
+
+    public List<Cafe> findPopularCafe() {
+        return cafeQueryRepository.findPopularCafe().stream()
+                .map(CafeEntity::toCafe).collect(Collectors.toList());
+    }
 
     public Cafe read(Long id) {
         return cafeRepository.findById(id).orElseThrow(

@@ -25,11 +25,6 @@ public class CartService {
         return cartManager.getMyCart(memberId);
     }
 
-    public List<MenuOptions> getAllMenuOptions(Long cafeId) {
-
-        return null;
-    }
-
     @Transactional
     public void createCart(String email, Long cafeId) {
         Long memberId = memberManager.readEmail(email).getId();

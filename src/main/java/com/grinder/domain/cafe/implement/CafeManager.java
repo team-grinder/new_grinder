@@ -15,6 +15,10 @@ public class CafeManager {
     private final CafeReader cafeReader;
     private final MenuReader menuReader;
 
+    public List<Cafe> findPopularCafe() {
+        return cafeReader.findPopularCafe();
+    }
+
     public CafeAndMenu getCafeAndMenu(Long cafeId) {
         Cafe cafe = cafeReader.read(cafeId);
         List<Menu> menus = menuReader.readAllMenu(cafeId);

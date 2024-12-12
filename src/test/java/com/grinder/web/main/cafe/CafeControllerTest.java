@@ -48,6 +48,7 @@ class CafeControllerTest {
     void getCafeData() throws Exception {
         // given
         createDummy.createCafeDummy(100);
+
         Cafe cafe = cafeService.findCafeByName("카페1").get(0);
 
         mockMvc.perform(get("/cafe/" + cafe.getId())
