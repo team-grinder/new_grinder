@@ -3,6 +3,7 @@ package com.grinder.domain.tabling.repository;
 import com.grinder.domain.tabling.entity.TablingTimeSlotEntity;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,15 @@ public interface TablingTimeSlotRepository extends JpaRepository<TablingTimeSlot
             @Param("cafeId") Long cafeId,
             @Param("date") LocalDate date,
             @Param("timeSlot") LocalTime timeSlot
+    );
+
+    @Query("SELECT t FROM TablingTimeSlotEntity t " +
+            "WHERE t.cafeId = :cafeId " +
+            "AND t.reservationDate = :date " +
+            "AND t.currentReservations < t.maxReservations " +
+            "ORDER BY t.timeSlot")
+    List<TablingTimeSlotEntity> findAvailableTimeSlots(
+            @Param("cafeId") Long cafeId,
+            @Param("date") LocalDate date
     );
 }

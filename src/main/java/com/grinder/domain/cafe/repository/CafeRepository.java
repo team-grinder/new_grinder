@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CafeRepository extends JpaRepository<CafeEntity, Long> {
+    boolean findByName(String name);
 }

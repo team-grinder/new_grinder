@@ -1,6 +1,7 @@
 package com.grinder.domain.tabling.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.domain.tabling.model.TableCapacity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,4 +31,13 @@ public class TableCapacityEntity extends BaseDateEntity {
 
     @Version
     private Long version;
+
+    public TableCapacity toTableCapacity() {
+        return TableCapacity.builder()
+                .id(id)
+                .cafeId(cafeId)
+                .minCapacity(minCapacity)
+                .maxCapacity(maxCapacity)
+                .build();
+    }
 }
