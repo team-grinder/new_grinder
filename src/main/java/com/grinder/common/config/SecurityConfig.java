@@ -1,5 +1,6 @@
 package com.grinder.common.config;
 
+import com.grinder.common.security.common.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.grinder.common.security.common.service.MemberDetailsService;
 import com.grinder.common.security.oauth.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,9 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,6 +19,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -40,8 +45,29 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //AuthenticationManager 설정
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        // 인증 유저 관련
+        authenticationManagerBuilder
+                .userDetailsService(memberDetailsService)
+                .passwordEncoder(passwordEncoder());
+        // AuthenticationManager 빌드
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+        // 설정 저장 필수
+        http.authenticationManager(authenticationManager);
+
+        CustomUsernamePasswordAuthenticationFilter customAuthenticationFilter =
+                new CustomUsernamePasswordAuthenticationFilter(authenticationManager);
+
+        http
+                .cors()
+                .and()
+                .csrf().disable();
+
         http
                 .authenticationProvider(authenticationProvider())
+                .addFilter(customAuthenticationFilter)
+
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .antMatchers("/login/oauth2/code/**").permitAll()
                         .antMatchers("/login/**").permitAll()
@@ -52,7 +78,7 @@ public class SecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .loginProcessingUrl("/loginProcess")
+                        .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .permitAll()
@@ -97,5 +123,16 @@ public class SecurityConfig {
         return authProvider;
     }
 
-
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowCredentials(true);
+            }
+        };
+    }
 }
