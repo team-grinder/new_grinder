@@ -1,5 +1,6 @@
 package com.grinder.common.security.oauth.service;
 
+import com.grinder.common.model.ReslutEnum;
 import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
 import com.grinder.common.security.oauth.model.implement.Oauth2MemberManager;
 import com.grinder.common.security.oauth.model.implement.OAuth2ResponseConverter;
@@ -29,11 +30,12 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
         Member member = oauth2MemberManager.findOrCreate(oAuth2Response);
 
         loginHistoryManager.saveLoginHistory(member.getId());
-        return new OAuth2MemberDetails(oAuth2Response, member.getTier());
+        return new OAuth2MemberDetails(oAuth2Response, member.getTier(),member);
         } catch (Exception e){
             throw new OAuth2AuthenticationException(
-                    new OAuth2Error("authentication_error"),
-                    "소셜 로그인 처리 중 오류가 발생했습니다: " + e.getMessage()
+                    new OAuth2Error("authentication_error",
+                            ReslutEnum.UNAUTHORIZED.getMessage(),
+                            null)
             );
         }
     }

@@ -1,6 +1,13 @@
 package com.grinder.common.exception.handler;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.SuccessResult;
+import com.grinder.common.security.common.model.MemberUserDetails;
+import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
+import com.grinder.domain.member.model.Member;
+import com.grinder.domain.member.model.login.LoginResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -18,21 +25,35 @@ import java.io.IOException;
  * 해당 핸들러에서 세션에 저장
  */
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
 
         String loginMessage = (String) request.getAttribute("loginMessage");
-        if (loginMessage != null) {
-            request.getSession().setAttribute("loginMessage", loginMessage);
+        Member member;
+
+        if (authentication.getPrincipal() instanceof MemberUserDetails) {
+            member = ((MemberUserDetails) authentication.getPrincipal()).getMemberEntity().toMember();
+        } else if (authentication.getPrincipal() instanceof OAuth2MemberDetails) {
+            member = ((OAuth2MemberDetails) authentication.getPrincipal()).getMember();
+        } else {
+            throw new IllegalStateException("지원하지 않는 인증타입 입니다.");
         }
 
-        String targetUrl = determineTargetUrl(request, response, authentication);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
+        LoginResult loginResult = loginMessage != null ?
+                new LoginResult(member, loginMessage) :
+                new LoginResult(member);
+
+        SuccessResult<LoginResult> result = SuccessResult.of(ReslutEnum.SUCCESS, loginResult);
+            response.getWriter().write(objectMapper.writeValueAsString(result));
+        }
+
 
     /**
      *로그인 성공 후 경로 지정

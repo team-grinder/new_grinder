@@ -9,6 +9,7 @@ import com.grinder.domain.member.repository.MemberRepository;
 import com.grinder.domain.member.repository.login.LoginAttemptRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class LoginAttemptManager {
                         .build());
 
         if (attempt.isLocked()) {
-            throw new LoginException("계정이 잠금 처리되었습니다. 관리자에게 문의하세요.");
+            throw new LockedException("계정이 잠금 처리되었습니다. 관리자에게 문의하세요.");
         }
     }
 
