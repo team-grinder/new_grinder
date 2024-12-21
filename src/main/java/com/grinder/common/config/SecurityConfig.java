@@ -1,6 +1,5 @@
 package com.grinder.common.config;
 
-import com.grinder.common.exception.LoginException;
 import com.grinder.common.exception.handler.CustomAuthenticationFailureHandler;
 import com.grinder.common.exception.handler.CustomAuthenticationSuccessHandler;
 import com.grinder.common.security.common.service.MemberDetailsService;
@@ -11,7 +10,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -102,20 +100,13 @@ public class SecurityConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider() {
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                String email = authentication.getName();
-
                 try {
-                    memberDetailsService.loadUserByUsername(email);
-                    try {
-                        Authentication auth = super.authenticate(authentication);
-                        memberDetailsService.handleLoginSuccess(email);
-                        return auth;
-                    } catch (BadCredentialsException e) {
-                        memberDetailsService.handleLoginFailure(email);
-                        throw e;
-                    }
-                } catch (LoginException e) {
-                    throw new LockedException(e.getMessage());
+                    Authentication auth = super.authenticate(authentication);
+                    memberDetailsService.handleLoginSuccess(authentication.getName());
+                    return auth;
+                } catch (BadCredentialsException e) {
+                    memberDetailsService.handleLoginFailure(authentication.getName());
+                    throw e;
                 }
             }
         };

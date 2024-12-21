@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,18 +26,13 @@ public class LoginAttemptManager {
 
     public void validateLoginAttempt(String email) {
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(email)
-                .orElse(LoginAttemptEntity.builder()
-                        .email(email)
-                        .failCount(0)
-                        .isLocked(false)
-                        .build());
+                .orElse(null);
 
-        if (attempt.isLocked()) {
+        if (attempt != null && attempt.isLocked()) {
             throw new LockedException("계정이 잠금 처리되었습니다. 관리자에게 문의하세요.");
         }
     }
 
-    @Transactional
     public void handleLoginSuccess(String email) {
         loginAttemptRepository.findByEmail(email)
                 .ifPresent(attempt -> {
@@ -47,7 +41,6 @@ public class LoginAttemptManager {
                 });
     }
 
-    @Transactional
     public void handleLoginFailure(String email) {
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(email)
                 .orElseGet(() -> {
@@ -78,7 +71,7 @@ public class LoginAttemptManager {
     /**
      *TODO : 관리자(Master) 관련 로직 추가.
      */
-    @Transactional
+//    @Transactional
     public void unlockAccount(String adminEmail, String targetEmail) {
         MemberEntity admin = memberRepository.findByEmail(adminEmail)
                 .orElseThrow(() -> new MemberException("관리자 계정을 찾을 수 없습니다."));
