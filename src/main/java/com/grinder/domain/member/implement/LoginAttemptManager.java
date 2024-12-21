@@ -13,17 +13,18 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
-@RequiredArgsConstructor
+
 /**
  * 1. 로그인 시도기록 조회 -> 없으면 생성,잠기면 예외 발생
  * 2. 로그인 성공 시 실패 카운트 초기화
  * 3. 로그인 실패 시 카운트 증가, 카운트 초과면 잠금처리
  */
+@Component
+@RequiredArgsConstructor
 public class LoginAttemptManager {
     private final LoginAttemptRepository loginAttemptRepository;
     private final MemberRepository memberRepository;
-    private static final int MAX_ATTEMPTS = 5;
+    private static final int MAX_ATTEMPTS = 10;
 
     public void validateLoginAttempt(String email) {
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(email)

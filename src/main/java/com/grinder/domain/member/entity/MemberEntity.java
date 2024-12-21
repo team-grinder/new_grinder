@@ -32,6 +32,10 @@ public class MemberEntity extends BaseDateEntity {
 
     private String phoneNumber;
 
+    private String nickname;
+
+    private String imageUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoginType loginType;

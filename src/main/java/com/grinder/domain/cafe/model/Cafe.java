@@ -8,6 +8,8 @@ import lombok.Getter;
 public class Cafe {
     private Long id;
 
+    private String imageUrl;
+
     private String name;
 
     private String address;

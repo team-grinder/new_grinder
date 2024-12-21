@@ -1,4 +1,4 @@
-package com.grinder.common.exception.handler;
+package com.grinder.common.security.common.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grinder.common.exception.LoginException;

@@ -1,4 +1,4 @@
-package com.grinder.common.exception.handler;
+package com.grinder.common.security.common.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-@RequiredArgsConstructor
+
 /**
  * LoginHistoryManger에서 loginMessage 설정
  * 해당 핸들러에서 세션에 저장
  */
+@Component
+@RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final ObjectMapper objectMapper;
 
@@ -53,7 +54,6 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         SuccessResult<LoginResult> result = SuccessResult.of(ReslutEnum.SUCCESS, loginResult);
             response.getWriter().write(objectMapper.writeValueAsString(result));
         }
-
 
     /**
      *로그인 성공 후 경로 지정

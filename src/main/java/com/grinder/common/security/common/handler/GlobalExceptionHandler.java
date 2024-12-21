@@ -1,4 +1,4 @@
-package com.grinder.common.exception.handler;
+package com.grinder.common.security.common.handler;
 
 import com.grinder.domain.cart.exception.UnorderedCartAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;

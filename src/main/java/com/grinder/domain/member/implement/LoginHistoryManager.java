@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class LoginHistoryManager {
      *1.동시 로그인 체크 및 처리
      *2.새로운 로그인 이력 저장
      */
+    @Transactional
     public void saveLoginHistory(Long memberId) {
         String message = validateConcurrentLogin(memberId);
         if (message != null) {
