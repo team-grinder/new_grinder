@@ -49,14 +49,14 @@ public class CartService {
         return true;
     }
 
-    @Transactional
-    public CartDetail addMenu(String email, Long cafeId, Long menuId, int quantity) {
-        Long memberId = memberManager.readEmail(email).getId();
-
-        Cart cart = cartReader.findCart(memberId, cafeId);
-
-        return cartManager.addMenu(cart.getId(), menuId, quantity);
-    }
+//    @Transactional
+//    public CartDetail addMenu(String email, Long cafeId, Long menuId, int quantity) {
+//        Long memberId = memberManager.readEmail(email).getId();
+//
+//        Cart cart = cartReader.findCart(memberId, cafeId);
+//
+//        return cartManager.addMenu(cart.getId(), menuId, quantity);
+//    }
 
     @Transactional
     public void overwriteCart(Long cartId, Long cafeId) {

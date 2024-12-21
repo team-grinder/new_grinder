@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CafeRepository extends JpaRepository<CafeEntity, Long> {
     List<CafeEntity> findAllByName(String name);
+
+    boolean findByName(String name);
 }

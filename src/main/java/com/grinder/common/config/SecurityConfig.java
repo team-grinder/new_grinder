@@ -1,6 +1,9 @@
 package com.grinder.common.config;
 
 import com.grinder.common.security.common.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.grinder.common.exception.LoginException;
+import com.grinder.common.exception.handler.CustomAuthenticationFailureHandler;
+import com.grinder.common.exception.handler.CustomAuthenticationSuccessHandler;
 import com.grinder.common.security.common.service.MemberDetailsService;
 import com.grinder.common.security.oauth.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,8 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +21,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -29,6 +35,8 @@ public class SecurityConfig {
     private final OAuth2MemberService customOAuth2MemberService;
     private final CacheManager cacheManager;
     private final MemberDetailsService memberDetailsService;
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -81,12 +89,15 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
+                        .successHandler(authenticationSuccessHandler)
+                        .failureHandler(authenticationFailureHandler)
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint((userInfoEndpointConfig) ->
                                 userInfoEndpointConfig.userService(customOAuth2MemberService))
                         .loginPage("/login")
+                        .successHandler(authenticationSuccessHandler)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -98,7 +109,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session-> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1)
+                        .maximumSessions(3)
                         .maxSessionsPreventsLogin(true)
                         .expiredUrl("/login?expired=true")
                 )
@@ -114,12 +125,30 @@ public class SecurityConfig {
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider() {
+            @Override
+            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                String email = authentication.getName();
+
+                try {
+                    memberDetailsService.loadUserByUsername(email);
+                    try {
+                        Authentication auth = super.authenticate(authentication);
+                        memberDetailsService.handleLoginSuccess(email);
+                        return auth;
+                    } catch (BadCredentialsException e) {
+                        memberDetailsService.handleLoginFailure(email);
+                        throw e;
+                    }
+                } catch (LoginException e) {
+                    throw new LockedException(e.getMessage());
+                }
+            }
+        };
         authProvider.setUserDetailsService(memberDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         // SpringCacheBasedUserCache 설정
-        authProvider.setUserCache(new SpringCacheBasedUserCache(cacheManager.getCache("userCache")));
+//        authProvider.setUserCache(new SpringCacheBasedUserCache(cacheManager.getCache("userCache")));
         return authProvider;
     }
 

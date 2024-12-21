@@ -66,13 +66,13 @@ public class CartManager {
         return cartReader.modifyCart(cartId, cafeId);
     }
 
-    public CartDetail addMenu(Long cartDetailId, Long menuId, int quantity) {
-        Menu menu = menuReader.read(menuId);
-
-        if (menu.getStock() <= 0 || menu.getStock() - quantity < 0) {
-            throw new IllegalArgumentException("해당 메뉴의 재고가 부족합니다.");
-        }
-
-        return cartReader.createDetail(cartDetailId, menuId, quantity);
-    }
+//    public CartDetail addMenu(Long cartDetailId, Long menuId, int quantity) {
+//        Menu menu = menuReader.read(menuId);
+//
+//        if (menu.getStock() <= 0 || menu.getStock() - quantity < 0) {
+//            throw new IllegalArgumentException("해당 메뉴의 재고가 부족합니다.");
+//        }
+//
+//        return cartReader.createDetail(cartDetailId, menuId, quantity);
+//    }
 }
