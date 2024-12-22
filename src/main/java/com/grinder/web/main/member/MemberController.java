@@ -19,29 +19,29 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/register")
-    public String register(@ModelAttribute @Valid MemberRegister request,
-                           BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes,
-                           Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("bindingResult", bindingResult);
-            return "main/register";
-        }
-
-        try {
-            memberService.register(request.getEmail(), request.getPassword(), request.getConfirmPassword());
-
-            redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다.");
-            return "redirect:/login";
-        } catch (MemberException | PasswordValidationException e) {
-            if (e instanceof PasswordValidationException) {
-                bindingResult.rejectValue("confirmPassword", "error", e.getMessage());
-            } else bindingResult.rejectValue("email", "error", e.getMessage());
-        }
-
-        model.addAttribute("bindingResult", bindingResult);
-        return "main/register";
-    }
+//    @PostMapping("/register")
+//    public String register(@ModelAttribute @Valid MemberRegister request,
+//                           BindingResult bindingResult,
+//                           RedirectAttributes redirectAttributes,
+//                           Model model) {
+//
+//        if (bindingResult.hasErrors()) {
+//            model.addAttribute("bindingResult", bindingResult);
+//            return "main/register";
+//        }
+//
+//        try {
+//            memberService.register(request.getEmail(), request.getPassword(), request.getConfirmPassword());
+//
+//            redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다.");
+//            return "redirect:/login";
+//        } catch (MemberException | PasswordValidationException e) {
+//            if (e instanceof PasswordValidationException) {
+//                bindingResult.rejectValue("confirmPassword", "error", e.getMessage());
+//            } else bindingResult.rejectValue("email", "error", e.getMessage());
+//        }
+//
+//        model.addAttribute("bindingResult", bindingResult);
+//        return "main/register";
+//    }
 }

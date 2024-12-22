@@ -21,4 +21,8 @@ public class MemberService {
 
         return memberManager.save(email, password);
     }
+
+    public boolean existsByEmail(String email) {
+        return memberManager.existsByEmail(email);
+    }
 }

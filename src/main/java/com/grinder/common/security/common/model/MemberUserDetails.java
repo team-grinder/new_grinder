@@ -18,7 +18,7 @@ public class MemberUserDetails implements UserDetails, AuthenticatedUser {
 
     @Override
     public Long getId() {
-        return null;
+        return memberEntity.getId();
     }
 
 

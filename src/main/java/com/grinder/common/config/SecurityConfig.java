@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .antMatchers("/login/**").permitAll()
                         .antMatchers("/oauth2/**").permitAll()
                         .antMatchers("/register").permitAll()
+                        .antMatchers("/check-email").permitAll()
                         .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -73,7 +74,6 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID")
                         .clearAuthentication(true)
                         .invalidateHttpSession(true)

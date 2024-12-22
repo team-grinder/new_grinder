@@ -47,9 +47,13 @@ public class MemberManager {
                 .map(MemberEntity::toMember);
     }
 
-    public void validateDuplicateEmail(String email) {
+    public boolean validateDuplicateEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
             throw new MemberException("이미 사용 중인 이메일입니다");
-        }
+        } else return false;
+    }
+
+    public boolean existsByEmail(String email) {
+        return memberRepository.existsByEmail(email);
     }
 }
