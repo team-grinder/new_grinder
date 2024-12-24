@@ -2,6 +2,7 @@ package com.grinder.domain.member.implement;
 
 import com.grinder.common.exception.LoginException;
 import com.grinder.common.exception.MemberException;
+import com.grinder.common.model.AuthResultEnum;
 import com.grinder.domain.member.entity.LoginAttemptEntity;
 import com.grinder.domain.member.entity.MemberEntity;
 import com.grinder.domain.member.model.TierType;
@@ -35,7 +36,7 @@ public class LoginAttemptManager {
                         .build());
 
         if (attempt.isLocked()) {
-            throw new LockedException("계정이 잠금 처리되었습니다. 관리자에게 문의하세요.");
+            throw new LockedException(AuthResultEnum.ACCOUNT_LOCKED.getMessage());
         }
     }
 
@@ -61,7 +62,7 @@ public class LoginAttemptManager {
                 });
 
         if (attempt.isLocked()) {
-            throw new LoginException("계정이 잠금 처리되었습니다. 관리자에게 문의하세요.");
+            throw new LoginException(AuthResultEnum.ACCOUNT_LOCKED.getMessage());
         }
 
         attempt.increaseFailCount();
@@ -70,7 +71,7 @@ public class LoginAttemptManager {
             attempt.setLocked(true);
             attempt.setLockedTime(LocalDateTime.now());
             loginAttemptRepository.save(attempt);
-            throw new LoginException("비밀번호를 5회 이상 잘못 입력하여 계정이 잠겼습니다. 관리자에게 문의하세요.");
+            throw new LoginException(AuthResultEnum.MAX_LOGIN_ATTEMPTS.getMessage());
         }
 
         loginAttemptRepository.save(attempt);
@@ -82,14 +83,14 @@ public class LoginAttemptManager {
     @Transactional
     public void unlockAccount(String adminEmail, String targetEmail) {
         MemberEntity admin = memberRepository.findByEmail(adminEmail)
-                .orElseThrow(() -> new MemberException("관리자 계정을 찾을 수 없습니다."));
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND.getMessage()));
 
         if (!admin.getTier().equals(TierType.MASTER)) {
-            throw new LoginException("계정 잠금 해제는 관리자만 가능합니다.");
+            throw new LoginException(AuthResultEnum.UNAUTHORIZED_ACCESS.getMessage());
         }
 
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(targetEmail)
-                .orElseThrow(() -> new LoginException("해당 계정의 로그인 시도 기록을 찾을 수 없습니다."));
+                .orElseThrow(() -> new LoginException(AuthResultEnum.LOGIN_ATTEMPT_NOT_FOUND.getMessage()));
 
         attempt.resetFailCount();
 

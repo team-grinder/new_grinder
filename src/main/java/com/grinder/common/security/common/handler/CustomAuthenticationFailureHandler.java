@@ -2,6 +2,7 @@ package com.grinder.common.security.common.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grinder.common.exception.LoginException;
+import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.model.ErrorResult;
 import com.grinder.common.model.FailureResult;
 import com.grinder.common.model.ReslutEnum;
@@ -32,12 +33,10 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         response.setContentType("application/json;charset=UTF-8");
 
-        ErrorResult errorResponse;
 
         if (exception instanceof LockedException) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            errorResponse = new ErrorResult("ACCOUNT_LOCKED", exception.getMessage());
-            FailureResult<ErrorResult> result = FailureResult.of(ReslutEnum.FORBIDDEN, errorResponse);
+            FailureResult<ErrorResult> result = FailureResult.from(AuthResultEnum.ACCOUNT_LOCKED);
             response.getWriter().write(objectMapper.writeValueAsString(result));
         }
         else if (exception.getCause() instanceof LoginException) {
@@ -45,19 +44,16 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
             if (loginException.getMessage().contains("계정이 잠겼습니다")) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                errorResponse = new ErrorResult("ACCOUNT_LOCKED", loginException.getMessage());
-                FailureResult<ErrorResult> result = FailureResult.of(ReslutEnum.FORBIDDEN, errorResponse);
+                FailureResult<ErrorResult> result = FailureResult.from(AuthResultEnum.ACCOUNT_LOCKED);
                 response.getWriter().write(objectMapper.writeValueAsString(result));
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                errorResponse = new ErrorResult("AUTHENTICATION_FAILED", loginException.getMessage());
-                FailureResult<ErrorResult> result = FailureResult.of(ReslutEnum.UNAUTHORIZED, errorResponse);
+                FailureResult<ErrorResult> result = FailureResult.from(AuthResultEnum.LOGIN_FAILED);
                 response.getWriter().write(objectMapper.writeValueAsString(result));
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            errorResponse = new ErrorResult("AUTHENTICATION_FAILED", "인증에 실패했습니다.");
-            FailureResult<ErrorResult> result = FailureResult.of(ReslutEnum.UNAUTHORIZED, errorResponse);
+            FailureResult<ErrorResult> result = FailureResult.from(AuthResultEnum.LOGIN_FAILED);
             response.getWriter().write(objectMapper.writeValueAsString(result));
         }
     }
