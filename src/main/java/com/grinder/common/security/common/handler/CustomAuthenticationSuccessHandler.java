@@ -2,6 +2,7 @@ package com.grinder.common.security.common.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.model.ReslutEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.common.security.common.model.MemberUserDetails;
@@ -44,7 +45,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         } else if (authentication.getPrincipal() instanceof OAuth2MemberDetails) {
             member = ((OAuth2MemberDetails) authentication.getPrincipal()).getMember();
         } else {
-            throw new IllegalStateException("지원하지 않는 인증타입 입니다.");
+            throw new IllegalStateException(AuthResultEnum.UNSUPPORTED_AUTHENTICATION.getMessage());
         }
 
         LoginResult loginResult = loginMessage != null ?

@@ -10,4 +10,9 @@ import lombok.Getter;
 public class ErrorResult {
     private String errorCode;
     private String errorMessage;
+
+
+    public static ErrorResult from(AuthResultEnum errorCode) {
+        return new ErrorResult(errorCode.getCode(), errorCode.getMessage());
+    }
 }

@@ -1,5 +1,6 @@
 package com.grinder.common.security.common.handler;
 
+import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.security.common.service.MemberDetailsService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -39,7 +40,7 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
                 String password = authentication.getCredentials().toString();
 
                 if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-                    throw new BadCredentialsException("패스워드가 일치하지 않습니다.");
+                    throw new BadCredentialsException(AuthResultEnum.PASSWORD_MISMATCH.getMessage());
                 }
 
                 // 인증 성공 시 처리
