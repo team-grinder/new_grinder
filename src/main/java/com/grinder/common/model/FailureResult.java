@@ -18,12 +18,9 @@ public class FailureResult<T> {
         return new FailureResult<>(resultEnum.getCode(), resultEnum.getMessage(), data);
     }
 
-    public static FailureResult<ErrorResult> from(AuthResultEnum authErrorCode) {
-        ErrorResult errorResult = ErrorResult.from(authErrorCode);
-        return new FailureResult<>(
-                authErrorCode.getStatus(),  // HTTP 상태 코드
-                ReslutEnum.valueOf(authErrorCode.getStatus()).getMessage(),  // 상태 메시지
-                errorResult
-        );
+    public static FailureResult<ErrorResult> from(AuthResultEnum authResultEnum) {
+        ReslutEnum resultEnum = ReslutEnum.getByStatus(authResultEnum.getStatus());
+        ErrorResult errorResult = new ErrorResult(authResultEnum.getCode(), authResultEnum.getMessage());
+        return new FailureResult<>(resultEnum.getCode(), resultEnum.getMessage(), errorResult);
     }
 }

@@ -5,7 +5,6 @@ import com.grinder.common.exception.LoginException;
 import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.model.ErrorResult;
 import com.grinder.common.model.FailureResult;
-import com.grinder.common.model.ReslutEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
