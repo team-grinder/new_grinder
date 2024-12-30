@@ -16,4 +16,13 @@ public enum ReslutEnum {
 
     private final String code;
     private final String message;
+
+    public static ReslutEnum getByStatus(String status) {
+        for (ReslutEnum resultEnum : values()) {
+            if (resultEnum.getCode().equals(status)) {
+                return resultEnum;
+            }
+        }
+        throw new IllegalArgumentException("No matching ResultEnum for status: " + status);
+    }
 }

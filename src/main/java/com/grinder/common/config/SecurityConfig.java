@@ -67,11 +67,11 @@ public class SecurityConfig {
                         .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2MemberService))
-                        .loginPage("/oauth/login")
-                        .successHandler(authenticationSuccessHandler)
-                )
+//                .oauth2Login(oauth2 -> oauth2
+//                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2MemberService))
+//                        .loginPage("/oauth/login")
+//                        .successHandler(authenticationSuccessHandler)
+//                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .deleteCookies("JSESSIONID")

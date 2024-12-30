@@ -48,18 +48,10 @@ public class LoginAttemptManager {
                     loginAttemptRepository.save(attempt);
                 });
     }
-
-    @Transactional
+    @Transactional(noRollbackFor = LoginException.class)
     public void handleLoginFailure(String email) {
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    LoginAttemptEntity newAttempt = LoginAttemptEntity.builder()
-                            .email(email)
-                            .failCount(0)
-                            .isLocked(false)
-                            .build();
-                    return loginAttemptRepository.save(newAttempt);
-                });
+                .orElseGet(() -> createNewLoginAttempt(email));
 
         if (attempt.isLocked()) {
             throw new LoginException(AuthResultEnum.ACCOUNT_LOCKED.getMessage());
@@ -75,6 +67,15 @@ public class LoginAttemptManager {
         }
 
         loginAttemptRepository.save(attempt);
+    }
+
+    private LoginAttemptEntity createNewLoginAttempt(String email) {
+        LoginAttemptEntity newAttempt = LoginAttemptEntity.builder()
+                .email(email)
+                .failCount(0)
+                .isLocked(false)
+                .build();
+        return loginAttemptRepository.save(newAttempt);
     }
 
     /**

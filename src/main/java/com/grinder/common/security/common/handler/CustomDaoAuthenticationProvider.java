@@ -1,5 +1,6 @@
 package com.grinder.common.security.common.handler;
 
+import com.grinder.common.exception.LoginException;
 import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.security.common.service.MemberDetailsService;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,33 +31,26 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
-
         try {
-            // 사용자 정보를 조회하며 추가 검증 로직 수행
             UserDetails userDetails = memberDetailsService.loadUserByUsername(email);
-
-            try {
-                // 부모 클래스의 인증 로직 호출
-                String password = authentication.getCredentials().toString();
-
-                if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-                    throw new BadCredentialsException(AuthResultEnum.PASSWORD_MISMATCH.getMessage());
+            String password = authentication.getCredentials().toString();
+            if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+                try {
+                    memberDetailsService.handleLoginFailure(email);
+                } catch (LoginException e) {
+                    throw new LockedException(e.getMessage());
                 }
-
-                // 인증 성공 시 처리
-                memberDetailsService.handleLoginSuccess(email);
-
-                return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-
-            } catch (BadCredentialsException e) {
-                // 인증 실패 시 처리
-                memberDetailsService.handleLoginFailure(email);
-                throw e;
+                throw new BadCredentialsException(AuthResultEnum.PASSWORD_MISMATCH.getMessage());
             }
 
+            memberDetailsService.handleLoginSuccess(email);
+            return new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    userDetails.getPassword(),
+                    userDetails.getAuthorities()
+            );
         } catch (AuthenticationException e) {
-            // 추가적인 로그인 상태 검증 실패 처리
-            throw new LockedException(e.getMessage());
+            throw e;
         }
     }
 }
