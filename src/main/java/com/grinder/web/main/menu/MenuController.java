@@ -1,6 +1,6 @@
 package com.grinder.web.main.menu;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.domain.menu.model.Menu;
 import com.grinder.domain.menu.model.Option;
@@ -25,7 +25,7 @@ public class MenuController {
             @PathVariable Long cafeId) {
         List<Menu> menuList = menuService.getMenuList(cafeId);
 
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, menuList));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, menuList));
     }
 
     @GetMapping("/options/{menuId}")
@@ -33,6 +33,6 @@ public class MenuController {
             @PathVariable Long menuId) {
         List<Option> optionList = menuService.getOptionList(menuId);
 
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, optionList));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, optionList));
     }
 }

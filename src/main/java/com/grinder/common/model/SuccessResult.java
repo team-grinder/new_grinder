@@ -14,10 +14,10 @@ public class SuccessResult<T> {
     private String message;
     private T data;
 
-    public static <T> SuccessResult<T> of(ReslutEnum resultEnum, T data) {
+    public static <T> SuccessResult<T> of(ResultEnum resultEnum, T data) {
         return new SuccessResult<>(resultEnum.getCode(), resultEnum.getMessage(), data);
     }
-    public static <Void> SuccessResult<Void> of(ReslutEnum resultEnum) {
+    public static <Void> SuccessResult<Void> of(ResultEnum resultEnum) {
         return new SuccessResult<>(resultEnum.getCode(), resultEnum.getMessage(), null);
     }
 }

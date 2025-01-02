@@ -1,6 +1,6 @@
 package com.grinder.domain.member.implement;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.domain.member.entity.LoginHistoryEntity;
 import com.grinder.domain.member.model.LoginType;
 import com.grinder.domain.member.model.login.MemberConnectionInfo;
@@ -54,7 +54,7 @@ public class LoginHistoryManager {
             LoginHistoryEntity oldestLogin = activeLogins.get(0);
             oldestLogin.setActive(false);
             loginHistoryRepository.save(oldestLogin);
-            return ReslutEnum.SUCCESS.getMessage() + " (다른 기기에서 접속 중인 세션이 종료되었습니다)";
+            return ResultEnum.SUCCESS.getMessage() + " (다른 기기에서 접속 중인 세션이 종료되었습니다)";
         }
         return null;
     }

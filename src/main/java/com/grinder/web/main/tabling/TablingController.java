@@ -1,9 +1,8 @@
 package com.grinder.web.main.tabling;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.common.security.AuthenticatedUser;
-import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.domain.tabling.model.CapacityRegister;
 import com.grinder.domain.tabling.model.TableCapacity;
 import com.grinder.domain.tabling.model.Tabling;
@@ -44,7 +43,7 @@ public class TablingController {
         register.setMemberId(user.getId());
         log.info("현재 로그인한 유저 id={}",user.getId());
         Tabling tabling = tablingService.tryTabling(register);
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS,tabling));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS,tabling));
     }
 
     @PostMapping("/cafe/{cafeId}/capacity")
@@ -56,14 +55,14 @@ public class TablingController {
                 register.getMinCapacity(),
                 register.getMaxCapacity()
         );
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, capacity));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, capacity));
     }
 
     @GetMapping("/cafe/{cafeId}/capacity")
     public ResponseEntity<SuccessResult<TableCapacity>> getCapacity(
             @PathVariable Long cafeId) {
         TableCapacity capacity = tableCapacityService.getCapacity(cafeId);
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, capacity));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, capacity));
     }
 
     @PostMapping("/cafe/{cafeId}/timeslots")
@@ -77,7 +76,7 @@ public class TablingController {
                 register.getCloseTime(),
                 register.getMaxReservations()
         );
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, null));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, null));
     }
 
     @GetMapping("/cafe/{cafeId}/timeslots")
@@ -85,6 +84,6 @@ public class TablingController {
             @PathVariable Long cafeId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<TablingTimeSlot> slots = tablingTimeSlotService.getAvailableTimeSlots(cafeId, date);
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, slots));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, slots));
     }
 }

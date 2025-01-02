@@ -1,6 +1,6 @@
 package com.grinder.web.main.member;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.domain.member.model.MemberRegister;
 import com.grinder.domain.member.service.MemberService;
@@ -18,12 +18,12 @@ public class MemberRestController {
     @PostMapping("/register")
     public ResponseEntity<SuccessResult<Void>> register(@ModelAttribute @Valid MemberRegister request) {
         memberService.register(request.getEmail(), request.getPassword(), request.getConfirmPassword());
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
     @GetMapping("/check-email")
     public ResponseEntity<SuccessResult<Boolean>> checkEmail(String email) {
         boolean result = memberService.existsByEmail(email);
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, result));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, result));
     }
 }
