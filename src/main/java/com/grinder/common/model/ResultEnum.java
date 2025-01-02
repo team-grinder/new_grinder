@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ReslutEnum {
+public enum ResultEnum {
     SUCCESS("200", "성공"),
     NO_CONTENT("204", "데이터가 없습니다."),
     BAD_REQUEST("400", "잘못된 요청입니다."),
@@ -17,8 +17,8 @@ public enum ReslutEnum {
     private final String code;
     private final String message;
 
-    public static ReslutEnum getByStatus(String status) {
-        for (ReslutEnum resultEnum : values()) {
+    public static ResultEnum getByStatus(String status) {
+        for (ResultEnum resultEnum : values()) {
             if (resultEnum.getCode().equals(status)) {
                 return resultEnum;
             }

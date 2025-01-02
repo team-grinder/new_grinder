@@ -1,6 +1,6 @@
 package com.grinder.web.main;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.domain.member.model.MemberSimple;
@@ -27,7 +27,7 @@ public class MainRestController {
                     .imageUrl(userDetails.getImageUrl())
                     .build();
 
-            return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, memberSimple));
+            return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, memberSimple));
         }
 
         throw new DisabledException("잘못된 접근입니다.");

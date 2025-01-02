@@ -3,7 +3,7 @@ package com.grinder.common.security.common.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grinder.common.model.AuthResultEnum;
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
@@ -52,7 +52,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new LoginResult(member, loginMessage) :
                 new LoginResult(member);
 
-        SuccessResult<LoginResult> result = SuccessResult.of(ReslutEnum.SUCCESS, loginResult);
+        SuccessResult<LoginResult> result = SuccessResult.of(ResultEnum.SUCCESS, loginResult);
             response.getWriter().write(objectMapper.writeValueAsString(result));
         }
 

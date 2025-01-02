@@ -1,6 +1,6 @@
 package com.grinder.common.security.oauth.service;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
 import com.grinder.common.security.oauth.model.implement.Oauth2MemberManager;
 import com.grinder.common.security.oauth.model.implement.OAuth2ResponseConverter;
@@ -34,7 +34,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
         } catch (Exception e){
             throw new OAuth2AuthenticationException(
                     new OAuth2Error("authentication_error",
-                            ReslutEnum.UNAUTHORIZED.getMessage(),
+                            ResultEnum.UNAUTHORIZED.getMessage(),
                             null)
             );
         }

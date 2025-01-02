@@ -1,6 +1,6 @@
 package com.grinder.web.main.cart;
 
-import com.grinder.common.model.ReslutEnum;
+import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.domain.cart.model.CartInformation;
 import com.grinder.domain.cart.model.MenuVO;
@@ -26,7 +26,7 @@ public class CartController {
         String email = userDetails.getUsername();
         CartInformation myCart = CartService.getMyCart(email);
 
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS, myCart));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, myCart));
     }
 
     @PostMapping("/addMenu")
@@ -38,6 +38,6 @@ public class CartController {
             throw new IllegalArgumentException("메뉴 추가에 실패했습니다.");
         }
 
-        return ResponseEntity.ok(SuccessResult.of(ReslutEnum.SUCCESS));
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 }
