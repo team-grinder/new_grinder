@@ -14,12 +14,12 @@ public class FailureResult<T> {
     private String message;
     private T data;
 
-    public static <T> FailureResult<T> of(ReslutEnum resultEnum, T data) {
+    public static <T> FailureResult<T> of(ResultEnum resultEnum, T data) {
         return new FailureResult<>(resultEnum.getCode(), resultEnum.getMessage(), data);
     }
 
     public static FailureResult<ErrorResult> from(AuthResultEnum authResultEnum) {
-        ReslutEnum resultEnum = ReslutEnum.getByStatus(authResultEnum.getStatus());
+        ResultEnum resultEnum = ResultEnum.getByStatus(authResultEnum.getStatus());
         ErrorResult errorResult = new ErrorResult(authResultEnum.getCode(), authResultEnum.getMessage());
         return new FailureResult<>(resultEnum.getCode(), resultEnum.getMessage(), errorResult);
     }
