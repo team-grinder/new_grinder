@@ -16,7 +16,7 @@ public class MemberRestController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<SuccessResult<Void>> register(@ModelAttribute @Valid MemberRegister request) {
+    public ResponseEntity<SuccessResult<Void>> register(@RequestBody @Valid MemberRegister request) {
         memberService.register(request.getEmail(), request.getPassword(), request.getConfirmPassword());
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
