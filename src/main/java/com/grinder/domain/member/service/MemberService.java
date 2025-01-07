@@ -14,12 +14,12 @@ public class MemberService {
     private final MemberManager memberManager;
 
 
-    public Member register(String email, String password, String confirmPassword) {
+    public Member register(String email, String password, String nickname ,String confirmPassword) {
         memberManager.validateDuplicateEmail(email);
 
         PasswordValidator.validatePassword(password, confirmPassword);
 
-        return memberManager.save(email, password);
+        return memberManager.save(email, password, nickname);
     }
 
     public boolean existsByEmail(String email) {
