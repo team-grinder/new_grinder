@@ -71,7 +71,7 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2MemberService))
-                        .loginPage("/oauth/login")
+                        .loginProcessingUrl("/login/oauth2/code/**")
                         .successHandler(authenticationSuccessHandler)
                 )
                 .logout(logout -> logout
