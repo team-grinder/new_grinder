@@ -66,6 +66,7 @@ public class MemberEntity extends BaseDateEntity {
                 .id(id)
                 .email(email)
                 .password(password)
+                .nickname(nickname)
                 .phoneNumber(phoneNumber)
                 .loginType(loginType)
                 .tier(tier)
@@ -92,9 +93,10 @@ public class MemberEntity extends BaseDateEntity {
     }
 
     @Builder(builderClassName = "CommonMemberBuilder", builderMethodName = "commonBuilder")
-    public MemberEntity(String email, String password, String phoneNumber,TierType tier,LoginType loginType,boolean isDeleted) {
+    public MemberEntity(String email, String password, String nickname,String phoneNumber,TierType tier,LoginType loginType,boolean isDeleted) {
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.loginType = loginType;
         this.tier = tier;

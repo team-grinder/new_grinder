@@ -30,10 +30,11 @@ public class MemberManager {
         ).toBasicInfo();
     }
 
-    public Member save(String email, String password) {
+    public Member save(String email, String password, String nickname) {
         MemberEntity memberEntity = MemberEntity.commonBuilder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
+                .nickname(nickname)
                 .loginType(LoginType.COMMON)
                 .tier(TierType.SILVER)
                 .isDeleted(false)

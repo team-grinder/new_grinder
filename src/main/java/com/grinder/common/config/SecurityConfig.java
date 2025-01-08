@@ -64,14 +64,15 @@ public class SecurityConfig {
                         .antMatchers("/oauth2/**").permitAll()
                         .antMatchers("/register").permitAll()
                         .antMatchers("/check-email").permitAll()
+                        .antMatchers("session/validate").permitAll()
                         .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2MemberService))
-//                        .loginPage("/oauth/login")
-//                        .successHandler(authenticationSuccessHandler)
-//                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2MemberService))
+                        .loginPage("/oauth/login")
+                        .successHandler(authenticationSuccessHandler)
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .deleteCookies("JSESSIONID")
