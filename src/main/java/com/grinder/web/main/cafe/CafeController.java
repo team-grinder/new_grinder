@@ -20,7 +20,7 @@ import java.util.List;
 public class CafeController {
     private final CafeService cafeService;
 
-    @GetMapping()
+    @GetMapping("/popular")
     public ResponseEntity<SuccessResult<List<Cafe>>> getPopularCafe() {
         List<Cafe> popularCafe = cafeService.getPopularCafe();
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, popularCafe));
