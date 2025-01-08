@@ -44,6 +44,15 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             member = ((MemberUserDetails) authentication.getPrincipal()).getMemberEntity().toMember();
         } else if (authentication.getPrincipal() instanceof OAuth2MemberDetails) {
             member = ((OAuth2MemberDetails) authentication.getPrincipal()).getMember();
+            LoginResult loginResult = loginMessage != null ?
+                    new LoginResult(member, loginMessage) :
+                    new LoginResult(member);
+
+            SuccessResult<LoginResult> result = SuccessResult.of(ResultEnum.SUCCESS, loginResult);
+            response.getWriter().write(objectMapper.writeValueAsString(result));
+
+            getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000");
+            return;
         } else {
             throw new IllegalStateException(AuthResultEnum.UNSUPPORTED_AUTHENTICATION.getMessage());
         }
