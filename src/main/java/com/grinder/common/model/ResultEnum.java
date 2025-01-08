@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResultEnum {
     SUCCESS("200", "성공"),
+    CREATED("201", "생성되었습니다."),
     NO_CONTENT("204", "데이터가 없습니다."),
     BAD_REQUEST("400", "잘못된 요청입니다."),
     UNAUTHORIZED("401", "인증이 필요합니다."),
