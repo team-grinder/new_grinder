@@ -21,10 +21,12 @@ public class CafeQueryRepository {
     }
 
     public List<CafeEntity> findPopularCafe() {
-        List<Tuple> cafeAndOrderRank = query.from(cafeEntity)
+        List<Tuple> cafeAndOrderRank = query
+                .from(cafeEntity)
                 .select(cafeEntity, order.count())
                 .leftJoin(order).on(cafeEntity.id.eq(order.cafeId))
                 .orderBy(order.count().desc())
+                .groupBy(cafeEntity)
                 .limit(3)
                 .fetch();
 
