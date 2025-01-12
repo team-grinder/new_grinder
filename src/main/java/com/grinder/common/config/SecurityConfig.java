@@ -28,7 +28,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
 
     private final OAuth2MemberService customOAuth2MemberService; // OAuth2 전용 서비스
-    private final MemberDetailsService memberDetailsService;     // 일반 사용자 인증 서비스
     private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
     private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
@@ -66,6 +65,7 @@ public class SecurityConfig {
                         .antMatchers("/register").permitAll()
                         .antMatchers("/check-email").permitAll()
                         .antMatchers("/session/validate").permitAll()
+                        .antMatchers("/cafe/popular").permitAll()
                         .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -38,8 +38,8 @@ public class MainRestController {
                     .imageUrl(null)
                     .build();
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(SuccessResult.of(ResultEnum.UNAUTHORIZED));
+            return ResponseEntity.status(HttpStatus.RESET_CONTENT)
+                    .body(SuccessResult.of(ResultEnum.RESET_CONTENT));
         }
 
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, memberSimple));
