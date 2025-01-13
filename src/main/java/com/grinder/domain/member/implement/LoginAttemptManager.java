@@ -84,7 +84,7 @@ public class LoginAttemptManager {
     @Transactional
     public void unlockAccount(String adminEmail, String targetEmail) {
         MemberEntity admin = memberRepository.findByEmail(adminEmail)
-                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
 
         if (!admin.getTier().equals(TierType.MASTER)) {
             throw new LoginException(AuthResultEnum.UNAUTHORIZED_ACCESS.getMessage());

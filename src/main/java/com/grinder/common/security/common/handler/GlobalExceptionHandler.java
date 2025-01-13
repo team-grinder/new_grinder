@@ -1,5 +1,6 @@
 package com.grinder.common.security.common.handler;
 
+import com.grinder.common.exception.MemberException;
 import com.grinder.common.exception.PasswordValidationException;
 import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.model.ErrorResult;
@@ -24,7 +25,11 @@ public class GlobalExceptionHandler{
         FailureResult<ErrorResult> failureResult = FailureResult.from(e.getAuthResultEnum());
         return ResponseEntity.status(Integer.parseInt(e.getAuthResultEnum().getStatus())).body(failureResult);
     }
-
+    @ExceptionHandler(MemberException.class)
+    public ResponseEntity<FailureResult<ErrorResult>> handleMemberException(MemberException e) {
+        FailureResult<ErrorResult> failureResult = FailureResult.from(e.getAuthResultEnum());
+        return ResponseEntity.status(Integer.parseInt(e.getAuthResultEnum().getStatus())).body(failureResult);
+    }
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<FailureResult<ErrorResult>> handleBindException(BindException e) {
