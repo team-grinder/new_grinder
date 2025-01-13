@@ -32,6 +32,7 @@ public class MemberEntity extends BaseDateEntity {
 
     private String phoneNumber;
 
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     private String imageUrl;

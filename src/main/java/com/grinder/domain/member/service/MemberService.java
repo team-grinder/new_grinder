@@ -16,6 +16,7 @@ public class MemberService {
 
     public Member register(String email, String password, String nickname ,String confirmPassword) {
         memberManager.validateDuplicateEmail(email);
+        memberManager.validateDuplicateNickname(nickname);
 
         PasswordValidator.validatePassword(password, confirmPassword);
 

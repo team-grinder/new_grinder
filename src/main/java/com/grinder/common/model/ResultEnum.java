@@ -14,6 +14,7 @@ public enum ResultEnum {
     UNAUTHORIZED("401", "인증이 필요합니다."),
     FORBIDDEN("403", "권한이 없습니다."),
     NOT_FOUND("404", "찾을 수 없습니다."),
+    CONFLICT("409", "중복된 값입니다."),
     INTERNAL_SERVER_ERROR("500", "서버 내부 오류");
 
     private final String code;
