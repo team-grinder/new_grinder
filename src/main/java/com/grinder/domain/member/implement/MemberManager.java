@@ -1,6 +1,7 @@
 package com.grinder.domain.member.implement;
 
 import com.grinder.common.exception.MemberException;
+import com.grinder.common.model.AuthResultEnum;
 import com.grinder.domain.member.entity.MemberEntity;
 import com.grinder.domain.member.model.LoginType;
 import com.grinder.domain.member.model.Member;
@@ -21,12 +22,12 @@ public class MemberManager {
 
     public MemberBasicInfo read(Long id) {
         return memberRepository.findById(id).orElseThrow(
-                () -> new MemberException("해당 회원이 존재하지 않습니다.")
+                () -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND)
         ).toBasicInfo();
     }
     public MemberBasicInfo readEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(
-                () -> new MemberException("해당 이메일로 가입된 회원이 없습니다.")
+                () -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND)
         ).toBasicInfo();
     }
 
@@ -50,7 +51,13 @@ public class MemberManager {
 
     public boolean validateDuplicateEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new MemberException("이미 사용 중인 이메일입니다");
+            throw new MemberException(AuthResultEnum.DUPLICATE_EMAIL);
+        } else return false;
+    }
+
+    public boolean validateDuplicateNickname(String nickname){
+        if(memberRepository.existsByNickname(nickname)){
+            throw new MemberException(AuthResultEnum.DUPLICATE_NICKNAME);
         } else return false;
     }
 
