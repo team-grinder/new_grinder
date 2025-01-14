@@ -86,8 +86,9 @@ public class MemberEntity extends BaseDateEntity {
 //    }
 
     @Builder(builderClassName = "SocialMemberBuilder", builderMethodName = "socialBuilder")
-    public MemberEntity(String email, LoginType loginType, TierType tier, boolean isDeleted) {
+    public MemberEntity(String email, String nickname, LoginType loginType, TierType tier, boolean isDeleted) {
         this.email = email;
+        this.nickname = nickname;
         this.loginType = loginType;
         this.tier = tier;
         this.isDeleted = isDeleted;
