@@ -10,12 +10,16 @@ import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import lombok.Setter;
 
 @Entity
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
@@ -24,36 +28,32 @@ public class TablingEntity extends BaseDateEntity {
     @GeneratedValue
     private Long id;
 
+    private Long cafeId;
     private Long memberId;
 
-    private LocalDate tablingDate;
-
-    private LocalTime timeSlot;
-
-    private int currentNumber;
-
-    private Long cartId;
-
-    private int maxNumber;
+    private LocalDate date;
+    private LocalTime reserveTime;
+    private Integer numberOfGuests;
 
     @Enumerated(EnumType.STRING)
     private TablingStatus status;
 
-    private String reason;
-
-    @Name(name = "카페 정보 연관 관계")
-    private Long cafeId;
+    @Version
+    private Long version;
 
     public Tabling toTabling() {
         return Tabling.builder()
                 .id(id)
-                .memberId(memberId)
                 .cafeId(cafeId)
-                .reservationDate(tablingDate)
-                .timeSlot(timeSlot)
-                .numberOfPeople(currentNumber)
+                .memberId(memberId)
+                .date(date)
+                .reserveTime(reserveTime)
+                .numberOfGuests(numberOfGuests)
                 .status(status)
-                .cartId(cartId)
                 .build();
+    }
+
+    public void updateStatus(TablingStatus status) {
+        this.status = status;
     }
 }

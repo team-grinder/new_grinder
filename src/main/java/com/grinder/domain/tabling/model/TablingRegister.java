@@ -11,8 +11,8 @@ import lombok.Setter;
 @Builder
 public class TablingRegister {
     private Long cafeId;
-    private LocalDate tablingDate;
-    private LocalTime timeSlot;
-    private Integer numberOfPeople;
     private Long memberId;
+    private LocalDate date;
+    private LocalTime reserveTime;
+    private Integer numberOfGuests;
 }
