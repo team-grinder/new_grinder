@@ -12,24 +12,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TablingTimeSlotRepository extends JpaRepository<TablingTimeSlotEntity, Long> {
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT r FROM TablingTimeSlotEntity r " +
-            "WHERE r.cafeId = :cafeId " +
-            "AND r.reservationDate = :date " +
-            "AND r.timeSlot = :timeSlot")
-    Optional<TablingTimeSlotEntity> findForUpdate(
+    Optional<TablingTimeSlotEntity> findByCafeIdAndDateAndReserveTime(
+            Long cafeId, LocalDate date, LocalTime reserveTime);
+
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("SELECT ts FROM TablingTimeSlotEntity ts " +
+            "WHERE ts.cafeId = :cafeId " +
+            "AND ts.date = :date " +
+            "AND ts.reserveTime = :reserveTime")
+    Optional<TablingTimeSlotEntity> findWithLockByCafeIdAndDateAndReserveTime(
             @Param("cafeId") Long cafeId,
             @Param("date") LocalDate date,
-            @Param("timeSlot") LocalTime timeSlot
+            @Param("reserveTime") LocalTime reserveTime
     );
-
-    @Query("SELECT t FROM TablingTimeSlotEntity t " +
-            "WHERE t.cafeId = :cafeId " +
-            "AND t.reservationDate = :date " +
-            "AND t.currentReservations < t.maxReservations " +
-            "ORDER BY t.timeSlot")
-    List<TablingTimeSlotEntity> findAvailableTimeSlots(
-            @Param("cafeId") Long cafeId,
-            @Param("date") LocalDate date
-    );
+    void deleteByCafeIdAndDate(Long cafeId, LocalDate date);
 }
