@@ -28,6 +28,16 @@ public class OAuth2MemberDetails implements OAuth2User, AuthenticatedUser {
     }
 
     @Override
+    public String getNickname() {
+        return member.getNickname();
+    }
+
+    @Override
+    public String getImageUrl() {
+        return member.getImageUrl();
+    }
+
+    @Override
     public Long getId() {
         return null;
     }

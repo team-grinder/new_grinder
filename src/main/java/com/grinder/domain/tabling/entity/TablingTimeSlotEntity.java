@@ -4,55 +4,67 @@ import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.common.exception.TablingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: DB레벨에서 동시성 이슈 제어 성능테스트
-@Table(name = "reservation_time_slot",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"cafe_id", "reservation_date", "time_slot"}))
 public class TablingTimeSlotEntity extends BaseDateEntity {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "cafe_id")
     private Long cafeId;
-
-    @Column(name = "reservation_date")
-    private LocalDate reservationDate;
-
-    @Column(name = "time_slot")
-    private LocalTime timeSlot;
-
-    private Integer maxReservations;
-
-    private Integer currentReservations;
+    private LocalDate date;
+    private LocalTime reserveTime;
+    private Integer maxGuests;
+    private Integer currentGuests;
+    private Boolean isAvailable;
 
     @Version
     private Long version;
 
-    public boolean isAvailable() {
-        return currentReservations < maxReservations;
+    @Builder
+    public TablingTimeSlotEntity(Long cafeId, LocalDate date,
+                              LocalTime reserveTime, Integer maxGuests) {
+        this.cafeId = cafeId;
+        this.date = date;
+        this.reserveTime = reserveTime;
+        this.maxGuests = maxGuests;
+        this.currentGuests = 0;
+        this.isAvailable = true;
+    }
+    public boolean canReserve(int numberOfGuests) {
+        return isAvailable &&
+                (currentGuests + numberOfGuests <= maxGuests);
     }
 
-    public void incrementTabling() {
-        if (!isAvailable()) {
-            throw new TablingException("해당시간 예약이 마감되었습니다.");
+    public void addGuests(int numberOfGuests) {
+        if (!canReserve(numberOfGuests)) {
+            throw new TablingException(
+                    String.format("예약 가능 인원을 초과했습니다. (현재 가능 인원: %d)",
+                            maxGuests - currentGuests)
+            );
         }
-        currentReservations++;
+        this.currentGuests += numberOfGuests;
     }
+
+    public void removeGuests(int numberOfGuests) {
+        this.currentGuests -= numberOfGuests;
+        if (this.currentGuests < 0) {
+            this.currentGuests = 0;
+        }
+    }
+
 }

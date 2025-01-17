@@ -23,6 +23,7 @@ public class Oauth2MemberManager {
         MemberEntity newMember = MemberEntity.socialBuilder()
                 .email(oAuth2Response.getEmail())
                 .loginType(LoginType.SOCIAL)
+                .nickname(oAuth2Response.getName())
                 .tier(TierType.SILVER)
                 .isDeleted(false)
                 .build();

@@ -34,7 +34,7 @@ public class MainRestController {
             Member member = userDetails.getMember();
             memberSimple = MemberSimple.builder()
                     .id(member.getId())
-                    .nickname(member.getEmail())
+                    .nickname(member.getNickname())
                     .imageUrl(null)
                     .build();
         } else {

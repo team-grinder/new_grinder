@@ -10,7 +10,7 @@ public enum AuthResultEnum {
      */
     //로그인 실패
     LOGIN_FAILED("401", "AUTH_001", "이메일 또는 비밀번호가 일치하지 않습니다."),
-    INVALID_TOKEN("401", "AUTH_002", "유효하지 않은 토큰입니다."),
+    INVALID_SESSION("401", "AUTH_002", "유효하지 않은 토큰입니다."),
 
     //로그인 실패로 인한 접근제한
     ACCOUNT_LOCKED("403", "AUTH_003", "계정이 잠금 처리되었습니다. 관리자에게 문의하세요."),

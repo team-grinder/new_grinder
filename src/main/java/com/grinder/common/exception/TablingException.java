@@ -1,7 +1,6 @@
 package com.grinder.common.exception;
 
 public class TablingException extends RuntimeException{
-
     public TablingException(String message) {
         super(message);
     }
@@ -10,3 +9,4 @@ public class TablingException extends RuntimeException{
         super(message, cause);
     }
 }
+

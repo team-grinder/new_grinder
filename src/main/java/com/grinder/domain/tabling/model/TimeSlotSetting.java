@@ -1,18 +1,17 @@
 package com.grinder.domain.tabling.model;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class TimeSlotsRegister {
-    private LocalTime reserveTime;
-    private Integer maxGuests;
+public class TimeSlotSetting {
+    private LocalDate date;
+    private List<TimeSlotsRegister> timeSlots;
 }
