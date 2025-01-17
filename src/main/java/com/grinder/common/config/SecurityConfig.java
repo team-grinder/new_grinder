@@ -66,6 +66,7 @@ public class SecurityConfig {
                         .antMatchers("/check-email").permitAll()
                         .antMatchers("/session/validate").permitAll()
                         .antMatchers("/cafe/popular").permitAll()
+                        .antMatchers("/tabling/**").permitAll()
                         .antMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )

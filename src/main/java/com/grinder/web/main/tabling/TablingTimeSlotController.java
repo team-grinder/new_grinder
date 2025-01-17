@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/tabling/time-slots")
+@RequestMapping("/tabling/time-slots")
 @RequiredArgsConstructor
 public class TablingTimeSlotController {
     private final TablingTimeSlotService tablingTimeSlotService;

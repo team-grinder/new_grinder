@@ -15,6 +15,7 @@ public class Member {
     private String phoneNumber;
     private LoginType loginType;
     private TierType tier;
+    private String imageUrl;
     private Long PaymentInfoId;
     private Long CafeAdminId;
     private boolean isDeleted;

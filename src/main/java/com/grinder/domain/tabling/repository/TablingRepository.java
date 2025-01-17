@@ -18,14 +18,9 @@ public interface TablingRepository extends JpaRepository<TablingEntity, Long> {
 
     List<TablingEntity> findByCafeIdAndDateAndStatusIn(Long cafeId, LocalDate date, List<TablingStatus> statuses);
 
-    @Query("SELECT COUNT(t) > 0 FROM TablingEntity t " +
-            "WHERE t.cafeId = :cafeId " +
-            "AND t.date = :date " +
-            "AND t.reserveTime = :reserveTime " +
-            "AND t.status IN ('PENDING', 'CONFIRMED')")
-    boolean existsByCafeIdAndDateAndHourTimeAndStatusIn(
-            @Param("cafeId") Long cafeId,
-            @Param("date") LocalDate date,
-            @Param("hourTime") LocalTime reserveTime
-    );
+    boolean existsByMemberIdAndDateAndReserveTimeAndStatusNot(Long MemberId,LocalDate date, LocalTime reserveTime,TablingStatus status);
+
+    List<TablingEntity> findByDateAndReserveTimeAndStatusIn(LocalDate date, LocalTime reserveTime, List<TablingStatus> statuses);
+
+    List<TablingEntity> findByMemberIdAndStatusIn(Long memberId, List<TablingStatus> statuses);
 }

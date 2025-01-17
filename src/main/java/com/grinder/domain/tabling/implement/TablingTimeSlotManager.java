@@ -25,6 +25,7 @@ public class TablingTimeSlotManager {
                         .date(date)
                         .reserveTime(slot.getReserveTime())
                         .maxGuests(slot.getMaxGuests())
+                        .currentGuests(0)
                         .isAvailable(true)
                         .build())
                 .collect(Collectors.toList());

@@ -8,6 +8,10 @@ import com.grinder.domain.tabling.model.TablingRegister;
 import com.grinder.domain.tabling.model.TablingStatus;
 import com.grinder.domain.tabling.repository.BlockedDateRepository;
 import com.grinder.domain.tabling.repository.TablingRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
@@ -27,10 +31,18 @@ public class TablingManager {
             throw new TablingException("해당 날짜는 휴무일입니다.");
         }
 
-        // 2. 먼저 락 없이 예약 가능 여부 체크
+        // 2. 동일 회원의 중복 예약 체크
+        if (tablingRepository.existsByMemberIdAndDateAndReserveTimeAndStatusNot(
+                request.getMemberId(),
+                request.getDate(),
+                request.getReserveTime(),
+                TablingStatus.CANCEL)) {
+            throw new TablingException("해당 시간대에 이미 예약이 존재합니다.");
+        }
+
+        // 3. 락 없이 예약 가능 여부 체크
         TablingTimeSlotEntity timeSlot = tablingTimeSlotManager
-                .getTimeSlot(request.getCafeId(), request.getDate(),
-                        request.getReserveTime())
+                .getTimeSlot(request.getCafeId(), request.getDate(), request.getReserveTime())
                 .orElseThrow(() -> new TablingException("예약 가능한 시간대가 아닙니다."));
 
         if (!timeSlot.canReserve(request.getNumberOfGuests())) {
@@ -40,48 +52,8 @@ public class TablingManager {
             );
         }
 
-        // 3. 예약 생성 시도 (with 낙관적 락)
-        int maxRetries = 3;
-        int attempt = 0;
-
-        while (attempt < maxRetries) {
-            try {
-                timeSlot = tablingTimeSlotManager
-                        .getTimeSlotWithLock(request.getCafeId(), request.getDate(),
-                                request.getReserveTime())
-                        .orElseThrow(() -> new TablingException("예약 가능한 시간대가 아닙니다."));
-
-                // 한번 더 체크 (동시성 처리)
-                if (!timeSlot.canReserve(request.getNumberOfGuests())) {
-                    throw new TablingException("예약 가능한 인원을 초과했습니다.");
-                }
-
-                timeSlot.addGuests(request.getNumberOfGuests());
-
-                TablingEntity entity = TablingEntity.builder()
-                        .cafeId(request.getCafeId())
-                        .memberId(request.getMemberId())
-                        .date(request.getDate())
-                        .reserveTime(request.getReserveTime())
-                        .numberOfGuests(request.getNumberOfGuests())
-                        .build();
-
-                return tablingRepository.save(entity).toTabling();
-
-            } catch (OptimisticLockingFailureException e) {
-                attempt++;
-                if (attempt >= maxRetries) {
-                    throw new TablingException("예약 처리 중 충돌이 발생했습니다. 다시 시도해주세요.");
-                }
-                try {
-                    Thread.sleep(100 * (attempt + 1));
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    throw new TablingException("예약 처리가 중단되었습니다.");
-                }
-            }
-        }
-        throw new TablingException("예약 처리에 실패했습니다.");
+        // 4. 낙관적 락을 통한 예약 처리
+        return processTablingWithLock(request, timeSlot);
     }
 
     @Transactional
@@ -104,5 +76,109 @@ public class TablingManager {
         }
 
         tabling.updateStatus(newStatus);
+    }
+
+    private Tabling processTablingWithLock(TablingRegister request, TablingTimeSlotEntity timeSlot) {
+        int maxRetries = 3;
+        int attempt = 0;
+
+        while (attempt < maxRetries) {
+            try {
+                timeSlot = tablingTimeSlotManager
+                        .getTimeSlotWithLock(request.getCafeId(), request.getDate(), request.getReserveTime())
+                        .orElseThrow(() -> new TablingException("예약 가능한 시간대가 아닙니다."));
+
+                if (!timeSlot.canReserve(request.getNumberOfGuests())) {
+                    throw new TablingException("예약 가능한 인원을 초과했습니다.");
+                }
+
+                timeSlot.addGuests(request.getNumberOfGuests());
+
+                TablingEntity entity = TablingEntity.builder()
+                        .cafeId(request.getCafeId())
+                        .memberId(request.getMemberId())
+                        .date(request.getDate())
+                        .reserveTime(request.getReserveTime())
+                        .numberOfGuests(request.getNumberOfGuests())
+                        .status(TablingStatus.PENDING)
+                        .build();
+
+                return tablingRepository.save(entity).toTabling();
+
+            } catch (OptimisticLockingFailureException e) {
+                // 재시도 로직
+                attempt++;
+                if (attempt >= maxRetries) {
+                    throw new TablingException("예약 처리 중 충돌이 발생했습니다. 다시 시도해주세요.");
+                }
+                try {
+                    Thread.sleep(100 * (attempt + 1));
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new TablingException("예약 처리가 중단되었습니다.");
+                }
+            }
+        }
+        throw new TablingException("예약 처리에 실패했습니다.");
+    }
+
+    @Transactional
+    public void cancelTabling(Long tablingId, Long memberId) {
+        TablingEntity tabling = tablingRepository.findById(tablingId)
+                .orElseThrow(() -> new TablingException("예약을 찾을 수 없습니다."));
+
+        if (!tabling.getMemberId().equals(memberId)) {
+            throw new TablingException("예약 취소 권한이 없습니다.");
+        }
+
+        if (tabling.getStatus() == TablingStatus.CANCEL) {
+            throw new TablingException("이미 취소된 예약입니다.");
+        }
+
+        TablingTimeSlotEntity timeSlot = tablingTimeSlotManager
+                .getTimeSlotWithLock(tabling.getCafeId(), tabling.getDate(), tabling.getReserveTime())
+                .orElseThrow(() -> new TablingException("시간대 정보를 찾을 수 없습니다."));
+
+        timeSlot.removeGuests(tabling.getNumberOfGuests());
+        tabling.updateStatus(TablingStatus.CANCEL);
+    }
+
+    public List<Tabling> getCafeTablings(Long cafeId, LocalDate date) {
+        return tablingRepository.findByCafeIdAndDate(cafeId, date)
+                .stream()
+                .map(TablingEntity::toTabling)
+                .collect(Collectors.toList());
+    }
+
+    // 특정 카페의 기간별 예약 목록 조회
+    public List<Tabling> getCafeTablingsBetween(Long cafeId, LocalDate startDate, LocalDate endDate) {
+        return tablingRepository.findByCafeIdAndDateBetween(cafeId, startDate, endDate)
+                .stream()
+                .map(TablingEntity::toTabling)
+                .collect(Collectors.toList());
+    }
+
+    // 특정 카페의 특정 날짜, 상태별 예약 목록 조회
+    public List<Tabling> getCafeTablingsByStatus(Long cafeId, LocalDate date, List<TablingStatus> statuses) {
+        return tablingRepository.findByCafeIdAndDateAndStatusIn(cafeId, date, statuses)
+                .stream()
+                .map(TablingEntity::toTabling)
+                .collect(Collectors.toList());
+    }
+
+    // 특정 시간대의 예약 목록 조회
+    public List<Tabling> getTimeSlotTablings(LocalDate date, LocalTime reserveTime, List<TablingStatus> statuses) {
+        return tablingRepository.findByDateAndReserveTimeAndStatusIn(date, reserveTime, statuses)
+                .stream()
+                .map(TablingEntity::toTabling)
+                .collect(Collectors.toList());
+    }
+
+    // 회원의 예약 내역 조회
+    public List<Tabling> getMemberTablings(Long memberId, List<TablingStatus> statuses) {
+        return tablingRepository.findByMemberIdAndStatusIn(memberId, statuses)
+                .stream()
+                .map(TablingEntity::toTabling)
+                .collect(Collectors.toList());
     }
 }
