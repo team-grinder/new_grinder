@@ -15,6 +15,7 @@ public interface TablingTimeSlotRepository extends JpaRepository<TablingTimeSlot
     Optional<TablingTimeSlotEntity> findByCafeIdAndDateAndReserveTime(
             Long cafeId, LocalDate date, LocalTime reserveTime);
 
+    List<TablingTimeSlotEntity> findByCafeIdAndDate(Long cafeId, LocalDate date);
     @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT ts FROM TablingTimeSlotEntity ts " +
             "WHERE ts.cafeId = :cafeId " +

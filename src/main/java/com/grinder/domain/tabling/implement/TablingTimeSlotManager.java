@@ -39,6 +39,10 @@ public class TablingTimeSlotManager {
                 .findByCafeIdAndDateAndReserveTime(cafeId, date, hourTime);
     }
 
+    public List<TablingTimeSlotEntity> getTimeSlots(Long cafeId, LocalDate date) {
+        return tablingTimeSlotRepository.findByCafeIdAndDate(cafeId, date);
+    }
+
     public Optional<TablingTimeSlotEntity> getTimeSlotWithLock(
             Long cafeId, LocalDate date, LocalTime hourTime) {
         return tablingTimeSlotRepository.findWithLockByCafeIdAndDateAndReserveTime(cafeId, date, hourTime);
