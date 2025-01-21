@@ -15,7 +15,7 @@ public class JasyptTest {
 
     @BeforeAll
     static void setUp() {
-        System.setProperty("jasypt.encryptor.password", "grinder123");
+        System.setProperty("jasypt.encryptor.password", "test");
     }
 
     @Autowired

@@ -37,6 +37,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
             member = memberRepository.save(new MemberEntity(
                     email,
                     password,
+                    "test",
                     "010-1234-5678",
                     TierType.MASTER,
                     LoginType.COMMON,
