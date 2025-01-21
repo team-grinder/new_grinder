@@ -6,10 +6,10 @@ import com.grinder.domain.tabling.entity.TablingTimeSlotEntity;
 import com.grinder.domain.tabling.model.Tabling;
 import com.grinder.domain.tabling.model.TablingRegister;
 import com.grinder.domain.tabling.model.TablingStatus;
+import com.grinder.domain.tabling.model.AvailableTime;
 import com.grinder.domain.tabling.repository.BlockedDateRepository;
 import com.grinder.domain.tabling.repository.TablingRepository;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,6 @@ public class TablingManager {
     private final TablingRepository tablingRepository;
     private final TablingTimeSlotManager tablingTimeSlotManager;
     private final BlockedDateRepository blockedDateRepository;
-
     @Transactional
     public Tabling createTabling(TablingRegister request) {
         // 1. 휴무일 체크
@@ -143,42 +142,25 @@ public class TablingManager {
         tabling.updateStatus(TablingStatus.CANCEL);
     }
 
-    public List<Tabling> getCafeTablings(Long cafeId, LocalDate date) {
-        return tablingRepository.findByCafeIdAndDate(cafeId, date)
-                .stream()
-                .map(TablingEntity::toTabling)
-                .collect(Collectors.toList());
-    }
-
-    // 특정 카페의 기간별 예약 목록 조회
-    public List<Tabling> getCafeTablingsBetween(Long cafeId, LocalDate startDate, LocalDate endDate) {
-        return tablingRepository.findByCafeIdAndDateBetween(cafeId, startDate, endDate)
-                .stream()
-                .map(TablingEntity::toTabling)
-                .collect(Collectors.toList());
-    }
-
-    // 특정 카페의 특정 날짜, 상태별 예약 목록 조회
-    public List<Tabling> getCafeTablingsByStatus(Long cafeId, LocalDate date, List<TablingStatus> statuses) {
-        return tablingRepository.findByCafeIdAndDateAndStatusIn(cafeId, date, statuses)
-                .stream()
-                .map(TablingEntity::toTabling)
-                .collect(Collectors.toList());
-    }
-
-    // 특정 시간대의 예약 목록 조회
-    public List<Tabling> getTimeSlotTablings(LocalDate date, LocalTime reserveTime, List<TablingStatus> statuses) {
-        return tablingRepository.findByDateAndReserveTimeAndStatusIn(date, reserveTime, statuses)
-                .stream()
-                .map(TablingEntity::toTabling)
-                .collect(Collectors.toList());
-    }
-
     // 회원의 예약 내역 조회
     public List<Tabling> getMemberTablings(Long memberId, List<TablingStatus> statuses) {
         return tablingRepository.findByMemberIdAndStatusIn(memberId, statuses)
                 .stream()
                 .map(TablingEntity::toTabling)
                 .collect(Collectors.toList());
+    }
+
+    public AvailableTime getAvailableTime(Long cafeId, LocalDate date) {
+        List<TablingTimeSlotEntity> timeSlots =
+                tablingTimeSlotManager.getTimeSlots(cafeId, date);
+
+        List<TablingEntity> existingTablings =
+                tablingRepository.findByCafeIdAndDateAndStatusIn(
+                        cafeId,
+                        date,
+                        List.of(TablingStatus.PENDING, TablingStatus.CONFIRMED)
+                );
+
+        return AvailableTime.from(timeSlots, existingTablings);
     }
 }

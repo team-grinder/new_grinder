@@ -6,11 +6,14 @@ import com.grinder.common.security.AuthenticatedUser;
 import com.grinder.domain.tabling.model.Tabling;
 import com.grinder.domain.tabling.model.TablingRegister;
 import com.grinder.domain.tabling.model.TablingStatus;
+import com.grinder.domain.tabling.model.AvailableTime;
 import com.grinder.domain.tabling.service.TablingService;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -64,5 +67,12 @@ public class TablingRestController {
         }
         List<Tabling> tablings = tablingService.getMemberTablings(user.getId(), statuses);
         return ResponseEntity.ok(tablings);
+    }
+
+    @GetMapping("/cafe/{cafeId}/tabling-info")
+    public ResponseEntity<AvailableTime> getTablingInfo(
+            @PathVariable Long cafeId,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        return ResponseEntity.ok(tablingService.getAvailableTime(cafeId, date));
     }
 }

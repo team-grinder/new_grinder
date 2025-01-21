@@ -38,42 +38,42 @@ public class TablingAdminController {
         );
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/cafes/{cafeId}/date")
-    public ResponseEntity<List<Tabling>> getCafeTablings(
-            @PathVariable Long cafeId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<Tabling> tablings = tablingService.getCafeTablings(cafeId, date);
-        return ResponseEntity.ok(tablings);
-    }
-
-    @GetMapping("/cafes/{cafeId}/period")
-    public ResponseEntity<List<Tabling>> getCafeTablingsBetween(
-            @PathVariable Long cafeId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        List<Tabling> tablings = tablingService.getCafeTablingsBetween(cafeId, startDate, endDate);
-        return ResponseEntity.ok(tablings);
-    }
-
-    @GetMapping("/cafes/{cafeId}/status")
-    public ResponseEntity<List<Tabling>> getCafeTablingsByStatus(
-            @PathVariable Long cafeId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam List<TablingStatus> statuses) {
-        List<Tabling> tablings = tablingService.getCafeTablingsByStatus(cafeId, date, statuses);
-        return ResponseEntity.ok(tablings);
-    }
-
-    @GetMapping("/time-slots")
-    public ResponseEntity<List<Tabling>> getTimeSlotTablings(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time,
-            @RequestParam(required = false) List<TablingStatus> statuses) {
-        if (statuses == null) {
-            statuses = Arrays.asList(TablingStatus.values());
-        }
-        List<Tabling> tablings = tablingService.getTimeSlotTablings(date, time, statuses);
-        return ResponseEntity.ok(tablings);
-    }
+//
+//    @GetMapping("/cafes/{cafeId}/date")
+//    public ResponseEntity<List<Tabling>> getCafeTablings(
+//            @PathVariable Long cafeId,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//        List<Tabling> tablings = tablingService.getCafeTablings(cafeId, date);
+//        return ResponseEntity.ok(tablings);
+//    }
+//
+//    @GetMapping("/cafes/{cafeId}/period")
+//    public ResponseEntity<List<Tabling>> getCafeTablingsBetween(
+//            @PathVariable Long cafeId,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//        List<Tabling> tablings = tablingService.getCafeTablingsBetween(cafeId, startDate, endDate);
+//        return ResponseEntity.ok(tablings);
+//    }
+//
+//    @GetMapping("/cafes/{cafeId}/status")
+//    public ResponseEntity<List<Tabling>> getCafeTablingsByStatus(
+//            @PathVariable Long cafeId,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+//            @RequestParam List<TablingStatus> statuses) {
+//        List<Tabling> tablings = tablingService.getCafeTablingsByStatus(cafeId, date, statuses);
+//        return ResponseEntity.ok(tablings);
+//    }
+//
+//    @GetMapping("/time-slots")
+//    public ResponseEntity<List<Tabling>> getTimeSlotTablings(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time,
+//            @RequestParam(required = false) List<TablingStatus> statuses) {
+//        if (statuses == null) {
+//            statuses = Arrays.asList(TablingStatus.values());
+//        }
+//        List<Tabling> tablings = tablingService.getTimeSlotTablings(date, time, statuses);
+//        return ResponseEntity.ok(tablings);
+//    }
 }
