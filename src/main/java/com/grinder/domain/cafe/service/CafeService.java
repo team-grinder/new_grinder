@@ -41,7 +41,7 @@ public class CafeService {
     public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {
         return cafeReader.createCafe(name, address, description, tel, businessNumber);
     }
-
+    @Transactional
     public CafeBusinessInfo setBusinessHours(Long cafeId, CafeBusinessInfoRegister request) {
         return cafeBusinessHourManager.setOperatingHours(cafeId, request);
     }
