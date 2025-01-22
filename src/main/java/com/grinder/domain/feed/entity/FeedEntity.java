@@ -1,29 +1,26 @@
 package com.grinder.domain.feed.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.cafe.entity.CafeEntity;
-import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Feed extends BaseDateEntity {
+public class FeedEntity extends BaseDateEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private MemberEntity memberEntity;
+    private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "cafe_id")
-    private CafeEntity cafeEntity;
+    private Long cafeId;
 
     @Column(nullable = false, length = 2000)
     private String content;

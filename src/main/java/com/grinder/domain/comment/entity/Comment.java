@@ -1,7 +1,7 @@
 package com.grinder.domain.comment.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
-import com.grinder.domain.feed.entity.Feed;
+import com.grinder.domain.feed.entity.FeedEntity;
 import com.grinder.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,7 @@ public class Comment extends BaseDateEntity {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Feed feed;
+    private Long feedId;
 
     @ManyToOne
     @JoinColumn(nullable = false)

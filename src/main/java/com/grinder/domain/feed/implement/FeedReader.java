@@ -9,5 +9,11 @@ import lombok.RequiredArgsConstructor;
 public class FeedReader {
     private final FeedRepository feedRepository;
 
+    public void readFeedSliceByMemberId(String memberId) {
 
+    }
+
+    public void readFeedSliceByCafeId(String cafeId) {
+
+    }
 }
