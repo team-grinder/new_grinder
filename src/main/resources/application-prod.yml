@@ -2,10 +2,10 @@ spring:
   application:
     name: grinder
   datasource:
-    driver-class-name: ENC(qUd7z0u9cv/ufdS5y5M9mH5408IjRv1w1nmv9z18W0wjUFzISZIr7Q==)
-    url: ENC(TXNeJHKB6555E6BKWt0JtfQnYROuZs43+fFC9eyJji58FEpNL6K44GQVMmjJYJEZkGU1lR6cAspmBuT7RWa/I75lCm6e7KWJHrUTXB44xRR/hcqfuBwHtUjKpl/XfthYK5Zs8z/CxKsfeNrpZMoNHAgYM2O9rkYaVif7KBpIDrB+DgOAt+2VEA==)
-    username: ENC(x+cM3eM5dXMMvtjcaS2lo/0mogj1SnUw)
-    password: ENC(75GW/0QEsaOTKReqHGOxt0BJ3pd7V7XU)
+    driver-class-name: ENC(YtATyRWSL8SyRCJU8G0ZKFzKAMQANWkAddPGwfFoU1DRUgg0fE66gQ==)
+    url: ENC(yo7JTw++2Ds7Zjpc/XXCN1r7/sSqhh+5wYyRZN0orvn0/zDfYry+n62FZvuO4wxuSlgpr56ut1N/lIYCZIfVucjZXyLo1FiyZgX2hnFZYOraUz+fLHrPfNoC0DKU2+tR2Yy1NS9/aCBN0vKouv9TNStYwaboY1EZZPtLDGBGj8kpz04qqJHc2Q==)
+    username: ENC(eE3mUyVOsUjwd9yYtjVpVPag5rA35b3X)
+    password: ENC(VKJKmbAUaTjqcPeQSO4mTmPfpZVEQxtc)
     hikari:
       connection-timeout: 10000
       minimum-idle: 3
@@ -13,7 +13,7 @@ spring:
       idle-timeout: 10000
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -25,9 +25,9 @@ spring:
         registration:
           naver:
             client-name: naver
-            client-id: ENC(cPpWmy1bRHSmNLIVa/07KhxVyMtOvf9clNBRNNetshk=)
-            client-secret: ENC(fvYj+WAbNCPveV0wRRZvMe6pskohKeLB)
-            redirect-uri: ENC(lWQY1dlOSYaPMpAawj/mRkdshIjQTYVjdV9Dr0dQAQsMDnRPahVfao8Gc9rEz2HvbRWcqIRWU1s=)
+            client-id: ENC(A01rFFFrdjnrXPLUVRfUPaLTuEh/7CNQMnmz2k+I+Do=)
+            client-secret: ENC(QEiT7wBx0jf/g1xSUNbm2qy1wddmi+YG)
+            redirect-uri: ENC(0FjbdFd48fGTRYmIhhx3ECbnU/mXXdnzlphaJPkdmFhCS1ZHj+uukRrYQNw9hBUaduqWrYpNsqI=)
             authorization-grant-type: authorization_code
             provider: naver
             scope:
@@ -35,18 +35,18 @@ spring:
               - email
           google:
             client-name: google
-            client-id: ENC(ZbYfiO0SRwaewrDp9VCZAqpsyxzfaU7tJiGSrn0veKV/3X+rmrnZv4QQrVcnigfCsii+6sQVdOsKeUaNpJs16gJuWpvTKZ+ELZxii14KMhPsm483xF/YnA==)
-            client-secret: ENC(i6e2a6JLniaAG/qgjKPYSsDk9AqxJAtQfWVHlhzGLxTFG27+8LsJ5ucij/imNm66)
-            redirect-uri: ENC(OcOB6ZXVKfjLHYtuA1fIwRLU7eDZbyzJQhuRdFJwZQabi724d5v0PsVTlscEJvKXEH7Xnsjwn5w=)
+            client-id: ENC(V490RKXNhE/ALCThvQ8mn2ug5iAPEBslVtmyf+Nj2e/4BjUi/nMFF28SK03XmGLA2+Uk9H7VdH09FTT/MfZ5QBRn6MJmXnyZ5dUcIKZvSA2jshPEt65wOg==)
+            client-secret: ENC(nGqYf4lXEMug9H3L7g43SeUrc/dZPbGi1F6tpeSk+xYLJZdgZO3W6XxCCvOt1rtp)
+            redirect-uri: ENC(ASp7UJmaek2dq0pemsnxQZqGg/1QDibwfeizap9cq4YOO2sYagjHc3d1rnHaf7fx3Y/Obx//K78=)
             authorization-grant-type: authorization_code
             scope:
               - profile
               - email
           kakao:
             client-name: kakao
-            client-id: ENC(NU8nItxNprfX+TRnNjKLstiSYi1w9Zw2LmSSGNP78wvvdADFhaRNu4UcyPWT8d1Y)
-            client-secret: ENC(OEU1xmCOg1m4550qaUrvFMH/WBDLfp4FqBo4xFPJuSWQ1fXMJocBoJi/SMOSgizy)
-            redirect-uri: ENC(B9549fFiFR23XzUzplLYUt6SUgE4e+zod87xFRGzXOQRhgumWU3gtQJXmzn89qr6fioiWZ0Y/Xw=)
+            client-id: ENC(SduSAns6b7+t6z2aUEwgFtGa55HV/Sg/Zjx88kxflmXJZtp3cfSxDWthJ2IdGqb2s1g7DZ2ugmVDIVSdBd/pWrCQcwxS1HbNYalbLUHhP1JC9wvve3QXpA==)
+            client-secret: ENC(3BAeFwz8gx79HgwJjt+ps7IjTl0c4TwRW4eLJdSeN5JQj3DQbseC1ydsnXPATFnI)
+            redirect-uri: ENC(6Qmq2YAE4wXHnL4OcJnAOf7+aeFyH581qQHbiRgMwD5pEu6S1K3n4Q3dzkRZ5wcE)
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             provider: kakao
@@ -55,15 +55,25 @@ spring:
               - account_email
         provider:
           naver:
-            authorization-uri: ENC(TeVq+bFrL+WbILoraSLsVsutbyzGP8e0oVayHhnorHysM5iY66ZfnGKQcaSX4saNQ/3LFxZ6etA=)
-            token-uri: ENC(aeRHoputB2DeXiCnm/8M9R9pP7jIfGAh2v1HbF25zL2jmQ19zIZtJgwl35Scqpdr)
-            user-info-uri: ENC(szyEnD/rOuJH5YmWZWyjcb4Cfqw9bbuTjJ+/zIVSDzx3U+4rz5zkFiG2tkyoUzZl)
+            authorization-uri: ENC(L3TUfDftVcZF1axe/TLFuToCtuxL/eljmkkWSjKZjUtZjtLhP0QXIVECgqDaTW66ExvEQ6FZlLY=)
+            token-uri: ENC(jd4pV2o0QRrm/foJLI2ZAIvkw1Da07WU/YThyQj2xDXON8BfK3+ZO+SpgOWJlmth)
+            user-info-uri: ENC(bGgsB5BfKxx1wfld1uowiqxH+g5e1BYpTZ+Jg42p+QfkrGTSNAqAOnofczUMKRMW)
             user-name-attribute: response
           kakao:
-            authorization-uri: ENC(cLZXUfFeBu+/6uF9rERJix9wPSIlV94YEXalNhfySLaa0iqJx9+tPDrF/MH20WpV)
-            token-uri: ENC(XI+aj4zB8wNryuj+DCzqiLVoeTY4moU4ox5hjChQpwr2kwNAUJ615ShM4EGjXU4e)
-            user-info-uri: ENC(T9IZi3zqyK8jDbUy8r0BN0Tp4buz+8xHoqP78YUxAZRGMVbJ54KY/ruuxRTBbbUs)
+            authorization-uri: ENC(EunSJKAo+dBdPkTdeiCftstTwC1iEEFoz10SWEPwTSiSS4jARcp6+DNPvizYsC1Y)
+            token-uri: ENC(kVlGej8uAR+UDgdu7Ww/yShrSJW+S6zsZ950oq5lbZ7sdtAgZEIehMo+/m0BCwxO)
+            user-info-uri: ENC(3yUw4QqZw04bKHuQXHdJV6VwlvECpwAPxuIHUX7usRH8SUZNntnXe9w9RKxjeLFo)
             user-name-attribute: id
+  # devtools
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
 
 server:
   tomcat:
@@ -84,6 +94,17 @@ management:
     web:
       exposure:
         include: "*"
+
+# AWS amazon S3
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(U3mPaYT6Vb27V0MA7ldZ8SuE7Gomzz4QNv/bjW+6STs=)
+      secret-key: ENC(+STVVOAGWuwv+zVPN2H2PEjs2cPFWtaDUkRf5TuKdKMzxLunl+meySz7al0J8PVH8f0A8dp2rrQ=)
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 jasypt:
   encryptor:
