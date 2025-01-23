@@ -1,6 +1,7 @@
 package com.grinder.domain.image.entity;
 
 
+import com.grinder.domain.like.model.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Image {
+public class ImageEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -21,4 +22,8 @@ public class Image {
     private String imageName;
 
     private String url;
+
+    private Long contentId;
+
+    private ContentType contentType;
 }

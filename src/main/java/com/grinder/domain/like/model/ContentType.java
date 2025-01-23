@@ -1,4 +1,4 @@
-package com.grinder.domain.heart.model;
+package com.grinder.domain.like.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

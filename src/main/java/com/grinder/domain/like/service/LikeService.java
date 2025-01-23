@@ -1,6 +1,6 @@
-package com.grinder.domain.heart.service;
+package com.grinder.domain.like.service;
 
-import com.grinder.domain.heart.repository.HeartRepository;
+import com.grinder.domain.like.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class HeartService {
-    private final HeartRepository heartRepository;
+public class LikeService {
+    private final LikeRepository likeRepository;
 }

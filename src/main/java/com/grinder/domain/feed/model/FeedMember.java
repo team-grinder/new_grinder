@@ -1,9 +1,12 @@
 package com.grinder.domain.feed.model;
 
 import com.grinder.common.annotation.Name;
+import com.grinder.common.utils.DateUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -24,6 +27,7 @@ public class FeedMember {
 
     private int likes;
 
+    @Setter
     @Name(description = "첨부파일 URL 리스트")
     private List<String> attachments;
 
@@ -31,16 +35,15 @@ public class FeedMember {
 
     private boolean isMine;
 
-    public FeedMember(String feedId, String nickname, String memberImage, String content, int rating, String period, int likes, List<String> attachments, Long memberId) {
+    public FeedMember(String feedId, Long feedMemberId, String nickname, String memberImage, String content, int rating, LocalDateTime period, int likes, Long memberId, boolean isLike) {
         this.feedId = feedId;
         this.nickname = nickname;
         this.memberImage = memberImage;
         this.content = content;
         this.rating = rating;
-        this.period = period;
+        this.period = DateUtils.parseYYYYMMDD(period);
         this.likes = likes;
-        this.attachments = attachments;
         this.isLike = isLike;
-        this.isMine = isMine;
+        this.isMine = feedMemberId.equals(memberId);
     }
 }

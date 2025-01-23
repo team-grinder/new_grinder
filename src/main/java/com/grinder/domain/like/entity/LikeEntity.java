@@ -1,7 +1,6 @@
-package com.grinder.domain.heart.entity;
+package com.grinder.domain.like.entity;
 
-import com.grinder.domain.heart.model.ContentType;
-import com.grinder.domain.member.entity.MemberEntity;
+import com.grinder.domain.like.model.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -13,14 +12,12 @@ import javax.persistence.*;
 })
 @NoArgsConstructor
 @AllArgsConstructor
-public class Heart {
+public class LikeEntity {
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private MemberEntity memberEntity;
+    private Long memberId;
 
     @Column(nullable = false)
     private Long contentId;

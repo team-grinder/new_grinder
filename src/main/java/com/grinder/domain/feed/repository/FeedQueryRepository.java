@@ -1,6 +1,12 @@
 package com.grinder.domain.feed.repository;
 
+import com.grinder.common.model.Slices;
 import com.grinder.domain.feed.entity.FeedEntity;
+import com.grinder.domain.feed.model.FeedMember;
+import com.grinder.domain.image.entity.QImageEntity;
+import com.grinder.domain.like.entity.QLikeEntity;
+import com.grinder.domain.like.model.ContentType;
+import com.grinder.domain.member.entity.QMemberEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -17,14 +23,24 @@ public class FeedQueryRepository {
         this.query = new JPAQueryFactory(entityManager);
     }
 
-    public void readFeedSliceByMemberId(Long memberId, int page, int size) {
+    public Slices<FeedMember> readFeedSliceByMemberId(Long memberId, int page, int size) {
+        QMemberEntity member = new QMemberEntity("member");
+        QLikeEntity like = new QLikeEntity("like");
+        QImageEntity image = new QImageEntity("image");
+
         List<FeedEntity> fetch = query.from(feedEntity)
                 .select(feedEntity)
-                .where(feedEntity.memberId.eq(memberId))
+                .leftJoin(member).on(feedEntity.memberId.eq(member.id))
+                .leftJoin(like).on(feedEntity.id.eq(like.contentId))
+                .where(feedEntity.memberId.eq(memberId)
+                        .and(like.contentType.eq(ContentType.FEED).and(like.contentId.eq(feedEntity.id)))
+                )
                 .orderBy(feedEntity.createDate.desc())
                 .limit(size)
                 .offset((long) page * size)
                 .fetch();
+
+        return null;
     }
 
     public void readFeedSliceByCafeId(String cafeId) {
