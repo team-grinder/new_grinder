@@ -55,13 +55,16 @@ dependencies {
     // AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // P6SPY
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-    systemProperty 'jasypt.encryptor.password', findProperty("jasypt.encryptor.password")
+    systemProperty 'jasypt.encryptor.password', project.findProperty("jasypt.encryptor.password") ?: "grinder!@#"
 }
 
 //// === QueryDsl 빌드 옵션 ===

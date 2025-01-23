@@ -14,10 +14,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         dialect: org.hibernate.dialect.MySQL8Dialect
   security:
     oauth2:
@@ -105,6 +105,12 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+# p6spy
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
 
 jasypt:
   encryptor:
