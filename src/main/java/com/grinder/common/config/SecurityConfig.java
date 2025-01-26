@@ -69,6 +69,7 @@ public class SecurityConfig {
                         .antMatchers("/tabling/**").permitAll()
                         .antMatchers("/cafe/**").permitAll()
                         .antMatchers("/").permitAll()
+                        .antMatchers("/s3/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

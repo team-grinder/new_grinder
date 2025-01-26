@@ -75,6 +75,10 @@ spring:
     cache: false
   thymeleaf:
     cache: false
+  servlet:
+    multipart:
+          max-file-size: 10MB
+          max-request-size: 10MB
 
 server:
   tomcat:
@@ -89,23 +93,28 @@ logging:
         info:
         security: trace
     zercok: debug
+    com:
+      amazonaws:
+              util:
+                EC2MetadataUtils: error
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
 # AWS amazon S3
 cloud:
   aws:
     credentials:
-      access-key: ENC(U3mPaYT6Vb27V0MA7ldZ8SuE7Gomzz4QNv/bjW+6STs=)
-      secret-key: ENC(+STVVOAGWuwv+zVPN2H2PEjs2cPFWtaDUkRf5TuKdKMzxLunl+meySz7al0J8PVH8f0A8dp2rrQ=)
+      access-key: ENC(gIZIQTCndbOGJ6XudczShykUAA3YebvHadJWxAtwcc8=)
+      secret-key: ENC(UmGY/Z9F3EXe2k5FAH3Xd7HeDkr5nu9bAzm+JZEYjp3gthSQvFmr1ETQx6yC53HgkYFT1/q78Yo=)
     region:
       static: ap-northeast-2
     stack:
       auto: false
+    s3:
+      bucket: newgrinders3
 
 jasypt:
   encryptor:
