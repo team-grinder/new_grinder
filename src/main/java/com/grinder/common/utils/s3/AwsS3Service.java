@@ -1,9 +1,8 @@
 package com.grinder.common.utils.s3;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +46,25 @@ public class AwsS3Service {
         });
 
         return fileNameList;
+    }
+
+    // 서명된 URL 생성
+    public String generatePresignedUrl(String fileName) {
+        try {
+            Date expiration = new Date();
+            long expTimeMillis = System.currentTimeMillis() + (60 * 60 * 1000); // 1시간 후 만료
+            expiration.setTime(expTimeMillis);
+
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(bucket, fileName)
+                            .withMethod(HttpMethod.GET)
+                            .withExpiration(expiration);
+
+            URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+            return url.toString();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Presigned URL 생성 실패");
+        }
     }
 
     public void deleteFile(String fileName) {

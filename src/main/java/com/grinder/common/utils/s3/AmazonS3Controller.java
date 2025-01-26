@@ -16,6 +16,16 @@ public class AmazonS3Controller {
     private final AwsS3Service awsS3Service;
 
     /**
+     * Amazon S3에 업로드 된 파일의 서명된 URL 생성
+     * @return 성공 시 200 Success와 함께 서명된 URL 반환
+     */
+    @GetMapping("/file")
+    public ResponseEntity<String> generatePresignedUrl(@RequestParam String fileName) {
+        String presignedUrl = awsS3Service.generatePresignedUrl(fileName);
+        return ResponseEntity.ok(presignedUrl);
+    }
+
+    /**
      * Amazon S3에 파일 업로드
      * @return 성공 시 200 Success와 함께 업로드 된 파일의 파일명 리스트 반환
      */
