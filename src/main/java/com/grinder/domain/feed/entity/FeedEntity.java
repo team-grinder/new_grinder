@@ -33,4 +33,12 @@ public class FeedEntity extends BaseDateEntity {
     @Column(name = "rank_value")
     private Integer rank;
 
+    public FeedEntity(Long memberId, Long cafeId, String content, Integer grade, Integer rank, Boolean isVisible) {
+        this.memberId = memberId;
+        this.cafeId = cafeId;
+        this.content = content;
+        this.grade = grade;
+        this.rank = rank;
+        this.isVisible = isVisible;
+    }
 }

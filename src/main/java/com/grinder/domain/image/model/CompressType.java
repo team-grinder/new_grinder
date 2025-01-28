@@ -9,13 +9,14 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public enum CompressType {
-    HIGH("1920", "_high"),
-    LARGE("1024", "_large"),
-    MEDIUM("512", "_medium"),
-    SMALL("256", "_small"),
-    LOW("128", "_low");
+    ORIGINAL(1, ""),
+    HIGH(0.9, "_high"),
+    LARGE(0.8, "_large"),
+    MEDIUM(0.7, "_medium"),
+    SMALL(0.6, "_small"),
+    LOW(0.5, "_low");
 
-    private final String value;
+    private final double scale;
     private final String suffix;
 
     public static List<CompressType> of(ContentType contentType) {

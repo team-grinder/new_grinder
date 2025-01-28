@@ -1,6 +1,5 @@
 package com.grinder.domain.cart.implement;
 
-import com.grinder.common.annotation.Implement;
 import com.grinder.domain.cart.entity.CartDetailEntity;
 import com.grinder.domain.cart.entity.CartEntity;
 import com.grinder.domain.cart.model.Cart;
@@ -10,11 +9,12 @@ import com.grinder.domain.cart.repository.CartRepository;
 import com.grinder.domain.menu.implement.OptionReader;
 import com.grinder.domain.menu.model.Option;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Implement
+@Component
 @RequiredArgsConstructor
 public class CartReader {
     private final OptionReader optionReader;
