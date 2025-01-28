@@ -64,7 +64,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-    systemProperty 'jasypt.encryptor.password', project.findProperty("jasypt.encryptor.password") ?: "grinder!@#"
+    systemProperty 'jasypt.encryptor.password', project.findProperty("jasypt.encryptor.password") ?: ""
 }
 
 //// === QueryDsl 빌드 옵션 ===
@@ -72,6 +72,10 @@ def generated = layout.buildDirectory.dir("generated/querydsl")
 
 // querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile).configureEach {
+    if (options.getGeneratedSourceOutputDirectory() != null) {
+        delete file(generated)
+    }
+
     options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 
