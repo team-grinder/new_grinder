@@ -53,34 +53,42 @@ public class ImageReader {
         return true;
     }
 
-    // 압축 이미지 저장
     @Transactional
-    public boolean compressImage(List<MultipartFile> multipartFiles, ContentType contentType, Long contentId) {
+    public void createAsyncImage(List<FileVO> files, ContentType contentType, Long contentId) {
         List<ImageInfo> imageInfoList = new ArrayList<>();
+
+        for (FileVO fileVO : files) {
+            File file = fileVO.getFile();
+            // s3 이미지 저장 로직
+            String uploadFileKey = awsS3Service.uploadFile(file, fileVO.getContentType());
+
+            // 완료 됐다면 DB에 이미지 정보 저장
+            ImageInfo imageInfo = ImageInfo.builder()
+                    .originalFileName(fileVO.getFileName())
+                    .storedFileName(uploadFileKey)
+                    .fileSize(fileVO.getFileSize())
+                    .fileType(fileVO.getContentType())
+                    .build();
+
+            imageInfoList.add(imageInfo);
+        }
+
+        saveImageInfo(contentType, contentId, imageInfoList);
+    }
+
+
+
+    // 압축 이미지 저장
+    public boolean compressAsyncImage(List<MultipartFile> multipartFiles, ContentType contentType, Long contentId) {
         List<CompressType> compressTypes = CompressType.of(contentType);
 
         // 압축 후 저장
-        CompletableFuture<List<FileVO>> compressedFiles = ImageUtils.asyncCompressImage(multipartFiles, compressTypes, 0.75f);
+        CompletableFuture<List<FileVO>> compressedFiles =
+                ImageUtils.asyncCompressImage(multipartFiles, compressTypes, 0.75f);
 
         compressedFiles.thenAccept(files -> {
-            for (FileVO fileVO : files) {
-                File file = fileVO.getFile();
-                // s3 이미지 저장 로직
-                String uploadFileKey = awsS3Service.uploadFile(file, fileVO.getContentType());
-
-                // 완료 됐다면 DB에 이미지 정보 저장
-                ImageInfo imageInfo = ImageInfo.builder()
-                        .originalFileName(fileVO.getFileName())
-                        .storedFileName(uploadFileKey)
-                        .fileSize(fileVO.getFileSize())
-                        .fileType(fileVO.getContentType())
-                        .build();
-
-                imageInfoList.add(imageInfo);
-            }
+            createAsyncImage(files, contentType, contentId);
         });
-
-        saveImageInfo(contentType, contentId, imageInfoList);
 
         return true;
     }

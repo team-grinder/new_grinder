@@ -5,7 +5,9 @@ import com.grinder.domain.feed.entity.FeedEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +25,8 @@ public class CreateFeedRequest {
 
     @Name(defaultValue = "true", description = "유저가 생성하는 피드는 기본적으로 true를 반환. ")
     private Boolean isVisible = true;
+
+    private List<MultipartFile> images;
 
     public void changeVisible() {
         this.isVisible = !this.isVisible;

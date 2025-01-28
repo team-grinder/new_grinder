@@ -22,12 +22,12 @@ public enum CompressType {
     public static List<CompressType> of(ContentType contentType) {
         switch (contentType) {
             case MEMBER:
-                return List.of(MEDIUM, SMALL, LOW);
+                return List.of(ORIGINAL, MEDIUM, SMALL, LOW);
             case FEED:
-                return List.of(LARGE, MEDIUM, SMALL);
+                return List.of(ORIGINAL, LARGE, MEDIUM, SMALL);
             case CAFE:
             case MENU:
-                return List.of(MEDIUM, SMALL);
+                return List.of(ORIGINAL, MEDIUM, SMALL);
             default:
                 throw new IllegalArgumentException("알 수 없는 ContentType 입니다.");
         }
