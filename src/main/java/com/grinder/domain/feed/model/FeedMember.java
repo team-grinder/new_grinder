@@ -26,7 +26,7 @@ public class FeedMember {
     @Name(description = "yyyy-MM-dd 형식")
     private String createDate;
 
-    private int likes;
+    private long likes;
 
     @Setter
     @Name(description = "첨부파일 URL 리스트")
@@ -36,7 +36,7 @@ public class FeedMember {
 
     private boolean isMine;
 
-    public FeedMember(Long feedId, String nickname, String memberImageUrl, String content, int grade, LocalDateTime createDate, boolean isMine, int likes, boolean isLike) {
+    public FeedMember(Long feedId, String nickname, String memberImageUrl, String content, int grade, LocalDateTime createDate, boolean isMine, long likes, boolean isLike) {
         this.feedId = feedId;
         this.nickname = nickname;
         this.memberImageUrl = memberImageUrl;

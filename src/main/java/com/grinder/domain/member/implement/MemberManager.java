@@ -44,9 +44,11 @@ public class MemberManager {
         return memberRepository.save(memberEntity).toMember();
     }
 
-    public Optional<Member> findByEmail(String email) {
+    public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .map(MemberEntity::toMember);
+                .map(MemberEntity::toMember).orElseThrow(
+                        () -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND)
+                );
     }
 
     public boolean validateDuplicateEmail(String email) {

@@ -6,8 +6,10 @@ import com.grinder.domain.feed.model.FeedMember;
 import com.grinder.domain.like.entity.QLikeEntity;
 import com.grinder.domain.like.model.ContentType;
 import com.grinder.domain.member.entity.QMemberEntity;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -30,8 +32,10 @@ public class FeedQueryRepository {
 
         NumberExpression<Long> likeCountExpression = like.id.count();
 
-        BooleanExpression isLikedExpression =
-                like.memberId.eq(clientId).count().gt(0);
+        // 좋아요 눌렀는지 여부도 CASE로 변환
+        Expression<Boolean> isLikedExpression = new CaseBuilder()
+                .when(like.memberId.eq(clientId)).then(true)
+                .otherwise(false);
 
         BooleanExpression isMine = feed.memberId.eq(clientId);
 
@@ -74,8 +78,13 @@ public class FeedQueryRepository {
 
         NumberExpression<Long> likeCountExpression = like.id.count();
 
-        BooleanExpression isLikedExpression =
-                like.memberId.eq(clientId).count().gt(0);
+        NumberExpression<Integer> isLikedAgg = new CaseBuilder()
+                .when(like.memberId.eq(clientId)).then(1)
+                .otherwise(0)
+                .max();
+
+        Expression<Boolean> isLikedExpression =
+                isLikedAgg.when(1).then(true).otherwise(false);
 
         BooleanExpression isMine = feed.memberId.eq(clientId);
 
@@ -99,8 +108,7 @@ public class FeedQueryRepository {
                         feed.id.eq(like.contentId)
                                 .and(like.contentType.eq(ContentType.FEED))
                 )
-                .where(feed.cafeId.eq(cafeId)) // 필요 조건
-                // 집계를 위해 필요한 모든 컬럼(group by 대상)을 groupBy에 나열
+                .where(feed.cafeId.eq(cafeId))
                 .groupBy(feed.id, feed.memberId, member.nickname, member.imageUrl,
                         feed.content, feed.grade, feed.createDate)
                 .orderBy(feed.createDate.desc())

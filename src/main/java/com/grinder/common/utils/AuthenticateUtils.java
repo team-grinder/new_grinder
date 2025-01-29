@@ -12,7 +12,18 @@ public class AuthenticateUtils {
 
     public static Long getAuthId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
-        return principal.getId();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // 인증되지 않은 상태거나 authentication이 없다면 null 혹은 예외처리
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof AuthenticatedUser)) {
+            // 예상과 다른 타입인 경우 처리
+            return null;
+        }
+
+        return ((AuthenticatedUser) principal).getId();
     }
 }
