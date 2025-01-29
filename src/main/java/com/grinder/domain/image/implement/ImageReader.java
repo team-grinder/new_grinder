@@ -33,16 +33,27 @@ public class ImageReader {
     private final ImageQueryRepository imageQueryRepository;
     private final AwsS3Service awsS3Service;
 
-    public Map<Long, ImageTag> findImageByFeedIds(List<Long> feedIds) {
-        Map<Long, ImageTag> imageByFeedIds = imageQueryRepository.findImageByFeedIds(feedIds);
+    public Map<Long, List<ImageTag>> findImageByFeedIds(List<Long> feedIds) {
+        Map<Long, List<ImageTag>> imageByFeedIds = imageQueryRepository.findImageByFeedIds(feedIds);
 
         imageByFeedIds.forEach((k, v) ->
-                v.setImageUrl(
-                        awsS3Service.generatePresignedUrl(v.getImageKey())
-                )
+                v.forEach(imageTag ->
+                        imageTag.setImageUrl(
+                                awsS3Service.generatePresignedUrl(imageTag.getImageKey())))
         );
 
         return imageByFeedIds;
+    }
+
+    public List<ImageTag> findImageByContentId(Long contentId, ContentType... contentType) {
+        List<ImageTag> imageTags = imageQueryRepository.findImageByContentId(contentId, contentType);
+
+        imageTags.forEach(imageTag ->
+                imageTag.setImageUrl(
+                        awsS3Service.generatePresignedUrl(imageTag.getImageKey()))
+        );
+
+        return imageTags;
     }
 
     @Transactional

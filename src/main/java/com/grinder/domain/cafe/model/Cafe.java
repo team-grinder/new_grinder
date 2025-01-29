@@ -17,4 +17,6 @@ public class Cafe {
     private String description;
 
     private String tel;
+
+    private int averageGrade;
 }

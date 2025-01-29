@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @Repository
 public class ImageQueryRepository {
@@ -22,7 +23,7 @@ public class ImageQueryRepository {
         this.query = new JPAQueryFactory(entityManager);
     }
 
-    public Map<Long, ImageTag> findImageByFeedIds(List<Long> feedIds) {
+    public Map<Long, List<ImageTag>> findImageByFeedIds(List<Long> feedIds) {
         QImageEntity image = QImageEntity.imageEntity;
 
         return query
@@ -33,11 +34,34 @@ public class ImageQueryRepository {
                                 .and(image.contentId.in(feedIds))
                 )
                 .transform(groupBy(image.contentId).as(
+                        list(
+                                Projections.constructor(
+                                        ImageTag.class,
+                                        image.imageName,
+                                        image.imageKey,
+                                        image.contentType
+                                )
+                        )
+                ));
+    }
+
+    public List<ImageTag> findImageByContentId(Long contentId, ContentType... contentType) {
+        QImageEntity image = QImageEntity.imageEntity;
+
+        return query
+                .from(image)
+                .where(
+                        image.contentType.in(contentType)
+                                .and(image.contentId.eq(contentId))
+                )
+                .select(
                         Projections.constructor(
                                 ImageTag.class,
                                 image.imageName,
-                                image.imageKey
+                                image.imageKey,
+                                image.contentType
                         )
-                ));
+                )
+                .fetch();
     }
 }

@@ -32,12 +32,12 @@ public class FeedReader {
                 .map(FeedMember::getFeedId).collect(Collectors.toList());
 
         // 이미지 조회 (피드 ID로 조회 및 S3 URL 생성)
-        Map<Long, ImageTag> imageTagMap = imageReader.findImageByFeedIds(feedIds);
+        Map<Long, List<ImageTag>> imageTagMap = imageReader.findImageByFeedIds(feedIds);
 
         feedMemberSlices.getContent().forEach(feedMember -> {
-            ImageTag imageTag = imageTagMap.get(feedMember.getFeedId());
-            if (imageTag != null) {
-                feedMember.setImageTagList(List.of(imageTag));
+            List<ImageTag> imageTag = imageTagMap.get(feedMember.getFeedId());
+            if (imageTag != null && !imageTag.isEmpty()) {
+                feedMember.setImageTagList(imageTag);
             }
         });
 
@@ -52,12 +52,12 @@ public class FeedReader {
                 .map(FeedMember::getFeedId).collect(Collectors.toList());
 
         // 이미지 조회 (피드 ID로 조회 및 S3 URL 생성)
-        Map<Long, ImageTag> imageTagMap = imageReader.findImageByFeedIds(feedIds);
+        Map<Long, List<ImageTag>> imageTagMap = imageReader.findImageByFeedIds(feedIds);
 
         feedMemberSlices.getContent().forEach(feedMember -> {
-            ImageTag imageTag = imageTagMap.get(feedMember.getFeedId());
-            if (imageTag != null) {
-                feedMember.setImageTagList(List.of(imageTag));
+            List<ImageTag> imageTag = imageTagMap.get(feedMember.getFeedId());
+            if (imageTag != null && !imageTag.isEmpty()) {
+                feedMember.setImageTagList(imageTag);
             }
         });
 

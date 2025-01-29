@@ -23,9 +23,10 @@ public enum CompressType {
         switch (contentType) {
             case MEMBER:
                 return List.of(ORIGINAL, MEDIUM, SMALL, LOW);
+            case CAFE_IMAGE:
             case FEED:
                 return List.of(ORIGINAL, LARGE, MEDIUM, SMALL);
-            case CAFE:
+            case CAFE_LOGO:
             case MENU:
                 return List.of(ORIGINAL, MEDIUM, SMALL);
             default:

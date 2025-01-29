@@ -1,5 +1,6 @@
 package com.grinder.domain.image.model;
 
+import com.grinder.domain.like.model.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,14 @@ public class ImageTag {
 
     private String imageKey;
 
+    private ContentType contentType;
+
     @Setter
     private String imageUrl;
+
+    public ImageTag(String imageName, String imageKey, ContentType contentType) {
+        this.imageName = imageName;
+        this.imageKey = imageKey;
+        this.contentType = contentType;
+    }
 }

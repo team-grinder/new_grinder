@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 
 @Entity
 @Getter
@@ -31,6 +32,8 @@ public class CafeEntity extends BaseDateEntity {
 
     private Long imageId;
 
+    private int averageGrade;
+
     @Builder
     public CafeEntity(String name, String address, String description, String tel, String businessNumber) {
         this.name = name;
@@ -47,6 +50,12 @@ public class CafeEntity extends BaseDateEntity {
                 .address(address)
                 .description(description)
                 .tel(tel)
+                .averageGrade(averageGrade)
                 .build();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.averageGrade = 0;
     }
 }

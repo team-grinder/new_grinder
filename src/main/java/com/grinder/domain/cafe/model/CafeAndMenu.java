@@ -11,6 +11,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CafeAndMenu {
-    private final Cafe cafe;
+    private String name;
+
+    private String address;
+
+    private String imageUrl;
+
+    private String logoUrl;
+
+    private String phoneNum;
+
+    private int averageGrade;
+
     private final List<Menu> menus;
 }
