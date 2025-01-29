@@ -75,10 +75,6 @@ def generated = layout.buildDirectory.dir("generated/querydsl")
 
 // querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile).configureEach {
-    if (generated.get().asFile != null) {
-        delete file(generated)
-    }
-
     options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 

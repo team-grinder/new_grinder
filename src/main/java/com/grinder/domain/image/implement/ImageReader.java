@@ -6,6 +6,8 @@ import com.grinder.common.utils.s3.AwsS3Service;
 import com.grinder.domain.image.entity.ImageEntity;
 import com.grinder.domain.image.model.CompressType;
 import com.grinder.domain.image.model.ImageInfo;
+import com.grinder.domain.image.model.ImageTag;
+import com.grinder.domain.image.repository.ImageQueryRepository;
 import com.grinder.domain.image.repository.ImageRepository;
 import com.grinder.domain.like.model.ContentType;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -27,7 +30,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ImageReader {
     private final ImageRepository imageRepository;
+    private final ImageQueryRepository imageQueryRepository;
     private final AwsS3Service awsS3Service;
+
+    public Map<Long, ImageTag> findImageByFeedIds(List<Long> feedIds) {
+        Map<Long, ImageTag> imageByFeedIds = imageQueryRepository.findImageByFeedIds(feedIds);
+
+        imageByFeedIds.forEach((k, v) ->
+                v.setImageUrl(
+                        awsS3Service.generatePresignedUrl(v.getImageKey())
+                )
+        );
+
+        return imageByFeedIds;
+    }
 
     @Transactional
     public boolean createImage(List<MultipartFile> multipartFiles, ContentType contentType, Long contentId) {

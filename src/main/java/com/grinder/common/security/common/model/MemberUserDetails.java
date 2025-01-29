@@ -21,7 +21,6 @@ public class MemberUserDetails implements UserDetails, AuthenticatedUser {
         return memberEntity.getId();
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         HashSet<GrantedAuthority> authorities = new HashSet<>();

@@ -1,13 +1,13 @@
 package com.grinder.domain.feed.service;
 
+import com.grinder.common.model.Slices;
 import com.grinder.domain.feed.implement.FeedReader;
 import com.grinder.domain.feed.model.CreateFeedRequest;
+import com.grinder.domain.feed.model.FeedMember;
 import com.grinder.domain.image.implement.ImageReader;
 import com.grinder.domain.like.model.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +18,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class FeedService {
     private final FeedReader feedReader;
     private final ImageReader imageReader;
+
+    public Slices<FeedMember> getFeedMember(Long memberId, Long clientId, int page, int size) {
+        return feedReader.readFeedSliceByMemberId(memberId, clientId, page, size);
+    }
+
+    public Slices<FeedMember> getFeedCafe(Long cafeId, Long clientId, int page, int size) {
+        return feedReader.readFeedSliceByCafeId(cafeId, clientId, page, size);
+    }
 
     @Transactional
     public boolean createFeed(CreateFeedRequest request, Long memberId) {

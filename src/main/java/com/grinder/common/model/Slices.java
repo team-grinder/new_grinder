@@ -15,7 +15,7 @@ public class Slices<T> {
 
     private final List<T> content;
 
-    public Slices(List<T> content, int nowPage, int cntPerPage) {
+    private Slices(List<T> content, int nowPage, int cntPerPage) {
         this.content = content;
         this.nowPage = nowPage;
         this.cntPerPage = cntPerPage;
