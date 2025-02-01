@@ -17,6 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
 
+    @GetMapping("/{feedId}")
+    public ResponseEntity<SuccessResult<Slices<Comment>>> getComments(@PathVariable Long feedId, int page, int size) {
+        Long clientId = AuthenticateUtils.getAuthId();
+
+        return ResponseEntity.ok(
+                SuccessResult.of(
+                        ResultEnum.SUCCESS,
+                        commentService.getComments(feedId, null, clientId, page, size)
+                )
+        );
+    }
+
     @GetMapping("/{feedId}/{parentId}")
     public ResponseEntity<SuccessResult<Slices<Comment>>> getComments(@PathVariable Long feedId, @PathVariable Long parentId, int page, int size) {
         Long clientId = AuthenticateUtils.getAuthId();

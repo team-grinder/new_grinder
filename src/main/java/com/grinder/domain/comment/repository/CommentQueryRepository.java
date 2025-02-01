@@ -33,6 +33,7 @@ public class CommentQueryRepository {
                 .select(Projections.constructor(
                         Comment.class,
                         comment.id,
+                        comment.feedId,
                         comment.memberId,
                         member.nickname,
                         comment.content,
