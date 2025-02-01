@@ -67,6 +67,7 @@ public class SecurityConfig {
                         .antMatchers("/session/validate").permitAll()
                         .antMatchers("/cafe/popular").permitAll()
                         .antMatchers("/tabling/**").permitAll()
+                        .antMatchers("/payment/**").permitAll()
                         .antMatchers("/").permitAll()
                         .antMatchers("/s3/**").permitAll()
                         .anyRequest().authenticated()
