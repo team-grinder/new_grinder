@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class ImageUtils {
      */
     public static File compressImage(MultipartFile imageFile, File outputFile, CompressType compressType, float compressionQuality) throws IOException {
         // 1. MultipartFile을 임시 파일로 복사 (이미지 사용 시 임시 파일이 삭제 될 수 있으므로 복사하여 사용)
-        File tempFile = File.createTempFile("temp_", imageFile.getOriginalFilename());
+        File tempFile = File.createTempFile("image_", imageFile.getOriginalFilename());
         imageFile.transferTo(tempFile); // MultipartFile을 임시 파일로 저장
 
         try {
@@ -37,6 +38,7 @@ public class ImageUtils {
             // 3. Thumbnails를 이용해 이미지 압축 및 크기 조정
             compress(outputFile, compressType, compressionQuality, image);
 
+            tempFile.deleteOnExit();
         } catch (IOException e) {
             log.error("이미지 압축 및 크기 조정 중 오류 발생", e);
             throw new IOException("이미지 압축 및 크기 조정 중 오류 발생", e);
@@ -50,24 +52,39 @@ public class ImageUtils {
         return outputFile;
     }
 
-    public static CompletableFuture<List<FileVO>> asyncCompressImage(List<MultipartFile> imageFiles, List<CompressType> compressType, float compressionQuality) {
-        return CompletableFuture.supplyAsync(() ->
-                imageFiles.stream()
-                .map(imageFile -> {
-                    for (CompressType type : compressType) {
-                        try {
-                            File outputFile = File.createTempFile("temp_",imageFile.getOriginalFilename() + type.getSuffix());
+    public static File compressImage(File inputFile, File outputFile, CompressType compressType, float compressionQuality) throws IOException {
+        BufferedImage image = ImageIO.read(inputFile);
+        if (image == null) {
+            throw new IOException("이미지 읽기 실패: " + inputFile.getAbsolutePath());
+        }
+        // Thumbnails 라이브러리를 사용한 압축 및 크기 조정 예시
+        Thumbnails.of(image)
+                .scale(compressType.getScale())
+                .outputQuality(compressionQuality)
+                .toFile(outputFile);
+        return outputFile;
+    }
 
-                            File file = compressImage(imageFile, outputFile, type, compressionQuality);
-                            return new FileVO(file, imageFile.getContentType());
-                        } catch (IOException e) {
-                            log.error("이미지 압축 및 크기 조정 중 오류 발생", e);
-                            throw new RuntimeException("이미지 압축 및 크기 조정 중 오류 발생", e);
-                        }
+    public static CompletableFuture<List<FileVO>> asyncCompressImage(List<MultipartFile> imageFiles, List<CompressType> compressType, float compressionQuality) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<FileVO> fileVOList = new ArrayList<>();
+            imageFiles.forEach(imageFile -> {
+                for (CompressType type : compressType) {
+                    try {
+                        File outputFile = File.createTempFile("temp_", imageFile.getOriginalFilename() + type.getSuffix());
+
+                        File file = compressImage(imageFile, outputFile, type, compressionQuality);
+                        fileVOList.add(new FileVO(file, imageFile.getContentType(), type));
+
+                        outputFile.deleteOnExit();
+                    } catch (IOException e) {
+                        log.error("이미지 압축 및 크기 조정 중 오류 발생", e);
+                        throw new RuntimeException("이미지 압축 및 크기 조정 중 오류 발생", e);
                     }
-                    return new FileVO();
-                })
-                .collect(Collectors.toList()));
+                }
+            });
+            return fileVOList;
+        });
     }
 
     private static void compress(File outputFile, CompressType compressType, float compressionQuality, BufferedImage image) throws IOException {

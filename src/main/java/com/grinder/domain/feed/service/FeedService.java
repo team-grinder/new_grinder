@@ -33,11 +33,19 @@ public class FeedService {
         if (!request.getMemberId().equals(memberId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "세션 정보와 요청 정보가 일치하지 않습니다.");
         }
-        // 이미지 저장 로직 (비동기 압축)
-        if (request.getImages() != null && !request.getImages().isEmpty()) {
-            imageReader.compressAsyncImage(request.getImages(), ContentType.FEED, request.getMemberId());
-        }
 
-        return feedReader.createFeed(request);
+        try {
+            Long feedId = feedReader.createFeed(request);
+
+            // 이미지 저장 로직 (비동기 압축)
+            if (request.getImages() != null && !request.getImages().isEmpty()) {
+                imageReader.createImage(request.getImages(), ContentType.FEED, feedId);
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 생성에 실패하였습니다.");
+        }
     }
 }

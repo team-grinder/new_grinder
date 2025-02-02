@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -48,7 +49,22 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
     @Override
     public String uploadFile(File file, String contentType) {
-        return null;
+        String fileName = createFileName(file.getName());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.length());
+        objectMetadata.setContentType(contentType);
+
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, file).withMetadata(objectMetadata));
+        return fileName;
+    }
+
+    @Override
+    public String uploadFile(InputStream inputStream, String fileName, String contentType) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(contentType);
+
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
+        return fileName;
     }
 
     // 서명된 URL 생성

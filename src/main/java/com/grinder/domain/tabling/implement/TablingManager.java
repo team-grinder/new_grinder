@@ -23,6 +23,7 @@ public class TablingManager {
     private final TablingRepository tablingRepository;
     private final TablingTimeSlotManager tablingTimeSlotManager;
     private final BlockedDateRepository blockedDateRepository;
+
     @Transactional
     public Tabling createTabling(TablingRegister request) {
         // 1. 휴무일 체크
@@ -111,7 +112,7 @@ public class TablingManager {
                     throw new TablingException("예약 처리 중 충돌이 발생했습니다. 다시 시도해주세요.");
                 }
                 try {
-                    Thread.sleep(100 * (attempt + 1));
+                    Thread.sleep(100L * (attempt + 1));
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                     throw new TablingException("예약 처리가 중단되었습니다.");

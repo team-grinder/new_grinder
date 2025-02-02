@@ -54,7 +54,7 @@ public class GrinderLocalAppRunner implements ApplicationRunner {
 
         if (feedRepository.findAll().isEmpty()) {
             for (int i = 0; i < 20; i++) {
-                CreateFeedRequest createFeedRequest = new CreateFeedRequest(memberId, CafeId, "스타벅스 강남점 너무 좋아요", 5, 1, true, List.of());
+                CreateFeedRequest createFeedRequest = new CreateFeedRequest(memberId, 2L, CafeId, "스타벅스 강남점 너무 좋아요", 5, 1, true, List.of());
                 feedService.createFeed(createFeedRequest, memberId);
             }
         }

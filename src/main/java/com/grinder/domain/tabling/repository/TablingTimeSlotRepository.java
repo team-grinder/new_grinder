@@ -16,6 +16,7 @@ public interface TablingTimeSlotRepository extends JpaRepository<TablingTimeSlot
             Long cafeId, LocalDate date, LocalTime reserveTime);
 
     List<TablingTimeSlotEntity> findByCafeIdAndDate(Long cafeId, LocalDate date);
+
     @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT ts FROM TablingTimeSlotEntity ts " +
             "WHERE ts.cafeId = :cafeId " +
@@ -26,5 +27,6 @@ public interface TablingTimeSlotRepository extends JpaRepository<TablingTimeSlot
             @Param("date") LocalDate date,
             @Param("reserveTime") LocalTime reserveTime
     );
+
     void deleteByCafeIdAndDate(Long cafeId, LocalDate date);
 }

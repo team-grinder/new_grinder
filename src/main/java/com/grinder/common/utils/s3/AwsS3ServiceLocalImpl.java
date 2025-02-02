@@ -1,6 +1,5 @@
 package com.grinder.common.utils.s3;
 
-import com.ulisesbocchio.jasyptspringboot.annotation.ConditionalOnMissingBean;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -9,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -23,6 +24,11 @@ public class AwsS3ServiceLocalImpl implements AwsS3Service {
     @Override
     public String uploadFile(File file, String contentType) {
         return createFileName(file.getName());
+    }
+
+    @Override
+    public String uploadFile(InputStream inputStream, String fileName, String contentType) {
+        return createFileName(fileName);
     }
 
     @Override

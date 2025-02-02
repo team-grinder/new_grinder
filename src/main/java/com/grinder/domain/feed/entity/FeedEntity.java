@@ -2,6 +2,7 @@ package com.grinder.domain.feed.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedEntity extends BaseDateEntity {
