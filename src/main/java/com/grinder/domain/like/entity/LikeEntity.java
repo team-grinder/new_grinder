@@ -8,8 +8,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_content_type", columnList = "content_type")
-})
+        @Index(name = "idx_content_type", columnList = "content_type")},
+        uniqueConstraints = {
+        @UniqueConstraint(name = "uk_member_id_content_id", columnNames = {"memberId", "contentId"})
+        }
+)
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikeEntity {
