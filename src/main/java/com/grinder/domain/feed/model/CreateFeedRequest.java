@@ -11,10 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateFeedRequest {
     private Long memberId;
+
+    private Long bookId;
 
     private Long cafeId;
 

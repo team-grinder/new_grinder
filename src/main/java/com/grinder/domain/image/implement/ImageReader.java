@@ -18,12 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static com.grinder.common.utils.ImageUtils.compressImage;
 
 @Slf4j
 @Component
@@ -61,21 +66,70 @@ public class ImageReader {
         List<ImageInfo> imageInfoList = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
-            // s3 이미지 저장 로직
-            String uploadFileKey = awsS3Service.uploadFile(multipartFile);
+            try {
+                byte[] fileData = multipartFile.getBytes();
 
-            // 완료 됐다면 DB에 이미지 정보 저장
-            ImageInfo imageInfo = ImageInfo.builder()
-                    .originalFileName(multipartFile.getOriginalFilename())
-                    .storedFileName(uploadFileKey)
-                    .fileSize(multipartFile.getSize())
-                    .fileType(multipartFile.getContentType())
-                    .build();
+                // S3 업로드를 위한 임시 InputStream 생성
+                ByteArrayInputStream s3InputStream = new ByteArrayInputStream(fileData);
+                String uploadFileKey = awsS3Service.uploadFile(s3InputStream, multipartFile.getOriginalFilename(), multipartFile.getContentType());
 
-            imageInfoList.add(imageInfo);
+                // S3 업로드 후 DB 저장을 위한 ImageInfo 객체 생성
+                ImageInfo imageInfo = ImageInfo.builder()
+                        .originalFileName(multipartFile.getOriginalFilename())
+                        .storedFileName(uploadFileKey)
+                        .fileSize((long) fileData.length)
+                        .fileType(multipartFile.getContentType())
+                        .compressType(CompressType.ORIGINAL)
+                        .build();
+                imageInfoList.add(imageInfo);
+
+                this.compressAsyncImage(fileData, multipartFile.getOriginalFilename(), multipartFile.getContentType(), contentType, contentId);
+
+            } catch (IOException e) {
+                log.error("파일 처리 중 오류 발생: {}", e.getMessage());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "파일 처리에 실패했습니다.");
+            }
         }
 
         saveImageInfo(contentType, contentId, imageInfoList);
+        return true;
+    }
+
+    public boolean compressAsyncImage(byte[] fileData, String originalFilename, String contentTypeStr, ContentType contentType, Long contentId) {
+        List<CompressType> compressTypes = CompressType.of(contentType);
+
+        CompletableFuture<List<FileVO>> compressedFiles = CompletableFuture.supplyAsync(() -> {
+            List<FileVO> fileVOList = new ArrayList<>();
+            // 압축 타입(예: 여러 해상도나 품질 버전)에 대해 반복
+            for (CompressType type : compressTypes) {
+                try {
+                    // 원본 데이터를 새 ByteArrayInputStream으로 복원하여 임시 파일 생성
+                    File tempInputFile = File.createTempFile("compress_input_", originalFilename);
+                    try (FileOutputStream fos = new FileOutputStream(tempInputFile)) {
+                        fos.write(fileData);
+                    }
+                    // 압축 결과를 저장할 임시 파일 생성
+                    String[] FileName = originalFilename.split("\\.");
+                    File outputFile = File.createTempFile("compress_output_", FileName[0] + type.getSuffix() + "." + FileName[1]);
+
+                    // 압축 수행 (여기서 compressImage는 tempInputFile을 읽어 outputFile에 압축 결과 저장)
+                    File compressedFile = compressImage(tempInputFile, outputFile, type, 0.75f);
+                    fileVOList.add(new FileVO(compressedFile, contentTypeStr, type));
+
+                    // 임시 파일 삭제 예약
+                    tempInputFile.delete();
+                    outputFile.deleteOnExit();
+                } catch (IOException e) {
+                    log.error("이미지 압축 및 크기 조정 중 오류 발생", e);
+                    throw new RuntimeException("이미지 압축 및 크기 조정 중 오류 발생", e);
+                }
+            }
+            return fileVOList;
+        });
+
+        compressedFiles.thenAccept(files -> {
+            createAsyncImage(files, contentType, contentId);
+        });
 
         return true;
     }
@@ -95,6 +149,7 @@ public class ImageReader {
                     .storedFileName(uploadFileKey)
                     .fileSize(fileVO.getFileSize())
                     .fileType(fileVO.getContentType())
+                    .compressType(fileVO.getCompressType())
                     .build();
 
             imageInfoList.add(imageInfo);
@@ -103,23 +158,11 @@ public class ImageReader {
         saveImageInfo(contentType, contentId, imageInfoList);
     }
 
-
-
-    // 압축 이미지 저장
-    public boolean compressAsyncImage(List<MultipartFile> multipartFiles, ContentType contentType, Long contentId) {
+    public CompletableFuture<List<FileVO>> asyncCompressImage(List<MultipartFile> imageFiles, ContentType contentType) {
         List<CompressType> compressTypes = CompressType.of(contentType);
 
-        // 압축 후 저장
-        CompletableFuture<List<FileVO>> compressedFiles =
-                ImageUtils.asyncCompressImage(multipartFiles, compressTypes, 0.75f);
-
-        compressedFiles.thenAccept(files -> {
-            createAsyncImage(files, contentType, contentId);
-        });
-
-        return true;
+        return ImageUtils.asyncCompressImage(imageFiles, compressTypes, 0.75f);
     }
-
 
     private void saveImageInfo(ContentType contentType, Long contentId, List<ImageInfo> imageInfoList) {
         try {
@@ -130,7 +173,7 @@ public class ImageReader {
                             info.getFileSize(),
                             contentType,
                             contentId,
-                            CompressType.ORIGINAL)
+                            info.getCompressType())
                     ).collect(Collectors.toList());
 
             imageRepository.saveAll(imageEntities);
