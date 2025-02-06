@@ -35,12 +35,15 @@ public class ImageEntity {
 
     private CompressType compressType;
 
-    public ImageEntity(String imageName, String imageKey, Long fileSize, ContentType contentType, Long contentId, CompressType compressType) {
+    private Integer sequence;
+
+    public ImageEntity(String imageName, String imageKey, Long fileSize, ContentType contentType, Long contentId, CompressType compressType, Integer sequence) {
         this.imageName = imageName;
         this.imageKey = imageKey;
         this.fileSize = fileSize;
         this.contentType = contentType;
         this.contentId = contentId;
         this.compressType = compressType;
+        this.sequence = sequence;
     }
 }

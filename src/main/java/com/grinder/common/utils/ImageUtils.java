@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class ImageUtils {
@@ -68,13 +68,16 @@ public class ImageUtils {
     public static CompletableFuture<List<FileVO>> asyncCompressImage(List<MultipartFile> imageFiles, List<CompressType> compressType, float compressionQuality) {
         return CompletableFuture.supplyAsync(() -> {
             List<FileVO> fileVOList = new ArrayList<>();
+            AtomicInteger sequence = new AtomicInteger(1);
+
             imageFiles.forEach(imageFile -> {
+                sequence.getAndIncrement();
                 for (CompressType type : compressType) {
                     try {
                         File outputFile = File.createTempFile("temp_", imageFile.getOriginalFilename() + type.getSuffix());
 
                         File file = compressImage(imageFile, outputFile, type, compressionQuality);
-                        fileVOList.add(new FileVO(file, imageFile.getContentType(), type));
+                        fileVOList.add(new FileVO(file, imageFile.getContentType(), type, sequence.get()));
 
                         outputFile.deleteOnExit();
                     } catch (IOException e) {

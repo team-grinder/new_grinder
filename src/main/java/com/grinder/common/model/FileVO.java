@@ -19,12 +19,15 @@ public class FileVO {
 
     private CompressType compressType;
 
-    public FileVO(File file, String contentType, CompressType compressType) {
+    private Integer sequence;
+
+    public FileVO(File file, String contentType, CompressType compressType, Integer sequence) {
         this.file = file;
         this.fileName = file.getName().replace("temp_", "");
         this.fileSize = file.length();
         this.contentType = contentType;
         this.compressType = compressType;
+        this.sequence = sequence;
     }
 
     public String getFileName() {

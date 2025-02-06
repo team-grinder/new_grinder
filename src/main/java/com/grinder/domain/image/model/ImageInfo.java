@@ -15,5 +15,6 @@ public class ImageInfo {
     private Long fileSize;
     private String fileType;
     private CompressType compressType;
+    private Integer sequence;
 
 }

@@ -65,6 +65,8 @@ public class ImageReader {
     public boolean createImage(List<MultipartFile> multipartFiles, ContentType contentType, Long contentId) {
         List<ImageInfo> imageInfoList = new ArrayList<>();
 
+        int sequence = 1;
+
         for (MultipartFile multipartFile : multipartFiles) {
             try {
                 byte[] fileData = multipartFile.getBytes();
@@ -80,10 +82,13 @@ public class ImageReader {
                         .fileSize((long) fileData.length)
                         .fileType(multipartFile.getContentType())
                         .compressType(CompressType.ORIGINAL)
+                        .sequence(sequence)
                         .build();
                 imageInfoList.add(imageInfo);
 
-                this.compressAsyncImage(fileData, multipartFile.getOriginalFilename(), multipartFile.getContentType(), contentType, contentId);
+                this.compressAsyncImage(fileData, multipartFile.getOriginalFilename(), multipartFile.getContentType(), contentType, contentId, sequence);
+
+                sequence++;
 
             } catch (IOException e) {
                 log.error("파일 처리 중 오류 발생: {}", e.getMessage());
@@ -95,7 +100,7 @@ public class ImageReader {
         return true;
     }
 
-    public boolean compressAsyncImage(byte[] fileData, String originalFilename, String contentTypeStr, ContentType contentType, Long contentId) {
+    public boolean compressAsyncImage(byte[] fileData, String originalFilename, String contentTypeStr, ContentType contentType, Long contentId, int sequence) {
         List<CompressType> compressTypes = CompressType.of(contentType);
 
         CompletableFuture<List<FileVO>> compressedFiles = CompletableFuture.supplyAsync(() -> {
@@ -114,7 +119,7 @@ public class ImageReader {
 
                     // 압축 수행 (여기서 compressImage는 tempInputFile을 읽어 outputFile에 압축 결과 저장)
                     File compressedFile = compressImage(tempInputFile, outputFile, type, 0.75f);
-                    fileVOList.add(new FileVO(compressedFile, contentTypeStr, type));
+                    fileVOList.add(new FileVO(compressedFile, contentTypeStr, type, sequence));
 
                     // 임시 파일 삭제 예약
                     tempInputFile.delete();
@@ -173,7 +178,8 @@ public class ImageReader {
                             info.getFileSize(),
                             contentType,
                             contentId,
-                            info.getCompressType())
+                            info.getCompressType(),
+                            info.getSequence())
                     ).collect(Collectors.toList());
 
             imageRepository.saveAll(imageEntities);
