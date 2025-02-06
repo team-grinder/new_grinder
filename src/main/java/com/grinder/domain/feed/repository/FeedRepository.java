@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeedRepository extends JpaRepository<FeedEntity, Long> {
+    void deleteByIdAndMemberId(Long feedId, Long memberId);
 }

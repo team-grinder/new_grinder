@@ -32,14 +32,15 @@ public class ImageQueryRepository {
                         image.contentType.eq(ContentType.FEED)
                                 .and(image.compressType.eq(CompressType.MEDIUM))
                                 .and(image.contentId.in(feedIds))
-                )
+                ).orderBy(image.sequence.asc())
                 .transform(groupBy(image.contentId).as(
                         list(
                                 Projections.constructor(
                                         ImageTag.class,
                                         image.imageName,
                                         image.imageKey,
-                                        image.contentType
+                                        image.contentType,
+                                        image.sequence
                                 )
                         )
                 ));
@@ -59,9 +60,11 @@ public class ImageQueryRepository {
                                 ImageTag.class,
                                 image.imageName,
                                 image.imageKey,
-                                image.contentType
+                                image.contentType,
+                                image.sequence
                         )
                 )
+                .orderBy(image.sequence.asc())
                 .fetch();
     }
 }

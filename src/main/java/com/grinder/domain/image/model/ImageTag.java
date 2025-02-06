@@ -17,9 +17,12 @@ public class ImageTag {
     @Setter
     private String imageUrl;
 
-    public ImageTag(String imageName, String imageKey, ContentType contentType) {
+    private int sequence;
+
+    public ImageTag(String imageName, String imageKey, ContentType contentType, int sequence) {
         this.imageName = imageName;
         this.imageKey = imageKey;
         this.contentType = contentType;
+        this.sequence = sequence;
     }
 }

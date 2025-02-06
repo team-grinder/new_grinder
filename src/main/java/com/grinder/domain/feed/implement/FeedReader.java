@@ -82,4 +82,15 @@ public class FeedReader {
             throw e;
         }
     }
+
+    @Transactional
+    public boolean deleteFeed(Long feedId, Long clientId) {
+        try {
+            feedRepository.deleteByIdAndMemberId(feedId, clientId);
+            return true;
+        } catch (Exception e) {
+            log.error("피드 삭제 오류 : {}", e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -48,4 +48,14 @@ public class FeedService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 생성에 실패하였습니다.");
         }
     }
+
+    @Transactional
+    public boolean deleteFeed(Long feedId, Long memberId) {
+        try {
+            feedReader.deleteFeed(feedId, memberId);
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }
