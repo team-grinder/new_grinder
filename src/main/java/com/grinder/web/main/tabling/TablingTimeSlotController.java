@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,18 @@ public class TablingTimeSlotController {
             @PathVariable Long cafeId,
             @RequestBody TimeSlotSetting request) {
         tablingTimeSlotService.setTimeSlots(cafeId, request.getDate(), request.getTimeSlots()
+        );
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/time-slots/{cafeId}")
+    public ResponseEntity<Void> updateTimeSlots(
+            @PathVariable Long cafeId,
+            @RequestBody TimeSlotSetting request) {
+        tablingTimeSlotService.updateTimeSlots(
+                cafeId,
+                request.getDate(),
+                request.getTimeSlots()
         );
         return ResponseEntity.ok().build();
     }
