@@ -49,4 +49,8 @@ public class CafeService {
     public CafeBusinessInfo getBusinessHours(Long cafeId) {
         return  cafeBusinessHourManager.getOperatingHours(cafeId);
     }
+
+    public CafeBusinessInfo updateBusinessHours(Long cafeId, CafeBusinessInfoRegister request) {
+        return cafeBusinessHourManager.updateBusinessHours(cafeId, request);
+    }
 }
