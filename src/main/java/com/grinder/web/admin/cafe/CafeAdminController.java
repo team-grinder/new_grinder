@@ -29,15 +29,23 @@ public class CafeAdminController {
     }
 
     @PostMapping("/cafe/{cafeId}/business-hours")
-    public ResponseEntity<CafeBusinessInfo> setOperatingHours(
+    public ResponseEntity<CafeBusinessInfo> setBusinessHours(
             @PathVariable Long cafeId,
             @RequestBody CafeBusinessInfoRegister request) {
         return ResponseEntity.ok(cafeService.setBusinessHours(cafeId, request));
     }
 
     @GetMapping("/cafe/{cafeId}/business-hours")
-    public ResponseEntity<CafeBusinessInfo> getOperatingHours(
+    public ResponseEntity<CafeBusinessInfo> getBusinessHours(
             @PathVariable Long cafeId) {
         return ResponseEntity.ok(cafeService.getBusinessHours(cafeId));
+    }
+
+    @PutMapping("/{cafeId}/business-hours")
+    public ResponseEntity<CafeBusinessInfo> updateBusinessHours(
+            @PathVariable Long cafeId,
+            @RequestBody CafeBusinessInfoRegister request) {
+        CafeBusinessInfo updatedInfo = cafeService.updateBusinessHours(cafeId, request);
+        return ResponseEntity.ok(updatedInfo);
     }
 }
