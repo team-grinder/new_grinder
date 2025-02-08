@@ -51,4 +51,26 @@ public class CommentQueryRepository {
 
         return Slices.create(commentList, page, size);
     }
+
+    public Comment getComment(Long commentId, Long authId) {
+        QCommentEntity comment = QCommentEntity.commentEntity;
+        QMemberEntity member = QMemberEntity.memberEntity;
+
+        return query
+                .select(Projections.constructor(
+                        Comment.class,
+                        comment.id,
+                        comment.feedId,
+                        comment.memberId,
+                        member.nickname,
+                        comment.content,
+                        comment.parentCommentId,
+                        comment.createDate,
+                        comment.memberId.eq(authId)
+                ))
+                .from(comment)
+                .leftJoin(member).on(comment.memberId.eq(member.id))
+                .where(comment.id.eq(commentId))
+                .fetchOne();
+    }
 }

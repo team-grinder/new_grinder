@@ -1,6 +1,7 @@
 package com.grinder.domain.feed.repository;
 
 import com.grinder.common.model.Slices;
+import com.grinder.domain.comment.entity.QCommentEntity;
 import com.grinder.domain.feed.entity.QFeedEntity;
 import com.grinder.domain.feed.model.FeedMember;
 import com.grinder.domain.like.entity.QLikeEntity;
@@ -29,8 +30,11 @@ public class FeedQueryRepository {
         QFeedEntity feed = QFeedEntity.feedEntity;
         QLikeEntity like = QLikeEntity.likeEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
+        QCommentEntity comment = QCommentEntity.commentEntity;
 
         NumberExpression<Long> likeCountExpression = like.id.count();
+
+        NumberExpression<Long> commentCountExpression = comment.id.count();
 
         // 좋아요 눌렀는지 여부도 CASE로 변환
         Expression<Boolean> isLikedExpression = new CaseBuilder()
@@ -51,6 +55,7 @@ public class FeedQueryRepository {
                                 feed.createDate,
                                 isMine,
                                 likeCountExpression, // 좋아요 총 개수
+                                commentCountExpression, // 댓글 총 개수
                                 isLikedExpression    // 현재 회원이 좋아요 눌렀는지 여부
                         )
                 )
@@ -58,8 +63,8 @@ public class FeedQueryRepository {
                 .leftJoin(member).on(feed.memberId.eq(member.id))
                 .leftJoin(like).on(
                         feed.id.eq(like.contentId)
-                                .and(like.contentType.eq(ContentType.FEED))
-                )
+                                .and(like.contentType.eq(ContentType.FEED)))
+                .leftJoin(comment).on(feed.id.eq(comment.feedId))
                 .where(feed.memberId.eq(memberId)) // 필요 조건
                 .groupBy(feed.id, feed.memberId, member.nickname, member.imageUrl,
                         feed.content, feed.grade, feed.createDate)
@@ -75,8 +80,11 @@ public class FeedQueryRepository {
         QFeedEntity feed = QFeedEntity.feedEntity;
         QLikeEntity like = QLikeEntity.likeEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
+        QCommentEntity comment = QCommentEntity.commentEntity;
 
         NumberExpression<Long> likeCountExpression = like.id.count();
+
+        NumberExpression<Long> commentCountExpression = comment.id.count();
 
         NumberExpression<Integer> isLikedAgg = new CaseBuilder()
                 .when(like.memberId.eq(clientId)).then(1)
@@ -99,6 +107,7 @@ public class FeedQueryRepository {
                                 feed.createDate,
                                 isMine,
                                 likeCountExpression, // 좋아요 총 개수
+                                commentCountExpression, // 댓글 총 개수
                                 isLikedExpression    // 현재 회원이 좋아요 눌렀는지 여부
                         )
                 )
@@ -106,8 +115,8 @@ public class FeedQueryRepository {
                 .leftJoin(member).on(feed.memberId.eq(member.id))
                 .leftJoin(like).on(
                         feed.id.eq(like.contentId)
-                                .and(like.contentType.eq(ContentType.FEED))
-                )
+                                .and(like.contentType.eq(ContentType.FEED)))
+                .leftJoin(comment).on(feed.id.eq(comment.feedId))
                 .where(feed.cafeId.eq(cafeId))
                 .groupBy(feed.id, feed.memberId, member.nickname, member.imageUrl,
                         feed.content, feed.grade, feed.createDate)

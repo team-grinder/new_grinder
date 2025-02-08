@@ -41,8 +41,19 @@ public class CommentController {
         );
     }
 
+    @GetMapping("/{commentId}")
+    public ResponseEntity<SuccessResult<Comment>> getComment(@PathVariable Long commentId) {
+        Long clientId = AuthenticateUtils.getAuthId();
+        return ResponseEntity.ok(
+                SuccessResult.of(
+                        ResultEnum.SUCCESS,
+                        commentService.getComment(commentId, clientId)
+                )
+        );
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<SuccessResult<Boolean>> createComment(@RequestBody CreateCommentRequest request) {
+    public ResponseEntity<SuccessResult<Long>> createComment(@RequestBody CreateCommentRequest request) {
         Long clientId = AuthenticateUtils.getAuthId();
 
         return ResponseEntity.ok(

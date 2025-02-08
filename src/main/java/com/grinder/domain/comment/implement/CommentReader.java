@@ -21,14 +21,18 @@ public class CommentReader {
         return commentQueryRepository.getCommentSlices(feedId, parentId, authId, page, size);
     }
 
-    public boolean createComment(CreateCommentRequest request, Long memberId) {
+    public Comment getComment(Long commentId, Long authId) {
+        return commentQueryRepository.getComment(commentId, authId);
+    }
+
+    public Long createComment(CreateCommentRequest request, Long memberId) {
         try {
-            commentRepository.save(request.toEntity(memberId));
-            return true;
+            return commentRepository.save(request.toEntity(memberId)).getId();
+
         } catch (Exception e) {
             log.error("댓글 생성 중 오류 발생", e);
 
-            return false;
+            throw new IllegalArgumentException("댓글 생성 중 오류 발생");
         }
     }
 

@@ -28,6 +28,8 @@ public class FeedMember {
 
     private long likes;
 
+    private long commentCount;
+
     @Setter
     @Name(description = "첨부파일 URL 리스트")
     private List<ImageTag> imageTagList;
@@ -35,6 +37,7 @@ public class FeedMember {
     private boolean isLike;
 
     private boolean isMine;
+
 
     public FeedMember(Long feedId, String nickname, String memberImageUrl, String content, int grade, LocalDateTime createDate, boolean isMine, long likes, boolean isLike) {
         this.feedId = feedId;
@@ -44,6 +47,19 @@ public class FeedMember {
         this.grade = grade;
         this.createDate = DateUtils.parseYYYYMMDD(createDate);
         this.likes = likes;
+        this.isLike = isLike;
+        this.isMine = isMine;
+    }
+
+    public FeedMember(Long feedId, String nickname, String memberImageUrl, String content, int grade, LocalDateTime createDate, boolean isMine, long likes, long commentCount, boolean isLike) {
+        this.feedId = feedId;
+        this.nickname = nickname;
+        this.memberImageUrl = memberImageUrl;
+        this.content = content;
+        this.grade = grade;
+        this.createDate = DateUtils.parseYYYYMMDD(createDate);
+        this.likes = likes;
+        this.commentCount = commentCount;
         this.isLike = isLike;
         this.isMine = isMine;
     }

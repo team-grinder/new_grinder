@@ -20,14 +20,19 @@ public class CommentService {
         return commentReader.getComments(feedId, parentId, authId, page, size);
     }
 
-    @Transactional
-    public boolean createComment(CreateCommentRequest request, Long authId) {
+    public Comment getComment(Long commentId, Long authId) {
         try {
-            if (commentReader.createComment(request, authId)) {
-                return true;
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 생성에 실패했습니다.");
-            }
+            return commentReader.getComment(commentId, authId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @Transactional
+    public Long createComment(CreateCommentRequest request, Long authId) {
+        try {
+            return commentReader.createComment(request, authId);
+
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
