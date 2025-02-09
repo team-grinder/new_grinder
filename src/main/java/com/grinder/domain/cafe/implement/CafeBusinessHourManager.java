@@ -33,4 +33,22 @@ public class CafeBusinessHourManager {
 
         return CafeBusinessInfo.from(cafeBusinessHourRepository.save(entity));
     }
+
+    public CafeBusinessInfo updateBusinessHours(Long cafeId, CafeBusinessInfoRegister request) {
+        CafeBusinessHourEntity entity = cafeBusinessHourRepository.findByCafeId(cafeId)
+                .orElseThrow(() -> new IllegalArgumentException("카페 운영시간 정보를 찾을 수 없습니다."));
+
+        entity.setStartTime(request.getStartTime());
+        entity.setEndTime(request.getEndTime());
+        entity.setMaxTimePerReservation(request.getMaxTimePerReservation());
+        entity.setBlockedTimes(request.getBlockedTimes());
+
+        CafeBusinessHourEntity savedEntity = cafeBusinessHourRepository.save(entity);
+        return CafeBusinessInfo.from(savedEntity);
+    }
+
+    public CafeBusinessHourEntity getBusinessHours(Long cafeId) {
+        return cafeBusinessHourRepository.findByCafeId(cafeId)
+                .orElseThrow(() -> new IllegalArgumentException("카페 운영시간 정보를 찾을 수 없습니다."));
+    }
 }

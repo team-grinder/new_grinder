@@ -18,4 +18,8 @@ public class TablingTimeSlotService {
     public void setTimeSlots(Long cafeId, LocalDate date, List<TimeSlotsRegister> timeSlots) {
         tablingTimeSlotManager.setTimeSlots(cafeId, date, timeSlots);
     }
+
+    public void updateTimeSlots(Long cafeId, LocalDate date, List<TimeSlotsRegister> timeSlots) {
+        tablingTimeSlotManager.updateTimeSlots(cafeId, date, timeSlots);
+    }
 }

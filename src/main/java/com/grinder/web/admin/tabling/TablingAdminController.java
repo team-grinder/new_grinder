@@ -27,17 +27,17 @@ public class TablingAdminController {
     private final TablingService tablingService;
     private final TablingTimeSlotService tablingTimeSlotService;
 
-    @PostMapping("/time-slots/{cafeId}")
-    public ResponseEntity<Void> setTimeSlots(
-            @PathVariable Long cafeId,
-            @RequestBody TimeSlotSetting request) {
-        tablingTimeSlotService.setTimeSlots(
-                cafeId,
-                request.getDate(),
-                request.getTimeSlots()
-        );
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/time-slots/{cafeId}")
+//    public ResponseEntity<Void> setTimeSlots(
+//            @PathVariable Long cafeId,
+//            @RequestBody TimeSlotSetting request) {
+//        tablingTimeSlotService.setTimeSlots(
+//                cafeId,
+//                request.getDate(),
+//                request.getTimeSlots()
+//        );
+//        return ResponseEntity.ok().build();
+//    }
 //
 //    @GetMapping("/cafes/{cafeId}/date")
 //    public ResponseEntity<List<Tabling>> getCafeTablings(
