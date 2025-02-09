@@ -20,9 +20,10 @@ public class Comment {
     private String content;
     private Long parentCommentId;
     private String createdAt;
+    private Long replyCount;
     private boolean isMine;
 
-    public Comment(Long id, Long feedId, Long memberId, String nickname, String content, Long parentCommentId, LocalDateTime createdAt, boolean isMine) {
+    public Comment(Long id, Long feedId, Long memberId, String nickname, String content, Long parentCommentId, LocalDateTime createdAt, Long replyCount, boolean isMine) {
         this.id = id;
         this.feedId = feedId;
         this.memberId = memberId;
@@ -30,6 +31,7 @@ public class Comment {
         this.content = content;
         this.parentCommentId = parentCommentId;
         this.createdAt = DateUtils.parseYYYYMMDD(createdAt);
+        this.replyCount = replyCount;
         this.isMine = isMine;
     }
 }

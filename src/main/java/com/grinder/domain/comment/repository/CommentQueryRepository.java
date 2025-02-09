@@ -6,6 +6,10 @@ import com.grinder.domain.comment.model.Comment;
 import com.grinder.domain.member.entity.QMemberEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -23,9 +27,16 @@ public class CommentQueryRepository {
     public Slices<Comment> getCommentSlices(Long feedId, Long parentCommentId, Long authId, int page, int size) {
         QCommentEntity comment = QCommentEntity.commentEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
+        QCommentEntity commentSub = new QCommentEntity("commentSub");
 
         BooleanExpression parentCommentExpression = parentCommentId == null ?
                 comment.parentCommentId.isNull() : comment.parentCommentId.eq(parentCommentId);
+
+        JPQLQuery<Long> replyCountExpression = parentCommentId == null
+                ? JPAExpressions.select(commentSub.id.count())
+                .from(commentSub)
+                .where(commentSub.parentCommentId.eq(comment.id))
+                : JPAExpressions.select(Expressions.numberTemplate(Long.class, "0"));
 
         BooleanExpression isMine = comment.memberId.eq(authId);
 
@@ -39,6 +50,7 @@ public class CommentQueryRepository {
                         comment.content,
                         comment.parentCommentId,
                         comment.createDate,
+                        replyCountExpression,
                         isMine
                 ))
                 .from(comment)
@@ -66,6 +78,7 @@ public class CommentQueryRepository {
                         comment.content,
                         comment.parentCommentId,
                         comment.createDate,
+                        Expressions.constant(0L),
                         comment.memberId.eq(authId)
                 ))
                 .from(comment)

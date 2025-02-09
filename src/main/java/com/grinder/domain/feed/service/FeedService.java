@@ -19,8 +19,8 @@ public class FeedService {
     private final FeedReader feedReader;
     private final ImageReader imageReader;
 
-    public Slices<FeedMember> getFeedMember(Long memberId, Long clientId, int page, int size) {
-        return feedReader.readFeedSliceByMemberId(memberId, clientId, page, size);
+    public Slices<FeedMember> getFeedMyPage(Long clientId, int page, int size) {
+        return feedReader.readFeedSliceByClientId(clientId, page, size);
     }
 
     public Slices<FeedMember> getFeedCafe(Long cafeId, Long clientId, int page, int size) {

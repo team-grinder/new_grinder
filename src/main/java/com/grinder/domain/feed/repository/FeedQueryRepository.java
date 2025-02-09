@@ -26,7 +26,7 @@ public class FeedQueryRepository {
         this.query = new JPAQueryFactory(entityManager);
     }
 
-    public Slices<FeedMember> readFeedSliceByMemberId(Long memberId, Long clientId, int page, int size) {
+    public Slices<FeedMember> readFeedSliceByClientId(Long clientId, int page, int size) {
         QFeedEntity feed = QFeedEntity.feedEntity;
         QLikeEntity like = QLikeEntity.likeEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
@@ -65,7 +65,7 @@ public class FeedQueryRepository {
                         feed.id.eq(like.contentId)
                                 .and(like.contentType.eq(ContentType.FEED)))
                 .leftJoin(comment).on(feed.id.eq(comment.feedId))
-                .where(feed.memberId.eq(memberId)) // 필요 조건
+                .where(feed.memberId.eq(clientId)) // 필요 조건
                 .groupBy(feed.id, feed.memberId, member.nickname, member.imageUrl,
                         feed.content, feed.grade, feed.createDate)
                 .orderBy(feed.createDate.desc())

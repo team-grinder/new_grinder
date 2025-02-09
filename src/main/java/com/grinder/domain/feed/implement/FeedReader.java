@@ -27,9 +27,9 @@ public class FeedReader {
     private final ImageReader imageReader;
     private final TablingManager tablingManager;
 
-    public Slices<FeedMember> readFeedSliceByMemberId(Long memberId, Long clientId, int page, int size) {
+    public Slices<FeedMember> readFeedSliceByClientId(Long clientId, int page, int size) {
         // 피드 조회
-        Slices<FeedMember> feedMemberSlices = feedQueryRepository.readFeedSliceByMemberId(memberId, clientId, page, size);
+        Slices<FeedMember> feedMemberSlices = feedQueryRepository.readFeedSliceByClientId(clientId, page, size);
 
         List<Long> feedIds = feedMemberSlices.getContent().stream()
                 .map(FeedMember::getFeedId).collect(Collectors.toList());

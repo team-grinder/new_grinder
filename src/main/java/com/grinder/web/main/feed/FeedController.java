@@ -18,6 +18,18 @@ import org.springframework.web.bind.annotation.*;
 public class FeedController {
     private final FeedService feedService;
 
+    @GetMapping("/myPage")
+    public ResponseEntity<SuccessResult<Slices<FeedMember>>> getFeedMyPage(int page, int size) {
+        Long clientId = AuthenticateUtils.getAuthId();
+
+        return ResponseEntity.ok(
+                SuccessResult.of(
+                        ResultEnum.SUCCESS,
+                        feedService.getFeedMyPage(clientId, page, size)
+                )
+        );
+    }
+
     @GetMapping("/cafe/{cafeId}")
     public ResponseEntity<SuccessResult<Slices<FeedMember>>> getFeedByCafeId(@PathVariable Long cafeId, int page, int size) {
         Long clientId = AuthenticateUtils.getAuthId();
