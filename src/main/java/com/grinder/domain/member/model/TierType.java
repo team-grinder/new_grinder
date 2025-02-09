@@ -10,7 +10,9 @@ public enum TierType {
     DIAMOND("diamond"),
     PLATINUM("platinum"),
     GOLD("gold"),
-    SILVER("silver");
+    SILVER("silver"),
+    CAFE_MANAGER("cafe_manager"),
+    ADMIN("admin");
 
     private final String value;
 }

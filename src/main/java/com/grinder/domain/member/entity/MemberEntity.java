@@ -5,7 +5,6 @@ import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.member.model.LoginType;
 import com.grinder.domain.member.model.Member;
 import com.grinder.domain.member.model.MemberBasicInfo;
-import com.grinder.domain.member.model.MemberOauth;
 import com.grinder.domain.member.model.TierType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,7 +49,7 @@ public class MemberEntity extends BaseDateEntity {
     private Long PaymentInfoId;
 
     @Name(name = "카페 관리자 연관 관계")
-    private Long CafeAdminId;
+    private String CafeAdminId;
 
     @Name(name = "삭제 여부")
     private boolean isDeleted;
@@ -76,14 +77,6 @@ public class MemberEntity extends BaseDateEntity {
                 .isDeleted(isDeleted)
                 .build();
     }
-
-//    public MemberOauth toMemberAuth() {
-//        return MemberOauth.builder()
-//                .email(email)
-//                .loginType(loginType)
-//                .tier(tier)
-//                .build();
-//    }
 
     @Builder(builderClassName = "SocialMemberBuilder", builderMethodName = "socialBuilder")
     public MemberEntity(String email, String nickname, LoginType loginType, TierType tier, boolean isDeleted) {
