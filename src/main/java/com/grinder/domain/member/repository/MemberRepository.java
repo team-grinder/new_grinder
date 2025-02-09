@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     Optional<MemberEntity> findByEmail(String email);
 
+    Optional<MemberEntity> findById(Long id);
+
     Optional<MemberEntity> findByEmailAndLoginType(String email, LoginType loginType);
 
     @Query("SELECT m.id FROM MemberEntity m WHERE m.email = :email")

@@ -58,6 +58,7 @@ public class SecurityConfig {
         http.authenticationManager(authenticationManager) // 명시적으로 AuthenticationManager 설정
                 .addFilterAt(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 필터 위치 설정
                 .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers("/login/oauth2/code/**").permitAll()
                         .antMatchers("/login/**").permitAll()
                         .antMatchers("/oauth2/**").permitAll()

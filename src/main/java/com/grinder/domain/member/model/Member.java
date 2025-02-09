@@ -3,8 +3,10 @@ package com.grinder.domain.member.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class Member {
@@ -17,6 +19,6 @@ public class Member {
     private TierType tier;
     private String imageUrl;
     private Long PaymentInfoId;
-    private Long CafeAdminId;
+    private String CafeAdminId;
     private boolean isDeleted;
 }

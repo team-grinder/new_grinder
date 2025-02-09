@@ -25,8 +25,10 @@ public enum AuthResultEnum {
     INVALID_EMAIL("400", "AUTH_011", "올바르지 않은 이메일 형식입니다."),
     INVALID_NICKNAME("400", "AUTH_012", "닉네임이 올바르지 않습니다."),
     UNSUPPORTED_AUTHENTICATION("400", "AUTH_013", "지원하지 않는 인증 타입입니다."),
+    NO_ADMIN_PERMISSION("400","AUTH_17","카페 관리자가 아닙니다."),
     //요청에대한 응답조회 오류
     LOGIN_ATTEMPT_NOT_FOUND("404", "AUTH_014", "로그인 시도 기록을 찾을 수 없습니다."),
+    BUSINESS_NUMBER_NOT_FOUND("404","AUTH_16","사업자 정보를 찾을 수 없습니다"),
     DUPLICATE_NICKNAME("409","AUTH_015","이미 사용 중인 닉네임입니다.");
     private final String status;
     private final String code;

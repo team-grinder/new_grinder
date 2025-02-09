@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,10 +21,10 @@ public class MemberManager {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public MemberBasicInfo read(Long id) {
+    public Member readById(Long id){
         return memberRepository.findById(id).orElseThrow(
                 () -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND)
-        ).toBasicInfo();
+        ).toMember();
     }
     public MemberBasicInfo readEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(
@@ -66,4 +67,13 @@ public class MemberManager {
     public boolean existsByEmail(String email) {
         return memberRepository.existsByEmail(email);
     }
+
+    @Transactional
+    public void revokeCafeAdminId(Long memberId){
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
+        member.setCafeAdminId(null);
+        memberRepository.save(member);
+    }
+
 }
