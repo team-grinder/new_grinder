@@ -73,7 +73,18 @@ public class MemberManager {
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
         member.setCafeAdminId(null);
+        member.setTier(TierType.SILVER);
+
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public void updateCafeAdminId(Long memberId,String cafeAdminId){
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
+
+        member.setCafeAdminId(cafeAdminId);
+        member.setTier(TierType.CAFE_MANAGER);
     }
 
 }
