@@ -28,6 +28,7 @@ public class CafeAdminService {
         }
 
         cafeAdminManager.createCafeAdminInfo(member.getCafeAdminId(), register);
+        memberManager.updateCafeAdminId(memberId,member.getCafeAdminId());
     }
 
     public CafeAdminInfo getCafeAdminInfoByMemberId(Long memberId){

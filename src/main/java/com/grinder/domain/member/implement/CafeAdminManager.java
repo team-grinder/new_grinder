@@ -5,7 +5,6 @@ import com.grinder.common.model.AuthResultEnum;
 import com.grinder.domain.member.entity.CafeAdminInfoEntity;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
 import com.grinder.domain.member.repository.CafeAdminInfoRepository;
-import com.grinder.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class CafeAdminManager {
-    private final MemberRepository memberRepository;
     private final CafeAdminInfoRepository cafeAdminInfoRepository;
 
     @Transactional

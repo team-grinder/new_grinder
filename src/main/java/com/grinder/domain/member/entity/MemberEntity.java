@@ -48,6 +48,7 @@ public class MemberEntity extends BaseDateEntity {
     @Name(name = "결제정보 연관 관계")
     private Long PaymentInfoId;
 
+    @Column(length = 36)
     @Name(name = "카페 관리자 연관 관계")
     private String CafeAdminId;
 
