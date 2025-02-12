@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/cafe-manager")
 public class CafeAdminController {
     private final CafeService cafeService;
 
@@ -35,11 +35,7 @@ public class CafeAdminController {
         return ResponseEntity.ok(cafeService.setBusinessHours(cafeId, request));
     }
 
-    @GetMapping("/cafe/{cafeId}/business-hours")
-    public ResponseEntity<CafeBusinessInfo> getBusinessHours(
-            @PathVariable Long cafeId) {
-        return ResponseEntity.ok(cafeService.getBusinessHours(cafeId));
-    }
+
 
     @PutMapping("/{cafeId}/business-hours")
     public ResponseEntity<CafeBusinessInfo> updateBusinessHours(
