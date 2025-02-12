@@ -28,6 +28,7 @@ public class MainRestController {
                     .id(userDetails.getId())
                     .nickname(userDetails.getNickname())
                     .imageUrl(userDetails.getImageUrl())
+                    .tier(userDetails.getTier())
                     .build();
         } else if (authentication.getPrincipal() instanceof OAuth2MemberDetails) {
             OAuth2MemberDetails userDetails = (OAuth2MemberDetails) authentication.getPrincipal();
@@ -36,6 +37,7 @@ public class MainRestController {
                     .id(member.getId())
                     .nickname(member.getNickname())
                     .imageUrl(null)
+                    .tier(member.getTier())
                     .build();
         } else {
             return ResponseEntity.status(HttpStatus.RESET_CONTENT)

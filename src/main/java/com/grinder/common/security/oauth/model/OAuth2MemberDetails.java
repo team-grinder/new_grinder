@@ -28,6 +28,11 @@ public class OAuth2MemberDetails implements OAuth2User, AuthenticatedUser {
     }
 
     @Override
+    public TierType getTier() {
+        return member.getTier();
+    }
+
+    @Override
     public String getNickname() {
         return member.getNickname();
     }
