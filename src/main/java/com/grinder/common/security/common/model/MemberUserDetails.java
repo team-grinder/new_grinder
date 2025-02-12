@@ -2,6 +2,7 @@ package com.grinder.common.security.common.model;
 
 import com.grinder.common.security.AuthenticatedUser;
 import com.grinder.domain.member.entity.MemberEntity;
+import com.grinder.domain.member.model.TierType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,11 @@ import java.util.HashSet;
 public class MemberUserDetails implements UserDetails, AuthenticatedUser {
 
     private final MemberEntity memberEntity;
+
+    @Override
+    public TierType getTier() {
+        return memberEntity.getTier();
+    }
 
     @Override
     public Long getId() {

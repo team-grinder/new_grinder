@@ -13,4 +13,5 @@ public class MemberSimple {
     private final Long id;
     private final String nickname;
     private final String imageUrl;
+    private final TierType tier;
 }

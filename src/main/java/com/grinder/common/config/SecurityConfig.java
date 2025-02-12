@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .addFilterAt(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 필터 위치 설정
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .antMatchers("/admin/**").hasAuthority("admin")
+                        .antMatchers("/cafe-manager").hasAnyAuthority("cafe_manager","admin")
                         .antMatchers("/login/oauth2/code/**").permitAll()
                         .antMatchers("/login/**").permitAll()
                         .antMatchers("/oauth2/**").permitAll()

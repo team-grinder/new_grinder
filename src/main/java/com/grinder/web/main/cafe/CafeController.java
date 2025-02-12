@@ -4,6 +4,7 @@ import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.domain.cafe.model.Cafe;
 import com.grinder.domain.cafe.model.CafeAndMenu;
+import com.grinder.domain.cafe.model.CafeBusinessInfo;
 import com.grinder.domain.cafe.service.CafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,11 @@ public class CafeController {
             @PathVariable Long id) {
         CafeAndMenu cafeAndMenu = cafeService.getCafeAndMenu(id);
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, cafeAndMenu));
+    }
+
+    @GetMapping("/{cafeId}/business-hours")
+    public ResponseEntity<CafeBusinessInfo> getBusinessHours(
+            @PathVariable Long cafeId) {
+        return ResponseEntity.ok(cafeService.getBusinessHours(cafeId));
     }
 }
