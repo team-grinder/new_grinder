@@ -144,8 +144,8 @@ public class TablingManager {
     }
 
     // 회원의 예약 내역 조회
-    public List<Tabling> getMemberTablings(Long memberId, List<TablingStatus> statuses) {
-        return tablingRepository.findByMemberIdAndStatusIn(memberId, statuses)
+    public List<Tabling> getMemberTablings(Long memberId) {
+        return tablingRepository.findByMemberId(memberId)
                 .stream()
                 .map(TablingEntity::toTabling)
                 .collect(Collectors.toList());

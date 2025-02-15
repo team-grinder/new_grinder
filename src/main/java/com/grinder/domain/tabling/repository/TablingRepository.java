@@ -22,5 +22,5 @@ public interface TablingRepository extends JpaRepository<TablingEntity, Long> {
 
     List<TablingEntity> findByDateAndReserveTimeAndStatusIn(LocalDate date, LocalTime reserveTime, List<TablingStatus> statuses);
 
-    List<TablingEntity> findByMemberIdAndStatusIn(Long memberId, List<TablingStatus> statuses);
+    List<TablingEntity> findByMemberId(Long memberId);
 }
