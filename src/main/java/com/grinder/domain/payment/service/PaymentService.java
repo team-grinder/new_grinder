@@ -1,6 +1,8 @@
 package com.grinder.domain.payment.service;
 
+import com.grinder.common.exception.TablingException;
 import com.grinder.domain.payment.entity.Payment;
+import com.grinder.domain.payment.implement.PaymentManager;
 import com.grinder.domain.payment.model.PaymentResponse;
 import com.grinder.domain.payment.model.PaymentSuccessRequest;
 import com.grinder.domain.payment.repository.PaymentRepository;
@@ -12,17 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class PaymentService {
-    private final PaymentRepository paymentRepository;
+    private final PaymentManager paymentManger;
+    public PaymentResponse processPayment(PaymentSuccessRequest request){
+        return paymentManger.processPayment(request);
+    }
 
-    public PaymentResponse processPayment(PaymentSuccessRequest request) {
-        Payment payment = Payment.builder()
-                .paymentType(request.getPaymentType())
-                .orderId(request.getOrderId())
-                .paymentKey(request.getPaymentKey())
-                .amount(request.getAmount())
-                .tablingId(request.getTablingId())
-                .build();
-        payment = paymentRepository.save(payment);
-        return PaymentResponse.to(payment);
+    public PaymentResponse getPaymentByTabling(Long tablingId){
+        return paymentManger.getPaymentByTablingId(tablingId);
     }
 }

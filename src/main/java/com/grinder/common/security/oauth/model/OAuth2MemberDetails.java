@@ -44,7 +44,7 @@ public class OAuth2MemberDetails implements OAuth2User, AuthenticatedUser {
 
     @Override
     public Long getId() {
-        return null;
+        return member.getId();
     }
 
     @Override

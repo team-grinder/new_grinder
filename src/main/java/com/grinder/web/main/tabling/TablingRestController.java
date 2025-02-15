@@ -2,6 +2,8 @@ package com.grinder.web.main.tabling;
 
 import com.grinder.common.exception.MemberException;
 import com.grinder.common.model.AuthResultEnum;
+import com.grinder.common.model.ResultEnum;
+import com.grinder.common.model.SuccessResult;
 import com.grinder.common.security.AuthenticatedUser;
 import com.grinder.domain.tabling.model.Tabling;
 import com.grinder.domain.tabling.model.TablingRegister;
@@ -14,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,17 +59,13 @@ public class TablingRestController {
     }
 
     @GetMapping("/mypage/tabling")
-    public ResponseEntity<List<Tabling>> getMyTablings(
-            @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam(required = false) List<TablingStatus> statuses) {
+    public ResponseEntity<SuccessResult<List<Tabling>>> getMyTablings(
+            @AuthenticationPrincipal AuthenticatedUser user) {
         if (user == null) {
             throw new MemberException(AuthResultEnum.INVALID_SESSION);
         }
-        if (statuses == null) {
-            statuses = Arrays.asList(TablingStatus.values());
-        }
-        List<Tabling> tablings = tablingService.getMemberTablings(user.getId(), statuses);
-        return ResponseEntity.ok(tablings);
+        List<Tabling> tablings = tablingService.getMemberTablings(user.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(SuccessResult.of(ResultEnum.SUCCESS, tablings));
     }
 
     @GetMapping("/cafe/{cafeId}/tabling-info")
