@@ -28,7 +28,13 @@ public class CafeBusinessHourEntity extends BaseDateEntity {
     private LocalTime endTime;
 
     @Column(nullable = false)
-    private Integer maxTimePerReservation = 3;
+    private Integer maxTimePerReservation;
+
+    @Column(nullable = false)
+    private Integer maxGuestsPerTime;
+
+    @Column(nullable = false)
+    private Boolean isActive;
 
     @ElementCollection
     @CollectionTable(name = "cafe_blocked_hours")
@@ -36,19 +42,22 @@ public class CafeBusinessHourEntity extends BaseDateEntity {
 
     @Builder
     public CafeBusinessHourEntity(Long cafeId, LocalTime startTime, LocalTime endTime,
-                                    Integer maxTimePerReservation, List<LocalTime> blockedTimes) {
+                                  Integer maxTimePerReservation, Integer maxGuestsPerTime, List<LocalTime> blockedTimes) {
         this.cafeId = cafeId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxTimePerReservation = maxTimePerReservation;
+        this.maxGuestsPerTime = maxGuestsPerTime;
         this.blockedTimes = blockedTimes;
+        this.isActive = true;
     }
 
     public void updateBusinessHours(LocalTime startTime, LocalTime endTime,
-                                     Integer maxTimePerReservation, List<LocalTime> blockedTimes) {
+                                     Integer maxTimePerReservation,Integer maxGuestsPerTime, List<LocalTime> blockedTimes) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxTimePerReservation = maxTimePerReservation;
+        this.maxGuestsPerTime = maxGuestsPerTime;
         this.blockedTimes = blockedTimes;
     }
 }

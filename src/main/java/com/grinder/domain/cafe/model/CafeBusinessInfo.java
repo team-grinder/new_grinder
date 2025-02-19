@@ -14,6 +14,7 @@ public class CafeBusinessInfo {
     private int startTime;
     private int endTime;
     private int maxTime;
+    private int maxGuestsPerTime;
     private List<Integer> invalidList;
 
     public static CafeBusinessInfo from(CafeBusinessHourEntity entity) {

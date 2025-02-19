@@ -1,5 +1,7 @@
 package com.grinder.domain.cafe.model;
 
+import java.time.LocalTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,4 +17,10 @@ public class CafeCreate {
     private String description;
     private String tel;
     private String businessNumber;
+
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private Integer maxTimePerReservation;
+    private Integer maxGuestsPerTime;
+    private List<LocalTime> blockedTimes;
 }
