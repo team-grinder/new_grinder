@@ -14,5 +14,6 @@ public class CafeBusinessInfoRegister {
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer maxTimePerReservation;
+    private Integer maxGuestsPerTime;
     private List<LocalTime> blockedTimes;
 }

@@ -77,5 +77,9 @@ public class TablingTimeSlotManager {
 
         tablingTimeSlotRepository.saveAll(updatedSlots);
     }
+
+    public boolean existsTimeSlots(Long cafeId, LocalDate date) {
+        return !tablingTimeSlotRepository.findByCafeIdAndDate(cafeId, date).isEmpty();
+    }
 }
 

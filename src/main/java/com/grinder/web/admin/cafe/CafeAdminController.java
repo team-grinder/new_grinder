@@ -18,13 +18,7 @@ public class CafeAdminController {
 
     @PostMapping("/cafe/create")
     public ResponseEntity<Cafe> createCafe(@RequestBody CafeCreate request) {
-        Cafe cafe = cafeService.createCafe(
-                request.getName(),
-                request.getAddress(),
-                request.getDescription(),
-                request.getTel(),
-                request.getBusinessNumber()
-        );
+        Cafe cafe = cafeService.createCafe(request);
         return ResponseEntity.ok(cafe);
     }
 
@@ -37,7 +31,7 @@ public class CafeAdminController {
 
 
 
-    @PutMapping("/{cafeId}/business-hours")
+    @PutMapping("/cafe/{cafeId}/business-hours")
     public ResponseEntity<CafeBusinessInfo> updateBusinessHours(
             @PathVariable Long cafeId,
             @RequestBody CafeBusinessInfoRegister request) {

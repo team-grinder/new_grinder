@@ -1,15 +1,17 @@
 package com.grinder.domain.tabling.implement;
 
 import com.grinder.common.exception.TablingException;
+import com.grinder.domain.cafe.implement.CafeBusinessHourManager;
+import com.grinder.domain.cafe.model.CafeBusinessInfo;
 import com.grinder.domain.tabling.entity.TablingEntity;
 import com.grinder.domain.tabling.entity.TablingTimeSlotEntity;
 import com.grinder.domain.tabling.model.Tabling;
 import com.grinder.domain.tabling.model.TablingRegister;
 import com.grinder.domain.tabling.model.TablingStatus;
 import com.grinder.domain.tabling.model.AvailableTime;
-import com.grinder.domain.tabling.repository.BlockedDateRepository;
 import com.grinder.domain.tabling.repository.TablingRepository;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class TablingManager {
     private final TablingRepository tablingRepository;
     private final TablingTimeSlotManager tablingTimeSlotManager;
-    private final BlockedDateRepository blockedDateRepository;
-
+    private final CafeBusinessHourManager cafeBusinessHourManager;
     @Transactional
     public Tabling createTabling(TablingRegister request) {
-        // 1. 휴무일 체크
-        if (blockedDateRepository.existsByCafeIdAndDate(request.getCafeId(), request.getDate())) {
-            throw new TablingException("해당 날짜는 휴무일입니다.");
-        }
+        CafeBusinessInfo businessHour = cafeBusinessHourManager.getOperatingHours(request.getCafeId());
+        // 1. 영업시간 체크
+        validateBusinessHours(businessHour, request.getDate(), request.getReserveTime());
 
         // 2. 동일 회원의 중복 예약 체크
         if (tablingRepository.existsByMemberIdAndDateAndReserveTimeAndStatusNot(
@@ -163,5 +163,18 @@ public class TablingManager {
                 );
 
         return AvailableTime.from(timeSlots, existingTablings);
+    }
+
+    private void validateBusinessHours(CafeBusinessInfo businessHour, LocalDate date, LocalTime time) {
+        // 영업시간 체크
+        if (time.getHour() < businessHour.getStartTime() ||
+                time.getHour() > businessHour.getEndTime()) {
+            throw new TablingException("영업시간이 아닙니다.");
+        }
+
+        // 차단된 시간대 체크
+        if (businessHour.getInvalidList().contains(time.getHour())) {
+            throw new TablingException("예약이 불가능한 시간대입니다.");
+        }
     }
 }

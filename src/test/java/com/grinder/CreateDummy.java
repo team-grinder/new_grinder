@@ -38,7 +38,7 @@ public class CreateDummy {
             String phone = "010-1234-5678";
             String businessNumber = "123-45-67890";
             String description = "카페" + i + "입니다.";
-            cafeService.createCafe(name, address, phone, businessNumber, description);
+           // cafeService.createCafe(name, address, phone, businessNumber, description);
         }
     }
 
