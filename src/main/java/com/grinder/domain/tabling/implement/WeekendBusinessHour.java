@@ -5,10 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WeekendBusinessHour extends BusinessHourTemplate {
-    public WeekendBusinessHour(TablingTimeSlotManager timeSlotManager) {
-        super(timeSlotManager);
-    }
-
     @Override
     protected int calculateMaxGuests(Long cafeId, CafeBusinessInfo businessHour) {
         return businessHour.getMaxGuestsPerTime();
