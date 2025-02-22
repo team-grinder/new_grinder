@@ -22,6 +22,7 @@ public class CafeBusinessInfo {
                 .startTime(entity.getStartTime().getHour())
                 .endTime(entity.getEndTime().getHour())
                 .maxTime(entity.getMaxTimePerReservation())
+                .maxGuestsPerTime(entity.getMaxGuestsPerTime())
                 .invalidList(entity.getBlockedTimes().stream()
                         .map(LocalTime::getHour)
                         .collect(Collectors.toList()))
