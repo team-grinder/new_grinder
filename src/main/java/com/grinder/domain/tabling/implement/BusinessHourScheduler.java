@@ -23,7 +23,6 @@ public class BusinessHourScheduler implements ApplicationRunner {
     private final TablingTimeSlotService timeSlotService;
 
     @Override
-    @Transactional
     public void run(ApplicationArguments args) {
         log.info("시작: 초기 타임슬롯 생성");
         LocalDate today = LocalDate.now();
@@ -31,18 +30,24 @@ public class BusinessHourScheduler implements ApplicationRunner {
         List<Long> activeCafeIds = cafeBusinessHourManager.getActiveCafeIds();
 
         for (Long cafeId : activeCafeIds) {
-            LocalDate currentDate = today;
-            try {
-                CafeBusinessInfo businessHour = cafeBusinessHourManager.getOperatingHours(cafeId);
-                while (!currentDate.isAfter(endDate)) {
-                    timeSlotService.generateTimeSlots(cafeId, currentDate, businessHour);
-                    currentDate = currentDate.plusDays(1);
-                }
-            } catch (Exception e) {
-                log.error("타임슬롯 생성 실패: 카페ID {}, 기간: {} ~ {}", cafeId, today, endDate, e);
-            }
+            generateCafeTimeSlots(cafeId, today, endDate);
         }
         log.info("완료: 초기 타임슬롯 생성");
+    }
+
+    @Transactional
+    public void generateCafeTimeSlots(Long cafeId, LocalDate startDate, LocalDate endDate) {
+        try {
+            CafeBusinessInfo businessHour = cafeBusinessHourManager.getOperatingHours(cafeId);
+            LocalDate currentDate = startDate;
+
+            while (!currentDate.isAfter(endDate)) {
+                timeSlotService.generateTimeSlots(cafeId, currentDate, businessHour);
+                currentDate = currentDate.plusDays(1);
+            }
+        } catch (Exception e) {
+            log.error("타임슬롯 생성 실패: 카페ID {}, 기간: {} ~ {}", cafeId, startDate, endDate, e);
+        }
     }
 
     @Scheduled(cron = "0 0 0 * * SUN")
