@@ -1,6 +1,7 @@
 package com.grinder.domain.member.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.common.security.common.model.MemberType;
 import com.grinder.domain.member.model.login.LoginAttempt;
 import lombok.*;
 
@@ -21,11 +22,14 @@ public class LoginAttemptEntity extends BaseDateEntity {
     @GeneratedValue
     private Long id;
 
+    private MemberType memberType;
+
     private String email;
 
     private Long memberId;
 
     private int failCount;
+
     @Column(columnDefinition = "BOOLEAN")
     private boolean isLocked;
 

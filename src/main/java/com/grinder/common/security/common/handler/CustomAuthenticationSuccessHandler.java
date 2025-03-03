@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grinder.common.model.AuthResultEnum;
 import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
+import com.grinder.common.security.common.model.AdminUserDetails;
 import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
+import com.grinder.domain.member.entity.SystemAdminEntity;
 import com.grinder.domain.member.model.Member;
 import com.grinder.domain.member.model.login.LoginResult;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
+            Authentication authentication) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -42,6 +44,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if (authentication.getPrincipal() instanceof MemberUserDetails) {
             member = ((MemberUserDetails) authentication.getPrincipal()).getMemberEntity().toMember();
+
         } else if (authentication.getPrincipal() instanceof OAuth2MemberDetails) {
             member = ((OAuth2MemberDetails) authentication.getPrincipal()).getMember();
             LoginResult loginResult = loginMessage != null ?
@@ -53,6 +56,18 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000");
             return;
+
+        } else if (authentication.getPrincipal() instanceof AdminUserDetails) {
+            SystemAdminEntity admin = ((AdminUserDetails) authentication.getPrincipal()).getSystemAdmin();
+
+            LoginResult loginResult = loginMessage != null ?
+                    new LoginResult(admin.getId(), admin.getEmail(), null, loginMessage) :
+                    new LoginResult(admin.getId(), admin.getEmail(), null, null);
+
+            SuccessResult<LoginResult> result = SuccessResult.of(ResultEnum.SUCCESS, loginResult);
+            response.getWriter().write(objectMapper.writeValueAsString(result));
+            return;
+
         } else {
             throw new IllegalStateException(AuthResultEnum.UNSUPPORTED_AUTHENTICATION.getMessage());
         }
