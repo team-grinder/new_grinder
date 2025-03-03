@@ -3,6 +3,7 @@ package com.grinder.domain.member.implement;
 import com.grinder.common.exception.LoginException;
 import com.grinder.common.exception.MemberException;
 import com.grinder.common.model.AuthResultEnum;
+import com.grinder.common.security.common.model.MemberType;
 import com.grinder.domain.member.entity.LoginAttemptEntity;
 import com.grinder.domain.member.entity.MemberEntity;
 import com.grinder.domain.member.model.TierType;
@@ -27,9 +28,10 @@ public class LoginAttemptManager {
     private final MemberRepository memberRepository;
     private static final int MAX_ATTEMPTS = 10;
 
-    public void validateLoginAttempt(String email) {
+    public void validateLoginAttempt(String email, MemberType memberType) {
         LoginAttemptEntity attempt = loginAttemptRepository.findByEmail(email)
                 .orElse(LoginAttemptEntity.builder()
+                        .memberType(memberType)
                         .email(email)
                         .failCount(0)
                         .isLocked(false)

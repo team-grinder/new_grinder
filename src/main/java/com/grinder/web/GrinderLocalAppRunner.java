@@ -6,8 +6,11 @@ import com.grinder.domain.cafe.service.CafeService;
 import com.grinder.domain.feed.model.CreateFeedRequest;
 import com.grinder.domain.feed.repository.FeedRepository;
 import com.grinder.domain.feed.service.FeedService;
+import com.grinder.domain.member.entity.SystemAdminEntity;
 import com.grinder.domain.member.implement.MemberManager;
+import com.grinder.domain.member.implement.SystemAdminManager;
 import com.grinder.domain.member.model.Member;
+import com.grinder.domain.member.repository.SystemAdminRepository;
 import com.grinder.domain.member.service.MemberService;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import java.util.List;
 public class GrinderLocalAppRunner implements ApplicationRunner {
     private final MemberManager memberManager;
     private final MemberService memberService;
+    private final SystemAdminManager systemAdminManager;
     private final CafeService cafeService;
     private final FeedService feedService;
     private final FeedRepository feedRepository;
@@ -40,6 +44,13 @@ public class GrinderLocalAppRunner implements ApplicationRunner {
             memberId = member.getId();
         } else {
             memberId = memberManager.findByEmail("admin").getId();
+        }
+
+        Long systemAdminId;
+        if (!systemAdminManager.existsByEmail("admin")) {
+            systemAdminManager.createSystemAdmin("admin", "test", "admin");
+        } else {
+            systemAdminId = systemAdminManager.findByEmail("admin").getId();
         }
 
         Long CafeId;

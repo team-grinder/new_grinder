@@ -2,6 +2,7 @@ package com.grinder.web.main;
 
 import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
+import com.grinder.common.security.common.model.AdminUserDetails;
 import com.grinder.common.security.common.model.MemberUserDetails;
 import com.grinder.common.security.oauth.model.OAuth2MemberDetails;
 import com.grinder.domain.member.model.Member;
@@ -38,6 +39,15 @@ public class MainRestController {
                     .nickname(member.getNickname())
                     .imageUrl(null)
                     .tier(member.getTier())
+                    .build();
+
+        } else if (authentication.getPrincipal() instanceof AdminUserDetails) {
+            AdminUserDetails userDetails = (AdminUserDetails) authentication.getPrincipal();
+            memberSimple = MemberSimple.builder()
+                    .id(userDetails.getId())
+                    .nickname(userDetails.getNickname())
+                    .imageUrl(null)
+                    .tier(null)
                     .build();
         } else {
             return ResponseEntity.status(HttpStatus.RESET_CONTENT)
