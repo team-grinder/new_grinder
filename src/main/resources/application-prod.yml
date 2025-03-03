@@ -115,3 +115,6 @@ decorator:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+permitAll:
+  List: /login/oauth2/code/**,/login/**,/oauth2/**,/oauth/**,/register,/check-email,/session/validate,/cafe/popular,/tabling/**,/payment/**,/s3/**

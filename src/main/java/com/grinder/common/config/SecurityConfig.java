@@ -3,9 +3,9 @@ package com.grinder.common.config;
 import com.grinder.common.security.common.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.grinder.common.security.common.handler.CustomAuthenticationFailureHandler;
 import com.grinder.common.security.common.handler.CustomAuthenticationSuccessHandler;
-import com.grinder.common.security.common.service.MemberDetailsService;
 import com.grinder.common.security.oauth.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +26,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Value("${permitAll.List}")
+    private String[] permitAllUrls;
 
     private final OAuth2MemberService customOAuth2MemberService; // OAuth2 전용 서비스
     private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
@@ -58,20 +61,9 @@ public class SecurityConfig {
         http.authenticationManager(authenticationManager) // 명시적으로 AuthenticationManager 설정
                 .addFilterAt(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 필터 위치 설정
                 .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .antMatchers(permitAllUrls).permitAll()
                         .antMatchers("/admin/**").hasAuthority("admin")
                         .antMatchers("/cafe-manager").hasAnyAuthority("cafe_manager","admin")
-                        .antMatchers("/login/oauth2/code/**").permitAll()
-                        .antMatchers("/login/**").permitAll()
-                        .antMatchers("/oauth2/**").permitAll()
-                        .antMatchers("/oauth/**").permitAll()
-                        .antMatchers("/register").permitAll()
-                        .antMatchers("/check-email").permitAll()
-                        .antMatchers("/session/validate").permitAll()
-                        .antMatchers("/cafe/popular").permitAll()
-                        .antMatchers("/tabling/**").permitAll()
-                        .antMatchers("/payment/**").permitAll()
-                        .antMatchers("/").permitAll()
-                        .antMatchers("/s3/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
