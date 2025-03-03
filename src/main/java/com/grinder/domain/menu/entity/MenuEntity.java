@@ -10,9 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import java.util.Optional;
 
 @Entity
-@Setter
 @Getter
 @Builder
 @NoArgsConstructor
@@ -46,6 +46,21 @@ public class MenuEntity extends BaseDateEntity {
     @PrePersist
     public void prePersist() {
         this.lockYn = false;
+    }
+
+    public void updateMenu(
+            Long price,
+            String description,
+            Integer stock,
+            Integer sequence,
+            Long imageId
+    ) {
+
+        this.price = Optional.of(price).orElse(this.price);
+        this.description = Optional.of(description).orElse(this.description);
+        this.stock = Optional.of(stock).orElse(this.stock);
+        this.sequence = Optional.of(sequence).orElse(this.sequence);
+        this.imageId = Optional.of(imageId).orElse(this.imageId);
     }
 
     public Menu toMenu() {

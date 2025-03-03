@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class CafeBusinessHourEntity extends BaseDateEntity {
     @Id
@@ -52,12 +50,31 @@ public class CafeBusinessHourEntity extends BaseDateEntity {
         this.isActive = true;
     }
 
-    public void updateBusinessHours(LocalTime startTime, LocalTime endTime,
-                                     Integer maxTimePerReservation,Integer maxGuestsPerTime, List<LocalTime> blockedTimes) {
+    public void updateBusinessHours(LocalTime startTime,
+                                    LocalTime endTime,
+                                    Integer maxTimePerReservation,
+                                    Integer maxGuestsPerTime,
+                                    List<LocalTime> blockedTimes) {
+
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxTimePerReservation = maxTimePerReservation;
         this.maxGuestsPerTime = maxGuestsPerTime;
         this.blockedTimes = blockedTimes;
+    }
+
+    public void updateBusinessHours(LocalTime startTime,
+                                    LocalTime endTime,
+                                    Integer maxTimePerReservation,
+                                    List<LocalTime> blockedTimes) {
+
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.maxTimePerReservation = maxTimePerReservation;
+        this.blockedTimes = blockedTimes;
+    }
+
+    public void updateMaxGuestsPerTime(int maxGuestsPerTime) {
+        this.maxGuestsPerTime = maxGuestsPerTime;
     }
 }

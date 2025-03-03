@@ -3,13 +3,14 @@ package com.grinder.domain.tabling.implement;
 import com.grinder.domain.tabling.entity.TablingTimeSlotEntity;
 import com.grinder.domain.tabling.model.TimeSlotsRegister;
 import com.grinder.domain.tabling.repository.TablingTimeSlotRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class TablingTimeSlotManager {
                             .orElse(null);
 
                     if (existing != null) {
-                        existing.setMaxGuests(slot.getMaxGuests());
+                        existing.updateMaxGuests(slot.getMaxGuests());
                         return existing;
                     } else {
                         return TablingTimeSlotEntity.builder()

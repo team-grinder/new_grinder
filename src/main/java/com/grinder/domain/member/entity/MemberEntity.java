@@ -13,10 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,6 +52,11 @@ public class MemberEntity extends BaseDateEntity {
 
     @Name(name = "삭제 여부")
     private boolean isDeleted;
+
+    public void updateCafeAdmin(String cafeId, TierType tier) {
+        this.CafeAdminId = cafeId;
+        this.tier = tier;
+    }
 
     public MemberBasicInfo toBasicInfo() {
         return MemberBasicInfo.builder()

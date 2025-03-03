@@ -1,25 +1,18 @@
 package com.grinder.domain.tabling.entity;
 
 
-import com.grinder.common.annotation.Name;
 import com.grinder.common.entity.BaseDateEntity;
 import com.grinder.domain.tabling.model.Tabling;
 import com.grinder.domain.tabling.model.TablingStatus;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)

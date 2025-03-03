@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
-    Payment save(Payment payment);
     Optional<Payment> findByTablingId(Long tablingId);
 }

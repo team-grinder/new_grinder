@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -80,16 +79,24 @@ public class MenuReader {
     }
 
     @Transactional
-    public void modifyMenu(Long menuId, Long price, String description, Integer stock, Integer sequence, Long imageId) {
+    public void modifyMenu(Long menuId,
+                           Long price,
+                           String description,
+                           Integer stock,
+                           Integer sequence,
+                           Long imageId) {
+
         MenuEntity menuEntity = menuRepository.findById(menuId).orElseThrow(
                 () -> new IllegalArgumentException("해당 메뉴가 존재하지 않습니다.")
         );
 
-        Optional.ofNullable(price).ifPresent(menuEntity::setPrice);
-        Optional.ofNullable(description).ifPresent(menuEntity::setDescription);
-        Optional.ofNullable(stock).ifPresent(menuEntity::setStock);
-        Optional.ofNullable(sequence).ifPresent(menuEntity::setSequence);
-        Optional.ofNullable(imageId).ifPresent(menuEntity::setImageId);
+        menuEntity.updateMenu(
+                price,
+                description,
+                stock,
+                sequence,
+                imageId
+        );
     }
 
     @Transactional

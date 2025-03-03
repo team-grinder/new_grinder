@@ -11,8 +11,6 @@ import com.grinder.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
@@ -72,10 +70,8 @@ public class MemberManager {
     public void revokeCafeAdminId(Long memberId){
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
-        member.setCafeAdminId(null);
-        member.setTier(TierType.SILVER);
 
-        memberRepository.save(member);
+        member.updateCafeAdmin(null, TierType.SILVER);
     }
 
     @Transactional
@@ -83,8 +79,6 @@ public class MemberManager {
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
 
-        member.setCafeAdminId(cafeAdminId);
-        member.setTier(TierType.CAFE_MANAGER);
+        member.updateCafeAdmin(cafeAdminId, TierType.GOLD);
     }
-
 }

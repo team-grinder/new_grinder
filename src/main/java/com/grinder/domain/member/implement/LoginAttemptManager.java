@@ -60,8 +60,7 @@ public class LoginAttemptManager {
         attempt.increaseFailCount();
 
         if (attempt.getFailCount() >= MAX_ATTEMPTS) {
-            attempt.setLocked(true);
-            attempt.setLockedTime(LocalDateTime.now());
+            attempt.setLocked(true, LocalDateTime.now());
             loginAttemptRepository.save(attempt);
             throw new LoginException(AuthResultEnum.MAX_LOGIN_ATTEMPTS.getMessage());
         }
