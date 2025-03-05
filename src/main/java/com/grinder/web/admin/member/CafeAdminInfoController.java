@@ -2,9 +2,13 @@ package com.grinder.web.admin.member;
 
 import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
+import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.member.model.AdminRole;
 import com.grinder.domain.member.model.CafeAdminInfo;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
+import com.grinder.domain.member.model.CafeAdminMapping;
 import com.grinder.domain.member.service.CafeAdminService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,5 +49,27 @@ public class CafeAdminInfoController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
+    @PostMapping("/{memberId}/cafe/{cafeId}")
+    public ResponseEntity<SuccessResult<CafeAdminMapping>> assignCafeToAdmin(
+            @PathVariable Long memberId,
+            @PathVariable Long cafeId,
+            @RequestParam AdminRole role) {
+        CafeAdminMapping mapping = cafeAdminService.assignCafeToAdmin(memberId, cafeId, role);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, mapping));
+    }
 
+    @DeleteMapping("/{memberId}/cafe/{cafeId}")
+    public ResponseEntity<SuccessResult<Void>> removeCafeFromAdmin(
+            @PathVariable Long memberId,
+            @PathVariable Long cafeId) {
+        cafeAdminService.removeCafeFromAdmin(memberId, cafeId);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+    }
+
+    @GetMapping("/{memberId}/cafes")
+    public ResponseEntity<SuccessResult<List<Cafe>>> getManagedCafes(
+            @PathVariable Long memberId) {
+        List<Cafe> cafes = cafeAdminService.getManagedCafes(memberId);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, cafes));
+    }
 }
