@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .antMatchers(permitAllUrls).permitAll()
                         .antMatchers("/admin/**").hasAuthority("admin")
-                        .antMatchers("/cafe-manager").hasAnyAuthority("cafe_manager","admin")
+                        .antMatchers("/cafe-manager/**").hasAnyAuthority("cafe_manager","admin")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
