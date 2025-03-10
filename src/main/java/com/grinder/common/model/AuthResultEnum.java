@@ -21,6 +21,8 @@ public enum AuthResultEnum {
     INVALID_PASSWORD("400", "AUTH_007", "비밀번호는 8~20자리이며 영문, 숫자, 특수문자를 포함해야 합니다."),
     PASSWORD_MISMATCH("400", "AUTH_008", "비밀번호가 일치하지 않습니다."),
     MEMBER_NOT_FOUND("404", "AUTH_009", "회원 정보를 찾을 수 없습니다."),
+    CAFE_NOT_FOUND("404", "AUTH_020", "카페 정보를 찾을 수 없습니다."),
+    CAFE_MANAGER_NOT_FOUND("404","AUTH_19","카페 매니저 정보를 찾을 수 없습니다."),
     INVALID_PARAMETER("400", "AUTH_010", "잘못된 요청 파라미터입니다."),
     INVALID_EMAIL("400", "AUTH_011", "올바르지 않은 이메일 형식입니다."),
     INVALID_NICKNAME("400", "AUTH_012", "닉네임이 올바르지 않습니다."),
@@ -29,7 +31,9 @@ public enum AuthResultEnum {
     //요청에대한 응답조회 오류
     LOGIN_ATTEMPT_NOT_FOUND("404", "AUTH_014", "로그인 시도 기록을 찾을 수 없습니다."),
     BUSINESS_NUMBER_NOT_FOUND("404","AUTH_16","사업자 정보를 찾을 수 없습니다"),
-    DUPLICATE_NICKNAME("409","AUTH_015","이미 사용 중인 닉네임입니다.");
+    DUPLICATE_NICKNAME("409","AUTH_015","이미 사용 중인 닉네임입니다."),
+
+    CAFE_ALREADY_MANAGED("409","AUTH_18","이미 카페를 관리하고 있습니다.");
     private final String status;
     private final String code;
     private final String message;

@@ -36,13 +36,13 @@ public class CafeReader {
     }
 
     public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {
-        CafeEntity cafeEntity = new CafeEntity(
-                name,
-                address,
-                description,
-                tel,
-                businessNumber
-        );
+        CafeEntity cafeEntity = CafeEntity.builder()
+                .name(name)
+                .address(address)
+                .description(description)
+                .tel(tel)
+                .businessNumber(businessNumber)
+                .build();
         return cafeRepository.save(cafeEntity).toCafe();
     }
 }

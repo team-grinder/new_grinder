@@ -10,8 +10,10 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +30,8 @@ public class CafeAdminInfoEntity extends BaseDateEntity {
     private String businessName;//사업자명
     private String businessAddress;//사업자 주소
     private String businessContact;//사업자 번호
+
+    private long cafeId;
 
     public void updateCafeAdminInfo(CafeAdminInfoRegister register){
         this.businessAddress=register.getBusinessAddress();
