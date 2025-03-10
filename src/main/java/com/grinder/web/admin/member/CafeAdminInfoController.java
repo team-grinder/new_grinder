@@ -28,18 +28,28 @@ public class CafeAdminInfoController {
     private final CafeAdminService cafeAdminService;
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<SuccessResult<CafeAdminInfo>> getCafeAdminInfo(
+    public ResponseEntity<SuccessResult<List<CafeAdminInfo>>> getCafeAdminInfo(
             @PathVariable Long memberId) {
-        CafeAdminInfo result = cafeAdminService.getCafeAdminInfoByMemberId(memberId);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, result));
+        List<CafeAdminInfo> results =cafeAdminService.getCafeAdminInfoByMemberId(memberId);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, results));
     }
 
-    @PostMapping("/authorize/{memberId}")
-    public ResponseEntity<SuccessResult<Void>> promoteToCafeAdmin(
+//    @PostMapping("/authorize/{memberId}/cafe/")
+//    public ResponseEntity<SuccessResult<Void>> promoteToCafeAdmin(
+//            @PathVariable Long memberId,
+//            @RequestBody @Valid CafeAdminInfoRegister request) {
+//        cafeAdminService.authorizeToCafeAdmin(memberId, request);
+//        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+//    }
+
+    @PostMapping("/{memberId}/cafe/{cafeId}")
+    public ResponseEntity<SuccessResult<CafeAdminMapping>> assignCafeToAdmin(
             @PathVariable Long memberId,
+            @PathVariable Long cafeId,
+            @RequestParam AdminRole role,
             @RequestBody @Valid CafeAdminInfoRegister request) {
-        cafeAdminService.authorizeToCafeAdmin(memberId, request);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+        CafeAdminMapping mapping = cafeAdminService.assignCafeToAdmin(memberId, cafeId, role,request);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, mapping));
     }
 
     @DeleteMapping("/{memberId}")
@@ -47,15 +57,6 @@ public class CafeAdminInfoController {
             @PathVariable Long memberId) {
         cafeAdminService.deleteCafeAdminInfo(memberId);
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
-    }
-
-    @PostMapping("/{memberId}/cafe/{cafeId}")
-    public ResponseEntity<SuccessResult<CafeAdminMapping>> assignCafeToAdmin(
-            @PathVariable Long memberId,
-            @PathVariable Long cafeId,
-            @RequestParam AdminRole role) {
-        CafeAdminMapping mapping = cafeAdminService.assignCafeToAdmin(memberId, cafeId, role);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, mapping));
     }
 
     @DeleteMapping("/{memberId}/cafe/{cafeId}")

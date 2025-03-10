@@ -2,7 +2,6 @@ package com.grinder.domain.member.service;
 
 import com.grinder.common.exception.MemberException;
 import com.grinder.common.model.AuthResultEnum;
-import com.grinder.domain.cafe.implement.CafeManager;
 import com.grinder.domain.cafe.implement.CafeReader;
 import com.grinder.domain.cafe.model.Cafe;
 import com.grinder.domain.member.entity.CafeAdminInfoEntity;
@@ -14,6 +13,8 @@ import com.grinder.domain.member.model.CafeAdminInfo;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
 import com.grinder.domain.member.model.CafeAdminMapping;
 import com.grinder.domain.member.model.Member;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,25 +32,51 @@ public class CafeAdminService {
     private final CafeAdminMappingManager cafeAdminMappingManager;
     private final CafeReader cafeManager;
     @Transactional
-    public void authorizeToCafeAdmin(Long memberId, CafeAdminInfoRegister register){
-
+    public CafeAdminMapping assignCafeToAdmin(Long memberId, Long cafeId, AdminRole role,CafeAdminInfoRegister register) {
         Member member = memberManager.readById(memberId);
-        if(member.getCafeAdminId()==null){
-            member.setCafeAdminId(UUID.randomUUID().toString()); //TODO: 부여 방식 및 분리 고려
+        if(member.getCafeAdminId() == null) {
+            member.setCafeAdminId(UUID.randomUUID().toString());
+        }
+        memberManager.updateCafeAdminId(memberId,member.getCafeAdminId());
+
+        if(cafeManager.read(cafeId).getId()==null) {
+            throw new MemberException(AuthResultEnum.CAFE_NOT_FOUND);
         }
 
-        cafeAdminManager.createCafeAdminInfo(member.getCafeAdminId(), register);
-        memberManager.updateCafeAdminId(memberId,member.getCafeAdminId());
+        return cafeAdminMappingManager.assignCafeToManager(member.getCafeAdminId(), cafeId, role, register);
     }
 
-    public CafeAdminInfo getCafeAdminInfoByMemberId(Long memberId){
+    public List<CafeAdminInfo> getCafeAdminInfoByMemberId(Long memberId){
         Member member = memberManager.readById(memberId);
         if(member.getCafeAdminId()==null){
             throw new MemberException(AuthResultEnum.NO_ADMIN_PERMISSION);
         }
+        List<Long> cafeIds = this.cafeAdminMappingManager.getManagedCafeIds(member.getCafeAdminId());
 
-        CafeAdminInfoEntity adminInfo = cafeAdminManager.getCafeAdminInfo(member.getCafeAdminId());
-        return CafeAdminInfo.from(adminInfo);
+        if(cafeIds.isEmpty()) {
+            CafeAdminInfoEntity adminInfo = cafeAdminManager.getCafeAdminInfo(member.getCafeAdminId());
+            return Collections.singletonList(CafeAdminInfo.from(adminInfo));
+        }
+
+        List<CafeAdminInfo> results = new ArrayList<>();
+
+        CafeAdminInfoEntity defaultInfo = cafeAdminManager.getCafeAdminInfo(member.getCafeAdminId());
+        CafeAdminInfo defaultAdminInfo = CafeAdminInfo.from(defaultInfo);
+
+        for(Long cafeId : cafeIds) {
+            CafeAdminInfo cafeAdminInfo = CafeAdminInfo.builder()
+                    .cafeId(cafeId)
+                    .cafeAdminId(defaultAdminInfo.getCafeAdminId())
+                    .businessNumber(defaultAdminInfo.getBusinessNumber())
+                    .businessName(defaultAdminInfo.getBusinessName())
+                    .businessAddress(defaultAdminInfo.getBusinessAddress())
+                    .businessContact(defaultAdminInfo.getBusinessContact())
+                    .build();
+
+            results.add(cafeAdminInfo);
+        }
+
+        return results;
     }
 
     @Transactional
@@ -71,20 +98,6 @@ public class CafeAdminService {
         }
         cafeAdminManager.deleteCafeAdminInfo(member.getCafeAdminId());
         memberManager.revokeCafeAdminId(memberId);
-    }
-
-    @Transactional
-    public CafeAdminMapping assignCafeToAdmin(Long memberId, Long cafeId, AdminRole role) {
-        Member member = memberManager.readById(memberId);
-        if(member.getCafeAdminId() == null) {
-            throw new MemberException(AuthResultEnum.NO_ADMIN_PERMISSION);
-        }
-
-        if(cafeManager.read(cafeId).getId()==null) {
-            throw new MemberException(AuthResultEnum.CAFE_NOT_FOUND);
-        }
-
-        return cafeAdminMappingManager.assignCafeToManager(member.getCafeAdminId(), cafeId, role);
     }
 
     @Transactional

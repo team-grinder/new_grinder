@@ -36,7 +36,7 @@ public class CafeService {
     public List<Cafe> findCafeByName(String name) {
         return cafeReader.readByName(name);
     }
-
+    @Transactional
     public Cafe createCafe(CafeCreate request) {
 
         Cafe cafe = cafeReader.createCafe(
@@ -58,7 +58,7 @@ public class CafeService {
                         .blockedTimes(request.getBlockedTimes())
                         .build()
         );
-        // 3. 일주일치 타임슬롯 생성
+
         return cafe;
     }
     @Transactional

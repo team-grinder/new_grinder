@@ -5,6 +5,7 @@ import com.grinder.common.model.AuthResultEnum;
 import com.grinder.domain.member.entity.CafeAdminInfoEntity;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
 import com.grinder.domain.member.repository.CafeAdminInfoRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,20 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CafeAdminManager {
     private final CafeAdminInfoRepository cafeAdminInfoRepository;
-
-    @Transactional
-    public CafeAdminInfoEntity createCafeAdminInfo(String cafeAdminId, CafeAdminInfoRegister register){
-
-        CafeAdminInfoEntity managerInfo = CafeAdminInfoEntity.builder()
-                .cafeAdminId(cafeAdminId)
-                .businessNumber(register.getBusinessNumber())
-                .businessName(register.getBusinessName())
-                .businessAddress(register.getBusinessAddress())
-                .businessContact(register.getBusinessContact())
-                .build();
-
-        return cafeAdminInfoRepository.save(managerInfo);
-    }
 
     public CafeAdminInfoEntity getCafeAdminInfo(String cafeAdminId) {
         return cafeAdminInfoRepository.findById(cafeAdminId)
