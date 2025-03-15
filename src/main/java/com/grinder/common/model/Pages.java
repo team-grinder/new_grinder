@@ -7,60 +7,60 @@ import java.util.List;
 @Getter
 public class Pages<T> {
     // 필드: 현재 페이지, 시작 페이지, 끝 페이지, 전체 항목 수, 페이지당 항목 수, 마지막 페이지, SQL start/end
-    private final int nowPage;
-    private final int startPage;
-    private final int endPage;
-    private final int total;
-    private final int cntPerPage;
-    private final int lastPage;
-    private final int start;
-    private final int end;
+    private final long nowPage;
+    private final long startPage;
+    private final long endPage;
+    private final long total;
+    private final long cntPerPage;
+    private final long lastPage;
+    private final long start;
+    private final long end;
 
     // 페이지당 보여줄 페이지 수
-    private final int cntPage;
+    private final long cntPage;
 
     // 컨텐츠 필드
     private final List<T> content;
 
-    public Pages(List<T> content, int total, int nowPage, int cntPerPage, int cntPage) {
+    public Pages(List<T> content, long total, long nowPage, long cntPerPage, long cntPage) {
         this.content = content;
         this.total = total;
         this.nowPage = nowPage;
         this.cntPerPage = cntPerPage;
         this.cntPage = cntPage;
         this.lastPage = calculateLastPage();
-        int[] startEndPage = calculateStartEndPage();
+        long[] startEndPage = calculateStartEndPage();
         this.startPage = startEndPage[0];
         this.endPage = startEndPage[1];
-        int[] startEnd = calculateStartEnd();
+        long[] startEnd = calculateStartEnd();
         this.start = startEnd[0];
         this.end = startEnd[1];
     }
 
     // 제일 마지막 페이지 계산
-    private int calculateLastPage() {
-        return (int) Math.ceil((double) total / cntPerPage);
+    private long calculateLastPage() {
+        return (long) Math.ceil((double) total / cntPerPage);
     }
 
     // 시작 페이지, 끝 페이지 계산
-    private int[] calculateStartEndPage() {
-        int endPage = ((int) Math.ceil((double) nowPage / cntPage)) * cntPage;
+    private long[] calculateStartEndPage() {
+        long endPage = ((long) Math.ceil((double) nowPage / cntPage)) * cntPage;
         if (endPage > lastPage) {
             endPage = lastPage;
         }
-        int startPage = Math.max(endPage - cntPage + 1, 1);
-        return new int[]{startPage, endPage};
+        long startPage = Math.max(endPage - cntPage + 1, 1);
+        return new long[]{startPage, endPage};
     }
 
     // SQL 쿼리에서 사용할 start, end 값 계산
-    private int[] calculateStartEnd() {
-        int end = nowPage * cntPerPage;
-        int start = end - cntPerPage + 1;
-        return new int[]{start, end};
+    private long[] calculateStartEnd() {
+        long end = nowPage * cntPerPage;
+        long start = end - cntPerPage + 1;
+        return new long[]{start, end};
     }
 
     // 페이지 정보 생성 메서드 (정적 팩토리 메서드 사용)
-    public static <T> Pages<T> create(List<T> content, int total, int nowPage, int cntPerPage, int cntPage) {
+    public static <T> Pages<T> create(List<T> content, long total, long nowPage, long cntPerPage, long cntPage) {
         return new Pages<>(content, total, nowPage, cntPerPage, cntPage);
     }
 }

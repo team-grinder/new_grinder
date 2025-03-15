@@ -15,7 +15,7 @@ public class PageVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int page;
+    private long page;
 
-    private int size;
+    private long size;
 }

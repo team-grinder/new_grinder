@@ -25,8 +25,7 @@ public class CafeReader {
     }
 
     public Pages<Cafe> findCafePage(CafeSearchPage searchPage) {
-
-        return null;
+        return cafeQueryRepository.findCafePage(searchPage);
     }
 
     public Cafe read(Long id) {
