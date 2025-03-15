@@ -3,6 +3,8 @@ package com.grinder.web.admin.member;
 import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
 import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.cafe.model.CafeCreate;
+import com.grinder.domain.cafe.service.CafeService;
 import com.grinder.domain.member.model.AdminRole;
 import com.grinder.domain.member.model.CafeAdminInfo;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
@@ -26,13 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/cafe-manager")
 public class CafeAdminInfoController {
     private final CafeAdminService cafeAdminService;
-
-    @GetMapping("/{memberId}")
-    public ResponseEntity<SuccessResult<List<CafeAdminInfo>>> getCafeAdminInfo(
-            @PathVariable Long memberId) {
-        List<CafeAdminInfo> results =cafeAdminService.getCafeAdminInfoByMemberId(memberId);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, results));
-    }
+    private final CafeService cafeService;
 
 //    @PostMapping("/authorize/{memberId}/cafe/")
 //    public ResponseEntity<SuccessResult<Void>> promoteToCafeAdmin(
@@ -41,7 +37,11 @@ public class CafeAdminInfoController {
 //        cafeAdminService.authorizeToCafeAdmin(memberId, request);
 //        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
 //    }
-
+    @PostMapping("/cafe/create")
+    public ResponseEntity<Cafe> createCafe(@RequestBody CafeCreate request) {
+        Cafe cafe = cafeService.createCafe(request);
+        return ResponseEntity.ok(cafe);
+    }
     @PostMapping("/{memberId}/cafe/{cafeId}")
     public ResponseEntity<SuccessResult<CafeAdminMapping>> assignCafeToAdmin(
             @PathVariable Long memberId,
@@ -67,10 +67,4 @@ public class CafeAdminInfoController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
-    @GetMapping("/{memberId}/cafes")
-    public ResponseEntity<SuccessResult<List<Cafe>>> getManagedCafes(
-            @PathVariable Long memberId) {
-        List<Cafe> cafes = cafeAdminService.getManagedCafes(memberId);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, cafes));
-    }
 }
