@@ -2,8 +2,10 @@ package com.grinder.common.model;
 
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
-public class Pages {
+public class Pages<T> {
     // 필드: 현재 페이지, 시작 페이지, 끝 페이지, 전체 항목 수, 페이지당 항목 수, 마지막 페이지, SQL start/end
     private final int nowPage;
     private final int startPage;
@@ -17,7 +19,11 @@ public class Pages {
     // 페이지당 보여줄 페이지 수
     private final int cntPage;
 
-    public Pages(int total, int nowPage, int cntPerPage, int cntPage) {
+    // 컨텐츠 필드
+    private final List<T> content;
+
+    public Pages(List<T> content, int total, int nowPage, int cntPerPage, int cntPage) {
+        this.content = content;
         this.total = total;
         this.nowPage = nowPage;
         this.cntPerPage = cntPerPage;
@@ -54,7 +60,7 @@ public class Pages {
     }
 
     // 페이지 정보 생성 메서드 (정적 팩토리 메서드 사용)
-    public static Pages create(int total, int nowPage, int cntPerPage, int cntPage) {
-        return new Pages(total, nowPage, cntPerPage, cntPage);
+    public static <T> Pages<T> create(List<T> content, int total, int nowPage, int cntPerPage, int cntPage) {
+        return new Pages<>(content, total, nowPage, cntPerPage, cntPage);
     }
 }

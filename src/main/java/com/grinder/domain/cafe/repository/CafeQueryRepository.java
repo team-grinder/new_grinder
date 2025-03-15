@@ -1,6 +1,8 @@
 package com.grinder.domain.cafe.repository;
 
+import com.grinder.common.model.Pages;
 import com.grinder.domain.cafe.entity.CafeEntity;
+import com.grinder.domain.cafe.model.CafeSearchPage;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -33,5 +35,10 @@ public class CafeQueryRepository {
         return cafeAndOrderRank.stream()
                 .map(tuple -> tuple.get(cafeEntity))
                 .collect(Collectors.toList());
+    }
+
+    public Pages<CafeEntity> findCafePage(CafeSearchPage searchPage) {
+
+        return null;
     }
 }

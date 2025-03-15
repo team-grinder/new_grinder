@@ -6,11 +6,9 @@ import com.grinder.domain.cafe.service.CafeService;
 import com.grinder.domain.feed.model.CreateFeedRequest;
 import com.grinder.domain.feed.repository.FeedRepository;
 import com.grinder.domain.feed.service.FeedService;
-import com.grinder.domain.member.entity.SystemAdminEntity;
 import com.grinder.domain.member.implement.MemberManager;
 import com.grinder.domain.member.implement.SystemAdminManager;
 import com.grinder.domain.member.model.Member;
-import com.grinder.domain.member.repository.SystemAdminRepository;
 import com.grinder.domain.member.service.MemberService;
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +68,7 @@ public class GrinderLocalAppRunner implements ApplicationRunner {
                             LocalTime.of(15, 0)
                     ))
                     .build();
-            Cafe cafe = cafeService.createCafe(cafeRequest);
+            Cafe cafe = cafeService.createCafeAndBusinessHour(cafeRequest);
 
             CafeCreate cafeRequest1 = CafeCreate.builder()
                     .name("스타벅스 홍대점")
@@ -87,7 +85,7 @@ public class GrinderLocalAppRunner implements ApplicationRunner {
                             LocalTime.of(16, 0)
                     ))
                     .build();
-            Cafe cafe1 = cafeService.createCafe(cafeRequest1);
+            Cafe cafe1 = cafeService.createCafeAndBusinessHour(cafeRequest1);
 
             CafeCreate cafeRequest2 = CafeCreate.builder()
                     .name("스타벅스 신촌점")
@@ -104,7 +102,7 @@ public class GrinderLocalAppRunner implements ApplicationRunner {
                             LocalTime.of(17, 0)
                     ))
                     .build();
-            Cafe cafe2 = cafeService.createCafe(cafeRequest2);
+            Cafe cafe2 = cafeService.createCafeAndBusinessHour(cafeRequest2);
 
             CafeId = cafe.getId();
         } else {

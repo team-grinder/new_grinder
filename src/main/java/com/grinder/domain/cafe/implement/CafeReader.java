@@ -1,7 +1,10 @@
 package com.grinder.domain.cafe.implement;
 
+import com.grinder.common.model.Pages;
 import com.grinder.domain.cafe.entity.CafeEntity;
 import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.cafe.model.CafeCreate;
+import com.grinder.domain.cafe.model.CafeSearchPage;
 import com.grinder.domain.cafe.repository.CafeQueryRepository;
 import com.grinder.domain.cafe.repository.CafeRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,11 @@ public class CafeReader {
                 .map(CafeEntity::toCafe).collect(Collectors.toList());
     }
 
+    public Pages<Cafe> findCafePage(CafeSearchPage searchPage) {
+
+        return null;
+    }
+
     public Cafe read(Long id) {
         return cafeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 카페가 존재하지 않습니다.")
@@ -35,13 +43,13 @@ public class CafeReader {
         return allByName.stream().map(CafeEntity::toCafe).collect(Collectors.toList());
     }
 
-    public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {
+    public Cafe createCafe(CafeCreate request) {
         CafeEntity cafeEntity = new CafeEntity(
-                name,
-                address,
-                description,
-                tel,
-                businessNumber
+                request.getName(),
+                request.getAddress(),
+                request.getDescription(),
+                request.getTel(),
+                request.getBusinessNumber()
         );
         return cafeRepository.save(cafeEntity).toCafe();
     }
