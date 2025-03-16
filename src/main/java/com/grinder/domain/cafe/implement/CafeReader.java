@@ -59,4 +59,14 @@ public class CafeReader {
         );
         cafeRepository.delete(cafeEntity);
     }
+
+    public void updateCafe(Long cafeId, Cafe cafe) {
+        CafeEntity cafeEntity = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 카페가 존재하지 않습니다.")
+        );
+
+        cafeEntity.updateCafeEntity(cafe);
+
+        cafeRepository.save(cafeEntity);
+    }
 }

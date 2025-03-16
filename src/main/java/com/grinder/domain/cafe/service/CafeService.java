@@ -83,4 +83,9 @@ public class CafeService {
     public void deleteCafe(Long cafeId) {
         cafeReader.deleteCafe(cafeId);
     }
+
+    @Transactional
+    public void updateCafe(Long cafeId, Cafe cafe) {
+        cafeReader.updateCafe(cafeId, cafe);
+    }
 }
