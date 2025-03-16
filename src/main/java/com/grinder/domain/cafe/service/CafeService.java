@@ -78,4 +78,9 @@ public class CafeService {
     public CafeBusinessInfo updateBusinessHours(Long cafeId, CafeBusinessInfoRegister request) {
         return cafeBusinessHourManager.updateBusinessHours(cafeId, request);
     }
+
+    @Transactional
+    public void deleteCafe(Long cafeId) {
+        cafeReader.deleteCafe(cafeId);
+    }
 }

@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,13 +20,30 @@ public class SystemAdminController {
     private final CafeService cafeService;
 
     @GetMapping("/cafe-list")
-    public ResponseEntity<SuccessResult<Pages<Cafe>>> getCafeList(CafeSearchPage searchPage, @AuthenticationPrincipal AdminUserDetails user) {
-        if (user.getSystemAdmin() != null) {
+    public ResponseEntity<SuccessResult<Pages<Cafe>>> getCafeList(
+            @ModelAttribute CafeSearchPage searchPage,
+            @AuthenticationPrincipal AdminUserDetails user) {
+
+        if (user.getSystemAdmin() == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(SuccessResult.of(ResultEnum.FORBIDDEN));
         }
 
         Pages<Cafe> cafes = cafeService.getCafes(searchPage);
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, cafes));
+    }
+
+    @DeleteMapping("/cafe/delete")
+    public ResponseEntity<SuccessResult<Void>> deleteCafe(
+            @RequestParam Long cafeId,
+            @AuthenticationPrincipal AdminUserDetails user) {
+
+        if (user.getSystemAdmin() == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(SuccessResult.of(ResultEnum.FORBIDDEN));
+        }
+
+        cafeService.deleteCafe(cafeId);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 }
