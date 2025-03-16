@@ -78,14 +78,14 @@ public class CafeQueryRepository {
 
         switch (searchPage.getSearchType()) {
             case ALL:
-                booleanBuilder.and(cafeEntity.name.contains(searchPage.getSearchKeyword())
-                        .or(cafeEntity.address.contains(searchPage.getSearchKeyword())));
+                booleanBuilder.and(cafeEntity.name.contains(searchPage.getSearchQuery())
+                        .or(cafeEntity.address.contains(searchPage.getSearchQuery())));
                 break;
             case NAME:
-                booleanBuilder.and(cafeEntity.name.contains(searchPage.getSearchKeyword()));
+                booleanBuilder.and(cafeEntity.name.contains(searchPage.getSearchQuery()));
                 break;
             case ADDRESS:
-                booleanBuilder.and(cafeEntity.address.contains(searchPage.getSearchKeyword()));
+                booleanBuilder.and(cafeEntity.address.contains(searchPage.getSearchQuery()));
                 break;
             default:
                 throw new IllegalArgumentException("존재하지 않는 검색 방식입니다.");
