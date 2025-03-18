@@ -4,7 +4,9 @@ import com.grinder.domain.tabling.entity.TablingEntity;
 import com.grinder.domain.tabling.entity.TablingTimeSlotEntity;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +26,15 @@ public class AvailableTime {
         private int maxGuests;
         private int availableGuests;
         private boolean isAvailable;
+
+        public Map<String, Object> toMap() {
+            Map<String, Object> map = new HashMap<>();
+            map.put("reserveTime", this.time);
+            map.put("maxGuests", this.maxGuests);
+            map.put("currentGuests", this.maxGuests - this.availableGuests);  // 현재 예약된 인원
+            map.put("isAvailable", this.isAvailable);
+            return map;
+        }
     }
 
     public static AvailableTime from(List<TablingTimeSlotEntity> timeSlots, List<TablingEntity> existingTablings) {
@@ -50,5 +61,11 @@ public class AvailableTime {
                 .filter(tabling -> tabling.getReserveTime().equals(time))
                 .mapToInt(TablingEntity::getNumberOfGuests)
                 .sum();
+    }
+
+    public List<Map<String, Object>> toMapList() {
+        return timeSlots.stream()
+                .map(TimeSlotInfo::toMap)
+                .collect(Collectors.toList());
     }
 }

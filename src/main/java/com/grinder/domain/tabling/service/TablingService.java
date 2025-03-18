@@ -51,23 +51,4 @@ public class TablingService {
                     return Tabling.from(tabling,payment,cafe);
                 }).collect(Collectors.toList());
     }
-
-//    public List<Tabling> getCafeTablings(Long cafeId, LocalDate date) {
-//        return tablingManager.getCafeTablings(cafeId, date);
-//    }
-//
-//    public List<Tabling> getCafeTablingsBetween(Long cafeId, LocalDate startDate, LocalDate endDate) {
-//        return tablingManager.getCafeTablingsBetween(cafeId, startDate, endDate);
-//    }
-//
-//    public List<Tabling> getCafeTablingsByStatus(Long cafeId, LocalDate date, List<TablingStatus> statuses) {
-//        return tablingManager.getCafeTablingsByStatus(cafeId, date, statuses);
-//    }
-//
-//    public List<Tabling> getTimeSlotTablings(
-//            LocalDate date,
-//            LocalTime reserveTime,
-//            List<TablingStatus> statuses) {
-//        return tablingManager.getTimeSlotTablings(date, reserveTime, statuses);
-//    }
 }
