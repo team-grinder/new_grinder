@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Getter
 @Entity
@@ -56,6 +57,17 @@ public class MemberEntity extends BaseDateEntity {
     public void updateCafeAdmin(String cafeId, TierType tier) {
         this.CafeAdminId = cafeId;
         this.tier = tier;
+    }
+
+    public void update(Member user) {
+        Optional.of(user.getEmail()).ifPresent(email -> this.email = email);
+        Optional.of(user.getNickname()).ifPresent(nickname -> this.nickname = nickname);
+        Optional.of(user.getPhoneNumber()).ifPresent(phoneNumber -> this.phoneNumber = phoneNumber);
+        Optional.of(user.getImageUrl()).ifPresent(imageUrl -> this.imageUrl = imageUrl);
+        Optional.of(user.getTier()).ifPresent(tier -> this.tier = tier);
+        Optional.of(user.getPaymentInfoId()).ifPresent(PaymentInfoId -> this.PaymentInfoId = PaymentInfoId);
+        Optional.of(user.getCafeAdminId()).ifPresent(CafeAdminId -> this.CafeAdminId = CafeAdminId);
+        Optional.of(user.isDeleted()).ifPresent(isDeleted -> this.isDeleted = isDeleted);
     }
 
     public MemberBasicInfo toBasicInfo() {

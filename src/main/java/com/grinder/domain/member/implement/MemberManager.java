@@ -2,11 +2,10 @@ package com.grinder.domain.member.implement;
 
 import com.grinder.common.exception.MemberException;
 import com.grinder.common.model.AuthResultEnum;
+import com.grinder.common.model.Pages;
 import com.grinder.domain.member.entity.MemberEntity;
-import com.grinder.domain.member.model.LoginType;
-import com.grinder.domain.member.model.Member;
-import com.grinder.domain.member.model.MemberBasicInfo;
-import com.grinder.domain.member.model.TierType;
+import com.grinder.domain.member.model.*;
+import com.grinder.domain.member.repository.MemberQueryRepository;
 import com.grinder.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberManager {
     private final MemberRepository memberRepository;
+    private final MemberQueryRepository memberQueryRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    public Pages<Member> getUsers(MemberSearchPage searchPage) {
+        return memberQueryRepository.getUsers(searchPage);
+    }
 
     public Member readById(Long id){
         return memberRepository.findById(id).orElseThrow(
@@ -80,5 +84,24 @@ public class MemberManager {
                 .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
 
         member.updateCafeAdmin(cafeAdminId, TierType.GOLD);
+    }
+
+    @Transactional
+    public Member update(Long userId, Member user) {
+        MemberEntity member = memberRepository.findById(userId)
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
+
+        member.update(user);
+        memberRepository.save(member);
+
+        return member.toMember();
+    }
+
+    @Transactional
+    public void delete(Long userId) {
+        MemberEntity member = memberRepository.findById(userId)
+                .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
+
+        memberRepository.delete(member);
     }
 }
