@@ -1,9 +1,12 @@
 package com.grinder.domain.feed.implement;
 
+import com.grinder.common.model.Pages;
 import com.grinder.common.model.Slices;
 import com.grinder.domain.feed.entity.FeedEntity;
 import com.grinder.domain.feed.model.CreateFeedRequest;
+import com.grinder.domain.feed.model.Feed;
 import com.grinder.domain.feed.model.FeedMember;
+import com.grinder.domain.feed.model.FeedSearchPage;
 import com.grinder.domain.feed.repository.FeedQueryRepository;
 import com.grinder.domain.feed.repository.FeedRepository;
 import com.grinder.domain.image.implement.ImageReader;
@@ -26,6 +29,11 @@ public class FeedReader {
     private final FeedQueryRepository feedQueryRepository;
     private final ImageReader imageReader;
     private final TablingManager tablingManager;
+
+    public Pages<Feed> getFeeds(FeedSearchPage searchPage) {
+        // 피드 조회
+        return feedQueryRepository.getFeedPages(searchPage);
+    }
 
     public Slices<FeedMember> readFeedSliceByClientId(Long clientId, int page, int size) {
         // 피드 조회
@@ -90,6 +98,43 @@ public class FeedReader {
             return true;
         } catch (Exception e) {
             log.error("피드 삭제 오류 : {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Transactional
+    public boolean deleteFeed(Long feedId) {
+        try {
+            feedRepository.deleteById(feedId);
+            return true;
+        } catch (Exception e) {
+            log.error("피드 삭제 오류 : {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Transactional
+    public boolean updateFeed(Long feedId, Feed request) {
+        try {
+            FeedEntity feedEntity = feedRepository.findById(feedId)
+                    .orElseThrow(() -> new IllegalArgumentException("피드를 찾을 수 없습니다."));
+
+            feedEntity.updateFeed(request);
+
+            return true;
+        } catch (Exception e) {
+            log.error("피드 수정 오류 : {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    public Feed getFeed(Long feedId) {
+        try {
+            return feedRepository.findById(feedId)
+                    .orElseThrow(() -> new IllegalArgumentException("피드를 찾을 수 없습니다."))
+                    .toFeed();
+        } catch (Exception e) {
+            log.error("피드 조회 오류 : {}", e.getMessage());
             throw e;
         }
     }

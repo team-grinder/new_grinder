@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/cafe")
 public class AdminCafeController {
     private final CafeService cafeService;
 
-    @GetMapping("/cafe/list")
+    @GetMapping("/list")
     public ResponseEntity<SuccessResult<Pages<Cafe>>> getCafeList(
             @ModelAttribute CafeSearchPage searchPage
     ) {
@@ -25,7 +25,7 @@ public class AdminCafeController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, cafes));
     }
 
-    @DeleteMapping("/cafe/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<SuccessResult<Void>> deleteCafe(
             @RequestParam Long cafeId
     ) {
@@ -33,7 +33,7 @@ public class AdminCafeController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
-    @PutMapping("/cafe/update")
+    @PutMapping("/update")
     public ResponseEntity<SuccessResult<Void>> updateCafe(
             @RequestParam Long cafeId,
             @RequestBody Cafe cafe
@@ -42,7 +42,7 @@ public class AdminCafeController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
-    @PostMapping("/cafe/create")
+    @PostMapping("/create")
     public ResponseEntity<SuccessResult<Cafe>> createCafe(
             @RequestBody CafeCreate request
     ) {
@@ -50,7 +50,7 @@ public class AdminCafeController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, createdCafe));
     }
 
-    @PostMapping("/cafe/search")
+    @PostMapping("/search")
     public ResponseEntity<SuccessResult<Cafe>> createCafe(
             @RequestParam Long cafeId
     ) {

@@ -1,9 +1,12 @@
 package com.grinder.domain.feed.service;
 
+import com.grinder.common.model.Pages;
 import com.grinder.common.model.Slices;
 import com.grinder.domain.feed.implement.FeedReader;
 import com.grinder.domain.feed.model.CreateFeedRequest;
+import com.grinder.domain.feed.model.Feed;
 import com.grinder.domain.feed.model.FeedMember;
+import com.grinder.domain.feed.model.FeedSearchPage;
 import com.grinder.domain.image.implement.ImageReader;
 import com.grinder.domain.like.model.ContentType;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 public class FeedService {
     private final FeedReader feedReader;
     private final ImageReader imageReader;
+
+    public Pages<Feed> getFeedPages(FeedSearchPage searchPage) {
+        return feedReader.getFeeds(searchPage);
+    }
 
     public Slices<FeedMember> getFeedMyPage(Long clientId, int page, int size) {
         return feedReader.readFeedSliceByClientId(clientId, page, size);
@@ -56,6 +63,34 @@ public class FeedService {
             return true;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @Transactional
+    public boolean deleteFeed(Long feedId) {
+        try {
+            feedReader.deleteFeed(feedId);
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @Transactional
+    public boolean updateFeed(Long feedId, Feed request) {
+        try {
+            feedReader.updateFeed(feedId, request);
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 수정에 실패하였습니다.");
+        }
+    }
+
+    public Feed getFeed(Long feedId) {
+        try {
+            return feedReader.getFeed(feedId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 조회에 실패하였습니다.");
         }
     }
 }

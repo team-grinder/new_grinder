@@ -1,12 +1,18 @@
 package com.grinder.domain.feed.repository;
 
+import com.grinder.common.model.Pages;
 import com.grinder.common.model.Slices;
+import com.grinder.common.utils.DateUtils;
 import com.grinder.domain.comment.entity.QCommentEntity;
+import com.grinder.domain.feed.entity.FeedEntity;
 import com.grinder.domain.feed.entity.QFeedEntity;
+import com.grinder.domain.feed.model.Feed;
 import com.grinder.domain.feed.model.FeedMember;
+import com.grinder.domain.feed.model.FeedSearchPage;
 import com.grinder.domain.like.entity.QLikeEntity;
 import com.grinder.domain.like.model.ContentType;
 import com.grinder.domain.member.entity.QMemberEntity;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,7 +22,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.grinder.domain.feed.entity.QFeedEntity.feedEntity;
 
 @Repository
 public class FeedQueryRepository {
@@ -27,7 +37,7 @@ public class FeedQueryRepository {
     }
 
     public Slices<FeedMember> readFeedSliceByClientId(Long clientId, int page, int size) {
-        QFeedEntity feed = QFeedEntity.feedEntity;
+        QFeedEntity feed = feedEntity;
         QLikeEntity like = QLikeEntity.likeEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
         QCommentEntity comment = QCommentEntity.commentEntity;
@@ -77,7 +87,7 @@ public class FeedQueryRepository {
     }
 
     public Slices<FeedMember> readFeedSliceByCafeId(Long cafeId, Long clientId, int page, int size) {
-        QFeedEntity feed = QFeedEntity.feedEntity;
+        QFeedEntity feed = feedEntity;
         QLikeEntity like = QLikeEntity.likeEntity;
         QMemberEntity member = QMemberEntity.memberEntity;
         QCommentEntity comment = QCommentEntity.commentEntity;
@@ -126,5 +136,63 @@ public class FeedQueryRepository {
                 .fetch();
 
         return Slices.create(fetch, page, size);
+    }
+
+    public Pages<Feed> getFeedPages(FeedSearchPage searchPage) {
+        // 날짜가 null이 아니라면 startDate와 endDate를 기준으로 검색
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        // 날짜 범위 검색
+        searchForDateRange(searchPage, booleanBuilder);
+
+        // 검색 타입 및 검색어 검색
+        SearchForType(searchPage, booleanBuilder);
+
+        Long feedCount = query.from(feedEntity)
+                .select(feedEntity.count())
+                .where(booleanBuilder)
+                .fetchOne();
+
+        List<Feed> feedEntities = query.from(feedEntity)
+                .select(feedEntity)
+                .where(booleanBuilder)
+                .orderBy(feedEntity.createDate.desc())
+                .offset(searchPage.getPage() * searchPage.getSize())
+                .limit(searchPage.getSize())
+                .fetch().stream().map(FeedEntity::toFeed).collect(Collectors.toList());
+
+        return Pages.create(
+                feedEntities,
+                feedCount != null ? feedCount : 0,
+                searchPage.getPage(),
+                searchPage.getSize(),
+                5
+        );
+    }
+
+    private void SearchForType(FeedSearchPage searchPage, BooleanBuilder booleanBuilder) {
+        if (searchPage.getSearchType() == null) return; // 검색 타입이 null인 경우는 검색하지 않음
+
+        switch (searchPage.getSearchType()) {
+            case ALL:
+                booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery()))
+                        .or(feedEntity.content.contains(searchPage.getSearchQuery())));
+                break;
+            case MEMBER_ID:
+                booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery())));
+                break;
+            case CONTENT:
+                booleanBuilder.and(feedEntity.content.contains(searchPage.getSearchQuery()));
+                break;
+            default:
+                throw new IllegalArgumentException("존재하지 않는 검색 방식입니다.");
+        }
+    }
+
+    private void searchForDateRange(FeedSearchPage searchPage, BooleanBuilder booleanBuilder) {
+        if (searchPage.getStartDate() != null && searchPage.getEndDate() != null) {
+            LocalDateTime[] betweenRange = DateUtils.parseForStartAndEndDate(searchPage.getStartDate(), searchPage.getEndDate());
+            booleanBuilder.and(feedEntity.createDate.between(betweenRange[0], betweenRange[1]));
+        }
     }
 }

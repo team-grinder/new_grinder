@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/user")
 public class AdminUserController {
     private final MemberService memberService;
 
-    @GetMapping("/user/list")
+    @GetMapping("/list")
     public ResponseEntity<SuccessResult<Pages<Member>>> getUserList(
             @ModelAttribute MemberSearchPage searchPage
     ) {
@@ -25,7 +25,7 @@ public class AdminUserController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, Users));
     }
 
-    @DeleteMapping("/user/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<SuccessResult<Void>> deleteUser(
             @RequestParam Long userId
     ) {
@@ -33,7 +33,7 @@ public class AdminUserController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
-    @PutMapping("/user/update")
+    @PutMapping("/update")
     public ResponseEntity<SuccessResult<Void>> updateUser(
             @RequestParam Long userId,
             @RequestBody Member user
@@ -42,7 +42,7 @@ public class AdminUserController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/create")
     public ResponseEntity<SuccessResult<Member>> createCafe(
             @RequestBody MemberCreate request
     ) {
@@ -50,7 +50,7 @@ public class AdminUserController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, createdUser));
     }
 
-    @PostMapping("/user/search")
+    @PostMapping("/search")
     public ResponseEntity<SuccessResult<Member>> createCafe(
             @RequestParam Long userId
     ) {

@@ -1,6 +1,7 @@
 package com.grinder.domain.feed.entity;
 
 import com.grinder.common.entity.BaseDateEntity;
+import com.grinder.domain.feed.model.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -42,5 +44,24 @@ public class FeedEntity extends BaseDateEntity {
         this.grade = grade;
         this.rank = rank;
         this.isVisible = isVisible;
+    }
+
+    public Feed toFeed() {
+        return Feed.builder()
+                .id(id)
+                .memberId(memberId)
+                .cafeId(cafeId)
+                .content(content)
+                .grade(grade)
+                .rank(rank)
+                .isVisible(isVisible)
+                .build();
+    }
+
+    public void updateFeed(Feed feed) {
+        Optional.ofNullable(feed.getContent()).ifPresent(content -> this.content = content);
+        Optional.ofNullable(feed.getGrade()).ifPresent(grade -> this.grade = grade);
+        Optional.ofNullable(feed.getRank()).ifPresent(rank -> this.rank = rank);
+        Optional.ofNullable(feed.getIsVisible()).ifPresent(isVisible -> this.isVisible = isVisible);
     }
 }
