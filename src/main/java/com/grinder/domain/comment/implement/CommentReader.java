@@ -1,8 +1,10 @@
 package com.grinder.domain.comment.implement;
 
+import com.grinder.common.model.Pages;
 import com.grinder.common.model.Slices;
 import com.grinder.domain.comment.entity.CommentEntity;
 import com.grinder.domain.comment.model.Comment;
+import com.grinder.domain.comment.model.CommentSearchPage;
 import com.grinder.domain.comment.model.CreateCommentRequest;
 import com.grinder.domain.comment.repository.CommentQueryRepository;
 import com.grinder.domain.comment.repository.CommentRepository;
@@ -23,6 +25,16 @@ public class CommentReader {
 
     public Comment getComment(Long commentId, Long authId) {
         return commentQueryRepository.getComment(commentId, authId);
+    }
+
+    public Pages<Comment> getCommentPages(CommentSearchPage searchPage) {
+        return commentQueryRepository.getCommentPages(searchPage);
+    }
+
+    public Comment getComment(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."))
+                .toComment();
     }
 
     public Long createComment(CreateCommentRequest request, Long memberId) {
@@ -92,5 +104,31 @@ public class CommentReader {
 
             return false;
         }
+    }
+
+    public void deleteComment(Long commentId) {
+        try {
+            commentRepository.deleteById(commentId);
+        } catch (Exception e) {
+            log.error("댓글 삭제 중 오류 발생", e);
+
+            throw new IllegalArgumentException("댓글 삭제 중 오류 발생");
+        }
+    }
+
+    public void updateComment(Long commentId, String content) {
+        try {
+            commentRepository.updateComment(commentId, content);
+        } catch (Exception e) {
+            log.error("댓글 수정 중 오류 발생", e);
+
+            throw new IllegalArgumentException("댓글 수정 중 오류 발생");
+        }
+    }
+
+    public Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."))
+                .toComment();
     }
 }

@@ -1,7 +1,10 @@
 package com.grinder.domain.cafe.implement;
 
+import com.grinder.common.model.Pages;
 import com.grinder.domain.cafe.entity.CafeEntity;
 import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.cafe.model.CafeCreate;
+import com.grinder.domain.cafe.model.CafeSearchPage;
 import com.grinder.domain.cafe.repository.CafeQueryRepository;
 import com.grinder.domain.cafe.repository.CafeRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,10 @@ public class CafeReader {
     public List<Cafe> findPopularCafe() {
         return cafeQueryRepository.findPopularCafe().stream()
                 .map(CafeEntity::toCafe).collect(Collectors.toList());
+    }
+
+    public Pages<Cafe> findCafePage(CafeSearchPage searchPage) {
+        return cafeQueryRepository.findCafePage(searchPage);
     }
 
     public Cafe read(Long id) {
@@ -43,6 +50,24 @@ public class CafeReader {
                 .tel(tel)
                 .businessNumber(businessNumber)
                 .build();
+      
         return cafeRepository.save(cafeEntity).toCafe();
+    }
+
+    public void deleteCafe(Long cafeId) {
+        CafeEntity cafeEntity = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 카페가 존재하지 않습니다.")
+        );
+        cafeRepository.delete(cafeEntity);
+    }
+
+    public void updateCafe(Long cafeId, Cafe cafe) {
+        CafeEntity cafeEntity = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 카페가 존재하지 않습니다.")
+        );
+
+        cafeEntity.updateCafeEntity(cafe);
+
+        cafeRepository.save(cafeEntity);
     }
 }

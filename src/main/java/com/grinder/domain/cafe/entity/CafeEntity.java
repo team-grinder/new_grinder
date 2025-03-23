@@ -43,6 +43,11 @@ public class CafeEntity extends BaseDateEntity {
         this.businessNumber = businessNumber;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.averageGrade = 0;
+    }
+
     public Cafe toCafe() {
         return Cafe.builder()
                 .id(id)
@@ -55,8 +60,10 @@ public class CafeEntity extends BaseDateEntity {
                 .build();
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.averageGrade = 0;
+    public void updateCafeEntity(Cafe cafe) {
+        this.name = cafe.getName();
+        this.address = cafe.getAddress();
+        this.description = cafe.getDescription();
+        this.tel = cafe.getTel();
     }
 }
