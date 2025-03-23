@@ -20,7 +20,7 @@ public abstract class BusinessHourTemplate {
         boolean isOvernight = endTime.isBefore(currentTime);
 
         while (true) {
-            if (isValidTimeSlot(businessHour, currentTime)) {
+            if (!businessHour.getInvalidList().contains(currentTime.getHour())) {
                 timeSlots.add(TimeSlotsRegister.builder()
                         .reserveTime(currentTime)
                         .maxGuests(calculateMaxGuests(cafeId, businessHour))

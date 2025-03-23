@@ -2,9 +2,15 @@ package com.grinder.web.admin.member;
 
 import com.grinder.common.model.ResultEnum;
 import com.grinder.common.model.SuccessResult;
+import com.grinder.domain.cafe.model.Cafe;
+import com.grinder.domain.cafe.model.CafeCreate;
+import com.grinder.domain.cafe.service.CafeService;
+import com.grinder.domain.member.model.AdminRole;
 import com.grinder.domain.member.model.CafeAdminInfo;
 import com.grinder.domain.member.model.CafeAdminInfoRegister;
+import com.grinder.domain.member.model.CafeAdminMapping;
 import com.grinder.domain.member.service.CafeAdminService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,20 +28,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/cafe-manager")
 public class CafeAdminInfoController {
     private final CafeAdminService cafeAdminService;
+    private final CafeService cafeService;
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<SuccessResult<CafeAdminInfo>> getCafeAdminInfo(
-            @PathVariable Long memberId) {
-        CafeAdminInfo result = cafeAdminService.getCafeAdminInfoByMemberId(memberId);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, result));
+//    @PostMapping("/authorize/{memberId}/cafe/")
+//    public ResponseEntity<SuccessResult<Void>> promoteToCafeAdmin(
+//            @PathVariable Long memberId,
+//            @RequestBody @Valid CafeAdminInfoRegister request) {
+//        cafeAdminService.authorizeToCafeAdmin(memberId, request);
+//        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+//    }
+    @PostMapping("/cafe/create")
+    public ResponseEntity<Cafe> createCafe(@RequestBody CafeCreate request) {
+        Cafe cafe = cafeService.createCafe(request);
+        return ResponseEntity.ok(cafe);
     }
-
-    @PostMapping("/authorize/{memberId}")
-    public ResponseEntity<SuccessResult<Void>> promoteToCafeAdmin(
+    @PostMapping("/{memberId}/cafe/{cafeId}")
+    public ResponseEntity<SuccessResult<CafeAdminMapping>> assignCafeToAdmin(
             @PathVariable Long memberId,
+            @PathVariable Long cafeId,
+            @RequestParam AdminRole role,
             @RequestBody @Valid CafeAdminInfoRegister request) {
-        cafeAdminService.authorizeToCafeAdmin(memberId, request);
-        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+        CafeAdminMapping mapping = cafeAdminService.assignCafeToAdmin(memberId, cafeId, role,request);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS, mapping));
     }
 
     @DeleteMapping("/{memberId}")
@@ -44,5 +59,12 @@ public class CafeAdminInfoController {
         return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
     }
 
+    @DeleteMapping("/{memberId}/cafe/{cafeId}")
+    public ResponseEntity<SuccessResult<Void>> removeCafeFromAdmin(
+            @PathVariable Long memberId,
+            @PathVariable Long cafeId) {
+        cafeAdminService.removeCafeFromAdmin(memberId, cafeId);
+        return ResponseEntity.ok(SuccessResult.of(ResultEnum.SUCCESS));
+    }
 
 }

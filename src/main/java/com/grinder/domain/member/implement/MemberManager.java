@@ -83,7 +83,7 @@ public class MemberManager {
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(AuthResultEnum.MEMBER_NOT_FOUND));
 
-        member.updateCafeAdmin(cafeAdminId, TierType.GOLD);
+        member.updateCafeAdmin(cafeAdminId, TierType.CAFE_MANAGER);
     }
 
     @Transactional

@@ -55,6 +55,7 @@ public class CafeEntity extends BaseDateEntity {
                 .address(address)
                 .description(description)
                 .tel(tel)
+                .businessNumber(businessNumber)
                 .averageGrade(averageGrade)
                 .build();
     }

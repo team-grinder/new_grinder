@@ -38,7 +38,7 @@ public class CafeService {
     public List<Cafe> findCafeByName(String name) {
         return cafeReader.readByName(name);
     }
-
+    @Transactional
     public Cafe createCafe(CafeCreate request) {
         return cafeReader.createCafe(request);
     }
@@ -51,17 +51,17 @@ public class CafeService {
         Cafe cafe = this.createCafe(request);
 
         // 2. 영업시간 정보 저장
-        CafeBusinessInfoRegister hourRegister = CafeBusinessInfoRegister.builder()
-                .startTime(request.getStartTime())
-                .endTime(request.getEndTime())
-                .maxTimePerReservation(request.getMaxTimePerReservation())
-                .maxGuestsPerTime(request.getMaxGuestsPerTime())
-                .blockedTimes(request.getBlockedTimes())
-                .build();
+        cafeBusinessHourManager.setOperatingHours(
+                cafe.getId(),
+                CafeBusinessInfoRegister.builder()
+                        .startTime(request.getStartTime())
+                        .endTime(request.getEndTime())
+                        .maxTimePerReservation(request.getMaxTimePerReservation())
+                        .maxGuestsPerTime(request.getMaxGuestsPerTime())
+                        .blockedTimes(request.getBlockedTimes())
+                        .build()
+        );
 
-        this.createBusinessHour(cafe.getId(), hourRegister);
-
-        // 3. 일주일치 타임슬롯 생성
         return cafe;
     }
 

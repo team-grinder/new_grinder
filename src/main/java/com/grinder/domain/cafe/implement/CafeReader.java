@@ -42,14 +42,15 @@ public class CafeReader {
         return allByName.stream().map(CafeEntity::toCafe).collect(Collectors.toList());
     }
 
-    public Cafe createCafe(CafeCreate request) {
-        CafeEntity cafeEntity = new CafeEntity(
-                request.getName(),
-                request.getAddress(),
-                request.getDescription(),
-                request.getTel(),
-                request.getBusinessNumber()
-        );
+    public Cafe createCafe(String name, String address, String description, String tel, String businessNumber) {
+        CafeEntity cafeEntity = CafeEntity.builder()
+                .name(name)
+                .address(address)
+                .description(description)
+                .tel(tel)
+                .businessNumber(businessNumber)
+                .build();
+      
         return cafeRepository.save(cafeEntity).toCafe();
     }
 

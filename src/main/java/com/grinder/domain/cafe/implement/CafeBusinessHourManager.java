@@ -41,7 +41,7 @@ public class CafeBusinessHourManager {
 
         return CafeBusinessInfo.from(cafeBusinessHourRepository.save(entity));
     }
-
+//TODO : 업데이트 시 7일치 내용도 변경 처리
     public CafeBusinessInfo updateBusinessHours(Long cafeId, CafeBusinessInfoRegister request) {
         CafeBusinessHourEntity entity = cafeBusinessHourRepository.findByCafeId(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("카페 운영시간 정보를 찾을 수 없습니다."));
