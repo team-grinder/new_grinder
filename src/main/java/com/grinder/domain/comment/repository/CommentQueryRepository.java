@@ -130,15 +130,21 @@ public class CommentQueryRepository {
     }
 
     private void SearchForType(CommentSearchPage searchPage, BooleanBuilder booleanBuilder) {
-        if (searchPage.getSearchType() == null) return; // 검색 타입이 null인 경우는 검색하지 않음
+        if (searchPage.getSearchQuery() == null || searchPage.getSearchQuery().isBlank()) return; // 검색 타입이 null인 경우는 검색하지 않음
 
         switch (searchPage.getSearchType()) {
             case ALL:
-                booleanBuilder.and(commentEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery()))
-                        .or(commentEntity.content.contains(searchPage.getSearchQuery())));
+                if (searchPage.getSearchQuery().matches("^[0-9]+$")) {
+                    booleanBuilder.and(commentEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery()))
+                            .or(commentEntity.content.contains(searchPage.getSearchQuery())));
+                } else {
+                    booleanBuilder.and(commentEntity.content.contains(searchPage.getSearchQuery()));
+                }
                 break;
             case MEMBER_ID:
-                booleanBuilder.and(commentEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery())));
+                if (searchPage.getSearchQuery().matches("^[0-9]+$")) {
+                    booleanBuilder.and(commentEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery())));
+                }
                 break;
             case CONTENT:
                 booleanBuilder.and(commentEntity.content.contains(searchPage.getSearchQuery()));

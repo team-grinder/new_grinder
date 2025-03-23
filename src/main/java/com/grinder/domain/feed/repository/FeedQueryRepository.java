@@ -171,15 +171,21 @@ public class FeedQueryRepository {
     }
 
     private void SearchForType(FeedSearchPage searchPage, BooleanBuilder booleanBuilder) {
-        if (searchPage.getSearchType() == null) return; // 검색 타입이 null인 경우는 검색하지 않음
+        if (searchPage.getSearchQuery() == null || searchPage.getSearchQuery().isBlank()) return; // 검색 타입이 null인 경우는 검색하지 않음
 
         switch (searchPage.getSearchType()) {
             case ALL:
-                booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery()))
-                        .or(feedEntity.content.contains(searchPage.getSearchQuery())));
+                if (searchPage.getSearchQuery().matches("\\d+")) {
+                    booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery()))
+                            .or(feedEntity.content.contains(searchPage.getSearchQuery())));
+                } else {
+                    booleanBuilder.and(feedEntity.content.contains(searchPage.getSearchQuery()));
+                }
                 break;
             case MEMBER_ID:
-                booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery())));
+                if (searchPage.getSearchQuery().matches("\\d+")) {
+                    booleanBuilder.and(feedEntity.memberId.eq(Long.parseLong(searchPage.getSearchQuery())));
+                }
                 break;
             case CONTENT:
                 booleanBuilder.and(feedEntity.content.contains(searchPage.getSearchQuery()));
